@@ -6,7 +6,7 @@
 #include <string.h>
 #include "mentry.h"
 
-#define BUFFERSIZE 1024
+#define BUFFERSIZE 2056
 
 typedef struct mentry {
 	char *surname;
@@ -21,18 +21,22 @@ MEntry *me_get(FILE *fd){
   char fpointer[BUFFERSIZE];
   char fulladdr[BUFFERSIZE];
   int fulladdrpla = 0;
+  int count = 0;
+  int offset = 0;
   char* pplace = fpointer;
   char* sname;
   char* pcode;
   char* f_address;
+  char* f_begin_adr;
   int h_number;
-
+  /* FIRST NAME */
   fgets(fpointer,BUFFERSIZE,fd);
   while (*pplace != ','){
     if (*pplace == '\n'){
       /* DO SOMETHING TO DEAL WITH NO SURNAME */
     }
     pplace++;
+	count++;
   }
   sname = malloc(sizeof(pplace-fpointer));;
   *pplace = '\0';
@@ -41,51 +45,64 @@ MEntry *me_get(FILE *fd){
   *pplace = ',';
   while(*pplace != '\n'){
     pplace++;
+	count++;
   }
-  while(fulladdrpla<=*pplace){
-    fulladdr[fulladdrpla] = fpointer[fulladdrpla];
+  while(offset<=count){
+    fulladdr[fulladdrpla] = fpointer[offset];
     fulladdrpla++;
+	offset++;
   }
+  offset = 0;
+  count = 0;
+  
+  /* DOOR NUMBER */
   fgets(fpointer,BUFFERSIZE,fd);
   pplace = fpointer;
   while(*pplace == ' '){pplace++;}
   char* intfind = pplace;
   char* inthold;
-  while(*pplace != ' '){pplace++;}
+  count = 0;
+  while(*pplace != ' '){
+	  pplace++;
+	  count++;
+  }
   inthold = malloc(sizeof(pplace-intfind));
   h_number = atoi(strcpy(inthold,intfind));
   while(*pplace != '\n'){
     pplace++;
+	count++;
   }
-  int offset = 0;
-  while(offset<=*pplace){
-    fulladdr[fulladdrpla] = fpointer[offset];
-    fulladdrpla++;
-    offset++;
+  offset = 0;
+  while(offset<=count){
+	  fulladdr[fulladdrpla] = fpointer[offset];
+	  fulladdrpla++;
+	  offset++;
   }
   ment->house_number = h_number;
+  offset = 0;
+  count = 0;
+  
+  /* POST CODE */
   fgets(fpointer,BUFFERSIZE,fd);
   pplace = fpointer;
-  while (*pplace != ' '){
+  while (*pplace != '\n'){
     pplace++;
+	count++;
   }
-  pplace = pplace+4;
   pcode = malloc(sizeof(fpointer-pplace));
-  *(pplace++) = '\0';
+  *pplace = '\0';
   strcpy(pcode,fpointer);
   ment->postcode = pcode;
-  offset = 0;
-  while(offset<=*pplace){
+  while(offset<=count){
     fulladdr[fulladdrpla] = fpointer[offset];
     fulladdrpla++;
     offset++;
   }
-  *pplace= fulladdr[fulladdrpla];
-  *fpointer = fulladdr[0];
-  f_address = malloc(sizeof(pplace-fpointer));
+  pplace= fulladdr[fulladdrpla];
+  f_begin_adr = fulladdr[0];
+  f_address = malloc(sizeof(pplace-f_begin_adr));
   strcpy(f_address,fulladdr);
   ment->full_address = f_address;
-  /*free(pplace); */
   printf("%s\n%i\n%s\n%s\n",sname,h_number,pcode,f_address);
   return ment;
 }
@@ -98,6 +115,9 @@ unsigned long me_hash(MEntry *me, unsigned long size){
 
 /* me_print prints the full address on fd */
 void me_print(MEntry *me, FILE *fd){
+	char* output;
+	output = me->full_address;
+	fputs(output,fd);
   return;
 }
 
