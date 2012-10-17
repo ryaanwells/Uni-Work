@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "mentry.h"
 
 #define BUFFERSIZE 1024
 
@@ -47,14 +48,20 @@ MEntry *me_get(FILE *fd){
   }
   fgets(fpointer,BUFFERSIZE,fd);
   pplace = fpointer;
-  scanf(fpointer, "%d",&h_number);
+  while(*pplace == ' '){pplace++;}
+  char* intfind = pplace;
+  char* inthold;
+  while(*pplace != ' '){pplace++;}
+  inthold = malloc(sizeof(pplace-intfind));
+  h_number = atoi(strcpy(inthold,intfind));
   while(*pplace != '\n'){
     pplace++;
   }
-  *pplace = *pplace + fulladdrpla;
-  while(fulladdrpla<=*pplace){
-    fulladdr[fulladdrpla] = fpointer[fulladdrpla];
+  int offset = 0;
+  while(offset<=*pplace){
+    fulladdr[fulladdrpla] = fpointer[offset];
     fulladdrpla++;
+    offset++;
   }
   ment->house_number = h_number;
   fgets(fpointer,BUFFERSIZE,fd);
@@ -62,35 +69,49 @@ MEntry *me_get(FILE *fd){
   while (*pplace != ' '){
     pplace++;
   }
-  pplace = pplace+3;
+  pplace = pplace+4;
   pcode = malloc(sizeof(fpointer-pplace));
   *(pplace++) = '\0';
   strcpy(pcode,fpointer);
   ment->postcode = pcode;
-  *pplace = *pplace + fulladdrpla;
-  while(fulladdrpla<=*pplace){
-    fulladdr[fulladdrpla] = fpointer[fulladdrpla];
+  offset = 0;
+  while(offset<=*pplace){
+    fulladdr[fulladdrpla] = fpointer[offset];
     fulladdrpla++;
+    offset++;
   }
-  f_address = malloc(sizeof(pplace));
+  *pplace= fulladdr[fulladdrpla];
+  *fpointer = fulladdr[0];
+  f_address = malloc(sizeof(pplace-fpointer));
   strcpy(f_address,fulladdr);
   ment->full_address = f_address;
+  /*free(pplace); */
+  printf("%s\n%i\n%s\n%s\n",sname,h_number,pcode,f_address);
+  return ment;
 }
 
 
 /* me_hash computes a hash of the MEntry, mod size */
-unsigned long me_hash(MEntry *me, unsigned long size);
+unsigned long me_hash(MEntry *me, unsigned long size){
+  return 0l;
+}
 
 /* me_print prints the full address on fd */
-void me_print(MEntry *me, FILE *fd);
+void me_print(MEntry *me, FILE *fd){
+  return;
+}
 
 /* me_compare compares two mail entries, returning <0, 0, >0 if
  * me1<me2, me1==me2, me1>me2
  */
-int me_compare(MEntry *me1, MEntry *me2);
+int me_compare(MEntry *me1, MEntry *me2){
+  return 0;
+}
 
 /* me_destroy destroys the mail entry
  */
-void me_destroy(MEntry *me);
+void me_destroy(MEntry *me){
+  return;
+}
 
 #endif /* _MENTRY_H_ */
