@@ -17,93 +17,69 @@ typedef struct mentry {
 
 /* me_get returns the next file entry, or NULL if end of file*/
 MEntry *me_get(FILE *fd){
-  MEntry* ment = (MEntry*) malloc(sizeof(MEntry));
-  char fpointer[BUFFERSIZE];
-  char fulladdr[BUFFERSIZE];
-  int fulladdrpla = 0;
-  int count = 0;
-  int offset = 0;
-  char* pplace = fpointer;
-  char* sname;
-  char* pcode;
-  char* f_address;
-  char* f_begin_adr;
-  int h_number;
-  /* FIRST NAME */
-  fgets(fpointer,BUFFERSIZE,fd);
-  while (*pplace != ','){
-    if (*pplace == '\n'){
-      /* DO SOMETHING TO DEAL WITH NO SURNAME */
-    }
-    pplace++;
-	count++;
+	MEntry* ment = (MEntry*) malloc(sizeof(MEntry));
+	if(ment==NULL){
+	  printf("%s", "Malloc Error");
+	  return NULL;
   }
-  sname = malloc(sizeof(pplace-fpointer));;
-  *pplace = '\0';
-  sname = strcpy(sname, fpointer);
-  ment->surname = sname;
-  *pplace = ',';
-  while(*pplace != '\n'){
-    pplace++;
-	count++;
-  }
-  while(offset<=count){
-    fulladdr[fulladdrpla] = fpointer[offset];
-    fulladdrpla++;
-	offset++;
-  }
-  offset = 0;
-  count = 0;
   
-  /* DOOR NUMBER */
-  fgets(fpointer,BUFFERSIZE,fd);
-  pplace = fpointer;
-  while(*pplace == ' '){pplace++;}
-  char* intfind = pplace;
-  char* inthold;
-  count = 0;
-  while(*pplace != ' '){
-	  pplace++;
+  char firstline[BUFFERSIZE];
+  char secondline[BUFFERSIZE];
+  char thirdline[BUFFERSIZE];
+  char fulladdr[BUFFERSIZE];
+  char *sname;
+  char *ptr;
+  char *pcode;
+  char *fadd;
+  int count = 0;
+  int doornum = 0;
+  fgets(firstline,BUFFERSIZE,fd);
+  ptr = firstline;
+   
+  while (*ptr != ','){
+	  fulladdr[count] = *ptr;
+	  ptr++;
 	  count++;
   }
-  inthold = malloc(sizeof(pplace-intfind));
-  h_number = atoi(strcpy(inthold,intfind));
-  while(*pplace != '\n'){
-    pplace++;
-	count++;
+  sname = malloc(sizeof(char)*(ptr-firstline) + 1);
+  strncat(sname,firstline,(sizeof(char)*(ptr-firstline)));
+  ment->surname = sname;
+  while (*ptr != '\n'){
+	  fulladdr[count] = *ptr;
+	  ptr++;
+	  count++;
   }
-  offset = 0;
-  while(offset<=count){
-	  fulladdr[fulladdrpla] = fpointer[offset];
-	  fulladdrpla++;
-	  offset++;
+  fulladdr[count] = *ptr;
+  fulladdr[++count] = '\n';
+
+  fgets(secondline,BUFFERSIZE,fd);
+  ptr = secondline;
+  doornum = atoi(ptr);
+  ment->house_number = doornum;
+  while (*ptr != '\n'){
+	  fulladdr[count] = *ptr;
+	  ptr++;
+	  count++;
   }
-  ment->house_number = h_number;
-  offset = 0;
-  count = 0;
-  
-  /* POST CODE */
-  fgets(fpointer,BUFFERSIZE,fd);
-  pplace = fpointer;
-  while (*pplace != '\n'){
-    pplace++;
-	count++;
+  fulladdr[count] = *ptr;
+  fulladdr[++count] = '\n';
+  fgets(thirdline,BUFFERSIZE,fd);
+  ptr = thirdline;
+  while (*ptr != '\n'){
+	  fulladdr[count] = *ptr;
+	  ptr++;
+	  count++;
   }
-  pcode = malloc(sizeof(fpointer-pplace));
-  *pplace = '\0';
-  strcpy(pcode,fpointer);
+  fulladdr[count] = *ptr;
+  fulladdr[++count] = '\0';
+  pcode = malloc(sizeof(char)*(ptr-thirdline)+1);
+  strncat(pcode,thirdline,(sizeof(char)*(ptr-thirdline)));
   ment->postcode = pcode;
-  while(offset<=count){
-    fulladdr[fulladdrpla] = fpointer[offset];
-    fulladdrpla++;
-    offset++;
-  }
-  pplace= fulladdr[fulladdrpla];
-  f_begin_adr = fulladdr[0];
-  f_address = malloc(sizeof(pplace-f_begin_adr));
-  strcpy(f_address,fulladdr);
-  ment->full_address = f_address;
-  printf("%s\n%i\n%s\n%s\n",sname,h_number,pcode,f_address);
+  ptr = &fulladdr[count];
+  fadd = malloc(sizeof(char)*(ptr-fulladdr)+1);
+  strncat(fadd,fulladdr,(sizeof(char)*(ptr-fulladdr)));
+  printf("%s",fulladdr);
+  ment->full_address = fadd;
   return ment;
 }
 
@@ -118,6 +94,7 @@ void me_print(MEntry *me, FILE *fd){
 	char* output;
 	output = me->full_address;
 	fputs(output,fd);
+	fputc('\n',fd);
   return;
 }
 
@@ -125,6 +102,8 @@ void me_print(MEntry *me, FILE *fd){
  * me1<me2, me1==me2, me1>me2
  */
 int me_compare(MEntry *me1, MEntry *me2){
+	char* me1p = me1->full_address;
+	char* me2p = me2->full_address;
   return 0;
 }
 
