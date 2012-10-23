@@ -98,15 +98,27 @@ MEntry *me_get(FILE *fd){
 
 /* me_hash computes a hash of the MEntry, mod size */
 unsigned long me_hash(MEntry *me, unsigned long size){
-  return 0l;
+  unsigned long hash;
+  char *ptr;
+  ptr = me->surname;
+  for(hash; *ptr!='/0'; ptr++){
+    hash = *ptr + 33 * hash;
+  }
+  ptr = me->postcode;
+  for(hash; *ptr!='\0'; ptr++){
+    hash = *ptr + 33 * hash;
+  }
+  ptr = me->house_number;
+  hash = *ptr + 33 * hash;
+  printf("%l",hash);
+  return hash % size;  
 }
 
 /* me_print prints the full address on fd */
 void me_print(MEntry *me, FILE *fd){
-	char* output;
+	char *output;
 	output = me->full_address;
 	fputs(output,fd);
-	fputc('\n',fd);
   return;
 }
 
@@ -116,23 +128,26 @@ void me_print(MEntry *me, FILE *fd){
 int me_compare(MEntry *me1, MEntry *me2){
 	int me1d = me1->house_number;
 	int me2d = me2->house_number;
-	char* me1s = me1->surname;
-	char* me2s = me2->surname;
-	char* me1p = me1->postcode;
-	char* me2p = me2->postcode;
-	if (me1d==me2d){
-		if(sizeof(me1s)==sizeof(me2s)){
-			char* ptr = me1s;
-			int i = 0;
-			int f = sizeof(me1s)/sizeof(char);
-			for(i;i<f;i++){
-				
-  return 0;
+	char *me1s = me1->surname;
+	char *me2s = me2->surname;
+	char *me1p = me1->postcode;
+	char *me2p = me2->postcode;
+	if (me1d == me2d){
+	  if (strcmp(me1s,me2s) == 0){
+	    return strcmp(me1p,me2p);
+	  }
+	  return strcmp(me1s,me2s);
+	}
+	return (me1d>0 ? 1: -1);
 }
 
 /* me_destroy destroys the mail entry
  */
 void me_destroy(MEntry *me){
+  free(me->surname);
+  free(me->postcode);
+  free(me->full_address);
+  free(me);
   return;
 }
 
