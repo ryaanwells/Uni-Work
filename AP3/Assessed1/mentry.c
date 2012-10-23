@@ -105,7 +105,7 @@ MEntry *me_get(FILE *fd){
   strncat(fadd,fulladdr,(sizeof(char)*(ptr-fulladdr)));
   ment->full_address = fadd;
   return ment;
-  }
+}
 
 
 /* me_hash computes a hash of the MEntry, mod size */
