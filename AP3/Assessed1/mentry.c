@@ -19,10 +19,7 @@ typedef struct mentry {
 /* me_get returns the next file entry, or NULL if end of file*/
 MEntry *me_get(FILE *fd){
 	MEntry* ment = (MEntry*) malloc(sizeof(MEntry));
-	if(ment==NULL){
-	  printf("%s", "Malloc Error");
-	  return NULL;
-  }
+	if(ment==NULL) return NULL;
   
   char firstline[BUFFERSIZE];
   char secondline[BUFFERSIZE];
@@ -45,7 +42,12 @@ MEntry *me_get(FILE *fd){
 	  count++;
   }
   sname = malloc(sizeof(char)*(ptr-firstline) + 1);
+  if(sname == NULL){
+    free(ment);
+    return NULL;
+  }
   strncat(sname,firstline,(sizeof(char)*(ptr-firstline)));
+
   int i = 0;
   for(i=0; i<count; i++){
 	  sname[i] = tolower(sname[i]);
@@ -85,15 +87,25 @@ MEntry *me_get(FILE *fd){
   fulladdr[count] = *ptr;
   fulladdr[++count] = '\0';
   pcode = malloc(sizeof(char)*(i));
+  if (pcode == NULL){
+    free(sname);
+    free(ment);
+    return NULL;
+  }
   strncat(pcode,pcodetemp,(sizeof(char)*(i)));
   ment->postcode = pcode;
   ptr = &fulladdr[count];
   fadd = malloc(sizeof(char)*(ptr-fulladdr)+1);
+  if (pcode == NULL){
+    free(pcode);
+    free(sname);
+    free(ment);
+    return NULL;
+  }
   strncat(fadd,fulladdr,(sizeof(char)*(ptr-fulladdr)));
-  printf("%s",fulladdr);
   ment->full_address = fadd;
   return ment;
-}
+  }
 
 
 /* me_hash computes a hash of the MEntry, mod size */
@@ -138,7 +150,7 @@ int me_compare(MEntry *me1, MEntry *me2){
 	  }
 	  return strcmp(me1s,me2s);
 	}
-	return (me1d>0 ? 1: -1);
+	return (me1d>me2d ? 1: -1);
 }
 
 /* me_destroy destroys the mail entry
@@ -150,5 +162,6 @@ void me_destroy(MEntry *me){
   free(me);
   return;
 }
+
 
 #endif /* _MENTRY_H_ */
