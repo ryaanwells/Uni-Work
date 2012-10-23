@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "mentry.h"
 
 #define BUFFERSIZE 2056
@@ -27,12 +28,14 @@ MEntry *me_get(FILE *fd){
   char secondline[BUFFERSIZE];
   char thirdline[BUFFERSIZE];
   char fulladdr[BUFFERSIZE];
+  char pcodetemp[BUFFERSIZE];
   char *sname;
   char *ptr;
   char *pcode;
   char *fadd;
   int count = 0;
   int doornum = 0;
+
   fgets(firstline,BUFFERSIZE,fd);
   ptr = firstline;
    
@@ -43,6 +46,10 @@ MEntry *me_get(FILE *fd){
   }
   sname = malloc(sizeof(char)*(ptr-firstline) + 1);
   strncat(sname,firstline,(sizeof(char)*(ptr-firstline)));
+  int i = 0;
+  for(i=0; i<count; i++){
+	  sname[i] = tolower(sname[i]);
+  }
   ment->surname = sname;
   while (*ptr != '\n'){
 	  fulladdr[count] = *ptr;
@@ -65,15 +72,20 @@ MEntry *me_get(FILE *fd){
   fulladdr[++count] = '\n';
   fgets(thirdline,BUFFERSIZE,fd);
   ptr = thirdline;
+  i = 0;
   while (*ptr != '\n'){
 	  fulladdr[count] = *ptr;
+	  if(isalpha(*ptr)){
+		  pcodetemp[i] = tolower(*ptr);
+		  i++;
+	  }
 	  ptr++;
 	  count++;
   }
   fulladdr[count] = *ptr;
   fulladdr[++count] = '\0';
-  pcode = malloc(sizeof(char)*(ptr-thirdline)+1);
-  strncat(pcode,thirdline,(sizeof(char)*(ptr-thirdline)));
+  pcode = malloc(sizeof(char)*(i));
+  strncat(pcode,pcodetemp,(sizeof(char)*(i)));
   ment->postcode = pcode;
   ptr = &fulladdr[count];
   fadd = malloc(sizeof(char)*(ptr-fulladdr)+1);
@@ -102,8 +114,19 @@ void me_print(MEntry *me, FILE *fd){
  * me1<me2, me1==me2, me1>me2
  */
 int me_compare(MEntry *me1, MEntry *me2){
-	char* me1p = me1->full_address;
-	char* me2p = me2->full_address;
+	int me1d = me1->house_number;
+	int me2d = me2->house_number;
+	char* me1s = me1->surname;
+	char* me2s = me2->surname;
+	char* me1p = me1->postcode;
+	char* me2p = me2->postcode;
+	if (me1d==me2d){
+		if(sizeof(me1s)==sizeof(me2s)){
+			char* ptr = me1s;
+			int i = 0;
+			int f = sizeof(me1s)/sizeof(char);
+			for(i;i<f;i++){
+				
   return 0;
 }
 
