@@ -17,14 +17,29 @@ typedef struct mlisthead{
 
 typedef struct mlistnode{
   struct MEntry *ment;
-  MEntry *next;
+  struct MEntry *next;
 } MListNode;
 
 extern int ml_verbose;		/* if true, prints diagnostics on stderr */
 
-/* ml_create - created a new mailing list */
-MList *ml_create(void){
-	return ml_create_size((unsigned int) STARTSIZE);
+
+/* ml_lookup - looks for MEntry in the list, returns matching entry or NULL */
+MEntry *ml_lookup(MList *ml, MEntry *me){
+  MListHead *bkts = ml->buckets;
+  unsigned int total = ml->size;
+  MListNode *ptr;
+  MEntry *other;
+  unsigned int i = 0;
+  for (i;i<total;i++){
+    ptr = bkts[i].node;
+    while (ptr!= NULL){
+      if (me_compare(me, ptr->ment) == 0){
+	return (ptr->ment);
+      }
+      ptr = ptr->next;
+    }
+  }
+  return NULL;
 }
 
 MList *ml_create_size(unsigned int size){
@@ -37,12 +52,20 @@ MList *ml_create_size(unsigned int size){
 	return &ml;
 }
 
+/* ml_create - created a new mailing list */
+MList *ml_create(void){
+	return ml_create_size((unsigned int) STARTSIZE);
+}
+
+
+
 /* ml_add - adds a new MEntry to the list;
  * returns 1 if successful, 0 if error (malloc)
  * returns 1 if it is a duplicate */
 int ml_add(MList **ml, MEntry *me){
-	MList *mlpointer = *ml;
-	if (ml_lookup(mlpointer,me) != NULL){ return 1;}
+  MList *mlpointer = *ml;
+  MEntry *MEpoint = ml_lookup(mlpointer,me);
+	if (MEpoint != NULL){ return 1;}
 	unsigned int mlsize = mlpointer->size;
 	unsigned long hval;
 	hval = (me,mlsize);
@@ -50,7 +73,7 @@ int ml_add(MList **ml, MEntry *me){
 	MListHead *location = &buckets[hval];
 	MListNode *newnode = malloc(sizeof(MListNode));
 	if (newnode == NULL){ return 0;}
-	*newnode->ment = me;
+	newnode->ment = me;
 	if (location->node == NULL){
 		location->node = &newnode;
 		location->entryTotal = 1;
@@ -58,7 +81,7 @@ int ml_add(MList **ml, MEntry *me){
 		return 1;
 	}
 	MListNode *npoint = location->node;
-	while (npoint.next != NULL){
+	while (npoint->next != NULL){
 		npoint = npoint->next;
 	}
 	npoint->next = me;
@@ -66,27 +89,7 @@ int ml_add(MList **ml, MEntry *me){
 	return 1;
 }
 
-/* ml_lookup - looks for MEntry in the list, returns matching entry or NULL */
-MEntry *ml_lookup(MList *ml, MEntry *me){
-	MListHead *bkts = ml->buckets;
-	unsigned int total = ml->size;
-	MListNode *ptr;
-	MEntry *other;
-	unsigned int i = 0;
-	for (i;i<total;i++){
-		ptr = *bkts[i]->node;
-		if (ptr!=NULL){
-			other = &ptr->ment;
-			while(other!=NULL){
-				if (me_compare(me, other) == 0){
-					return other;
-				}
-				other = &other->next;
-			}
-		}
-	}
-	return NULL;
-}
+
 
 /* ml_destroy - destroy the mailing list */
 void ml_destroy(MList *ml){
