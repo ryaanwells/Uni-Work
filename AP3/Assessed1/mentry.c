@@ -86,7 +86,7 @@ MEntry *me_get(FILE *fd){
   }
   fulladdr[count] = *ptr;
   fulladdr[++count] = '\0';
-  pcode = malloc(sizeof(char)*(i));
+  pcode = malloc(sizeof(char)*(i)); 
   if (pcode == NULL){
     free(sname);
     free(ment);
@@ -113,15 +113,14 @@ unsigned long me_hash(MEntry *me, unsigned long size){
   unsigned long hash;
   char *ptr;
   ptr = me->surname;
-  for(hash; *ptr!='/0'; ptr++){
+  for(hash; *ptr!='\0'; ptr++){
     hash = *ptr + 33 * hash;
   }
   ptr = me->postcode;
   for(hash; *ptr!='\0'; ptr++){
     hash = *ptr + 33 * hash;
   }
-  ptr = me->house_number;
-  hash = *ptr + 33 * hash;
+  hash = me->house_number + 33 * hash;
   printf("%l",hash);
   return hash % size;  
 }

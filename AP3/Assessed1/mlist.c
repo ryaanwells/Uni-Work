@@ -7,7 +7,7 @@
 
 typedef struct mlist{
 	unsigned int size;
-	struct mlisthead *buckets;
+	struct mlisthead **buckets;
 } MList;
 
 typedef struct mlisthead{
@@ -46,33 +46,45 @@ MEntry *ml_lookup(MList *ml, MEntry *me){
 	return NULL;
 }
 
-static MList *ml_create_size(unsigned int size){
+MList *ml_create(void){
+	int sizee = 10000;
 	MList *ml =(MList *) malloc(sizeof(MList)); 
 	if (ml == NULL) return NULL;
-	MListHead *bkts =(MListHead *) malloc(sizeof(MListHead)*size);
-	if (bkts = NULL) return NULL;
+	ml->buckets = (MListHead **) malloc(sizee*sizeof(MListHead *));
+	ml->size = sizee;
 	int i = 0;
-	MListHead *ptr = bkts;
-	MListHead *mlnew;
-	while(i<size){
-		mlnew = malloc(sizeof(MListHead));
-		mlnew->node = NULL;
-		mlnew->entryTotal = 0;
-		mlnew->isFull = 0;
-		*ptr = *mlnew;
+	for(i;i<sizee;i++){
+		ml->buckets[i] =(MListHead *)malloc(sizeof(MListHead));
+		ml->buckets[i]->node =(MListNode *) malloc(sizeof(MListNode));
+		ml->buckets[i]->node->ment = NULL;
+		ml->buckets[i]->node->next = NULL;
+		ml->buckets[i]->entryTotal = 0;
+		ml->buckets[i]->isFull = 0;
+	}
+	/*
+	int i = 0;
+	MListHead *ptr = bkts;	
+	while(i<10){
+		MListHead *newML = malloc(sizeof(MListHead));
+		newML->entryTotal = 0;
+		newML->isFull = 0;
+		newML->node = NULL;
+		printf("%s", "here");
+		*ptr = *newML;
 		i++;
 		ptr++;
 	}
 	ml->size = size;
 	ml->buckets = bkts;
+	*/
 	return ml;
 }
 
-/* ml_create - created a new mailing list */
+/* ml_create - created a new mailing list */ /*
 MList *ml_create(void){
-	return ml_create_size((unsigned int) STARTSIZE);
+	return ml_create_size(STARTSIZE);
 }
-
+											 */
 
 
 /* ml_add - adds a new MEntry to the list;
