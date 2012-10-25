@@ -41,7 +41,7 @@ MEntry *me_get(FILE *fd){
 	  ptr++;
 	  count++;
   }
-  sname = malloc(sizeof(char)*(ptr-firstline) + 1);
+  sname = malloc(sizeof(char)*(ptr-firstline) + sizeof(char));
   if(sname == NULL){
     free(ment);
     return NULL;
@@ -77,15 +77,16 @@ MEntry *me_get(FILE *fd){
   i = 0;
   while (*ptr != '\n'){
 	  fulladdr[count] = *ptr;
-	  if(isalpha(*ptr)){
+	  if(isalnum(*ptr)){
 		  pcodetemp[i] = tolower(*ptr);
 		  i++;
 	  }
 	  ptr++;
 	  count++;
   }
-  fulladdr[count] = *ptr;
-  fulladdr[++count] = '\0';
+  fulladdr[count] = '\n';
+  fulladdr[count++] = '\0';
+  pcodetemp[i] = '\0';
   pcode = malloc(sizeof(char)*(i)); 
   if (pcode == NULL){
     free(sname);
@@ -96,7 +97,7 @@ MEntry *me_get(FILE *fd){
   ment->postcode = pcode;
   ptr = &fulladdr[count];
   fadd = malloc(sizeof(char)*(ptr-fulladdr)+1);
-  if (pcode == NULL){
+  if (fadd == NULL){
     free(pcode);
     free(sname);
     free(ment);
@@ -113,16 +114,17 @@ unsigned long me_hash(MEntry *me, unsigned long size){
   unsigned long hash;
   char *ptr;
   ptr = me->surname;
-  for(hash; *ptr!='\0'; ptr++){
+  while(*ptr!='\0'){
     hash = *ptr + 33 * hash;
+    ptr++;
   }
   ptr = me->postcode;
-  for(hash; *ptr!='\0'; ptr++){
+  while(*ptr!='\0'){
     hash = *ptr + 33 * hash;
+    ptr++;
   }
   hash = me->house_number + 33 * hash;
-  printf("%l",hash);
-  return hash % size;  
+  return (hash%size);  
 }
 
 /* me_print prints the full address on fd */
@@ -137,7 +139,7 @@ void me_print(MEntry *me, FILE *fd){
  * me1<me2, me1==me2, me1>me2
  */
 int me_compare(MEntry *me1, MEntry *me2){
-	int me1d = me1->house_number;
+  int me1d = me1->house_number;
 	int me2d = me2->house_number;
 	char *me1s = me1->surname;
 	char *me2s = me2->surname;
