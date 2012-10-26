@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include "string.h"
+
+#define MAXLINE 1000 /* maximum input line length */
+
+/* print all lines from standard input that match pattern */
+int main(int argc, char* argv[])
+{
+	if (argc!=1){
+		printf("%s", "usage: find pattern");
+		return -1;
+	}
+	char pattern[] = argv[1];
+	char line[MAXLINE];
+	int found = 0;
+	while (fgets(line, MAXLINE, stdin) != NULL)
+		if (strstr(line, pattern) != NULL) {
+			printf("%s", line);
+			found++;
+		}
+	return found;
+}

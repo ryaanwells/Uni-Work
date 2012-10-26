@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	ml_verbose = varg;
-		
 	ml = ml_create();
 	while ((mep = me_get(stdin)) != NULL) {
 		meq = ml_lookup(ml, mep);
