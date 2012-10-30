@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 
+
 /**
  program to find shortest path using Dijkstra's algorithm
  */
@@ -15,11 +16,23 @@ public class Main {
 		FileReader reader = new FileReader(inputFileName);
 		Scanner in = new Scanner(reader);
 		
-		// read in the data here
+		int floatNode, sinkNode, vWeight;
+		int nodeTotal = in.nextInt();
+		
+		Graph dGraph = new Graph(nodeTotal);
+		for (int i = 0; i<nodeTotal; i++){
+			for (int j = 0; j<nodeTotal; j++){
+				vWeight = in.nextInt();
+				if (vWeight != 0){
+					dGraph.getVertex(i).addToAdjList(j,vWeight);
+				}
+			}
+		}
+		floatNode = in.nextInt();
+		sinkNode = in.nextInt();
 
 		reader.close();
 		
-		// create graph here
 		
 		
 		// do the work here
