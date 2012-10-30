@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.lang.Math;
 
 
 /**
@@ -33,8 +34,89 @@ public class Main {
 
 		reader.close();
 		
+		int[] S = new int[nodeTotal];
+		int[] d = new int[nodeTotal];
+		for(int i=0;i<nodeTotal;i++){
+			S[i]=0;
+			d[i]=dGraph.getVertex(floatNode).wt(dGraph.getVertex(i));
+		}
+		
+		S[floatNode]=1;
+		int previousNode = floatNode;
+		boolean active = false;
+		boolean found = false;
 		
 		
+		for(int i=0; i<nodeTotal;i++){
+			if(S[i]!=1 && d[i]>=0){
+				active = true;
+			}
+		}
+		
+		
+		int leastDistance = Integer.MAX_VALUE;
+		int newestNode = 0;
+		
+		
+		while (active){
+			leastDistance = Integer.MAX_VALUE;
+			for(int i=0; i<nodeTotal;i++){
+				if (S[i]!=1 && d[i]>0 && d[i]<=leastDistance){
+					leastDistance = d[i];
+					newestNode = i;
+				}
+			}
+			S[newestNode]=1;
+			dGraph.getVertex(newestNode).setPredecessor(previousNode);
+			if(newestNode == sinkNode){
+				active = false;
+				found = true;
+				continue;
+			}
+			for(int i=0; i<nodeTotal; i++){
+				if(S[i]!=1){
+					if(d[i] == -1){
+						d[i] = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i));
+					}
+					else{
+						int distance = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i));
+						if(distance != -1){
+							d[i]= Math.min(d[i], d[newestNode]+distance);
+						}
+					}
+				}
+			}
+			
+			active = false;
+			if(!found){
+				for(int i=0; i<nodeTotal;i++){
+					if(S[i]!=1 && d[i]>=0){
+						active = true;
+					}
+				}
+			}
+			System.out.println(d[newestNode]);
+			previousNode = newestNode;
+		}
+		
+		if(!found){
+			System.out.println("\nNo route to the sink node could be found.");
+		}
+		else{
+			System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + d[sinkNode]);
+			Stack<Integer> reverse = new Stack<Integer>();
+			int parent = sinkNode;
+			while (parent!=-1){
+				reverse.add(parent);
+				parent = dGraph.getVertex(parent).getPredecessor();
+			}
+			System.out.print("Shortest path: ");
+			while (!reverse.isEmpty()){
+				System.out.print(reverse.pop());
+				System.out.print(" ");
+			}
+			System.out.println("\n");
+		}
 		// do the work here
 		
 
@@ -42,5 +124,6 @@ public class Main {
 		long end = System.currentTimeMillis();
 		System.out.println("\nElapsed time: " + (end - start) + " milliseconds");
 	}
+	
 
 }
