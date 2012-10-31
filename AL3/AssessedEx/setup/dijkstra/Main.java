@@ -39,6 +39,12 @@ public class Main {
 		for(int i=0;i<nodeTotal;i++){
 			S[i]=0;
 			d[i]=dGraph.getVertex(floatNode).wt(dGraph.getVertex(i));
+			if (d[i]!=0){
+				dGraph.getVertex(i).setPredecessor(floatNode);
+			}
+			else{
+				dGraph.getVertex(i).setPredecessor(-1);
+			}
 		}
 		
 		S[floatNode]=1;
@@ -67,7 +73,6 @@ public class Main {
 				}
 			}
 			S[newestNode]=1;
-			dGraph.getVertex(newestNode).setPredecessor(previousNode);
 			if(newestNode == sinkNode){
 				active = false;
 				found = true;
@@ -77,11 +82,17 @@ public class Main {
 				if(S[i]!=1){
 					if(d[i] == -1){
 						d[i] = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i));
+						if (d[i] != -1){
+							dGraph.getVertex(i).setPredecessor(newestNode);
+						}
 					}
 					else{
 						int distance = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i));
 						if(distance != -1){
-							d[i]= Math.min(d[i], d[newestNode]+distance);
+							if(d[i] > d[newestNode]+distance){
+								d[i] = d[newestNode]+distance;
+								dGraph.getVertex(i).setPredecessor(newestNode);
+							}
 						}
 					}
 				}
@@ -95,7 +106,6 @@ public class Main {
 					}
 				}
 			}
-			System.out.println(d[newestNode]);
 			previousNode = newestNode;
 		}
 		
@@ -108,7 +118,12 @@ public class Main {
 			int parent = sinkNode;
 			while (parent!=-1){
 				reverse.add(parent);
-				parent = dGraph.getVertex(parent).getPredecessor();
+				if(parent == dGraph.getVertex(parent).getPredecessor()){
+					parent = -1;
+				}
+				else{
+					parent = dGraph.getVertex(parent).getPredecessor();
+				}
 			}
 			System.out.print("Shortest path: ");
 			while (!reverse.isEmpty()){
