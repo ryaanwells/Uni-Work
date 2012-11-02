@@ -39,7 +39,7 @@ public class Main {
 		for(int i=0;i<nodeTotal;i++){
 			S[i]=0;
 			d[i]=dGraph.getVertex(floatNode).wt(dGraph.getVertex(i));
-			if (d[i]!=0){
+			if (d[i]!=-1){
 				dGraph.getVertex(i).setPredecessor(floatNode);
 			}
 			else{
@@ -48,7 +48,6 @@ public class Main {
 		}
 		
 		S[floatNode]=1;
-		int previousNode = floatNode;
 		boolean active = false;
 		boolean found = false;
 		
@@ -66,12 +65,18 @@ public class Main {
 		
 		while (active){
 			leastDistance = Integer.MAX_VALUE;
+			newestNode = -1;
 			for(int i=0; i<nodeTotal;i++){
-				if (S[i]!=1 && d[i]>0 && d[i]<=leastDistance){
+				if (S[i]!=1 && (d[i]>0 && d[i]<=leastDistance)){
 					leastDistance = d[i];
 					newestNode = i;
 				}
 			}
+			if(newestNode == -1){
+				active = false;
+				break;
+			}
+			System.out.println(newestNode);
 			S[newestNode]=1;
 			if(newestNode == sinkNode){
 				active = false;
@@ -84,6 +89,8 @@ public class Main {
 						d[i] = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i));
 						if (d[i] != -1){
 							dGraph.getVertex(i).setPredecessor(newestNode);
+							d[i] = dGraph.getVertex(newestNode).wt(dGraph.getVertex(i)) +
+								d[newestNode];
 						}
 					}
 					else{
@@ -101,12 +108,11 @@ public class Main {
 			active = false;
 			if(!found){
 				for(int i=0; i<nodeTotal;i++){
-					if(S[i]!=1 && d[i]>=0){
+					if(S[i]!=1 && d[i]!=-1){
 						active = true;
 					}
 				}
 			}
-			previousNode = newestNode;
 		}
 		
 		if(!found){
@@ -116,25 +122,18 @@ public class Main {
 			System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + d[sinkNode]);
 			Stack<Integer> reverse = new Stack<Integer>();
 			int parent = sinkNode;
-			while (parent!=-1){
+			while (parent!=floatNode){
 				reverse.add(parent);
-				if(parent == dGraph.getVertex(parent).getPredecessor()){
-					parent = -1;
-				}
-				else{
-					parent = dGraph.getVertex(parent).getPredecessor();
-				}
+				parent = dGraph.getVertex(parent).getPredecessor();
 			}
+			reverse.add(floatNode);
 			System.out.print("Shortest path: ");
 			while (!reverse.isEmpty()){
 				System.out.print(reverse.pop());
 				System.out.print(" ");
 			}
-			System.out.println("\n");
 		}
-		// do the work here
 		
-
 		// end timer and print total time
 		long end = System.currentTimeMillis();
 		System.out.println("\nElapsed time: " + (end - start) + " milliseconds");

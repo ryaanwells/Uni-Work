@@ -83,7 +83,7 @@ public class Vertex {
     }
     
 	public int wt(Vertex x){
-		for(AdjListNode A: adjList){
+		for(AdjListNode A: this.adjList){
 			if(A.getVertexNumber() == x.getIndex()){
 				return A.getWeight();
 			}
