@@ -76,7 +76,6 @@ public class Main {
 				active = false;
 				break;
 			}
-			System.out.println(newestNode);
 			S[newestNode]=1;
 			if(newestNode == sinkNode){
 				active = false;
