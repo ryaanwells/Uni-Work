@@ -15,19 +15,34 @@ public class Main {
 		FileReader reader = new FileReader(inputFileName);
 		Scanner in = new Scanner(reader);
 		
-		// read in the data here
+		int floatNode, sinkNode, vWeight;
+		int nodeTotal = Integer.parseInt(in.next());
 
-		reader.close();
-		
-		// create graph here
-		
-		
-		// do the work here
-		
+		Graph bGraph = new Graph(nodeTotal);
+		for (int i = 0; i<nodeTotal; i++){
+		    for (int j = 0; j<nodeTotal; j++){
+		    	vWeight = Integer.parseInt(in.next());
+		    	if (vWeight != 0){
+		    		bGraph.getVertex(i).addToAdjList(j,vWeight);
+		    	}
+		    }
+		}
+		floatNode = Integer.parseInt(in.next());
+		sinkNode = Integer.parseInt(in.next());
 
+		reader.close();	
+		bGraph.bestPath(floatNode, sinkNode, nodeTotal);
+		Path bestPath = bGraph.getPath();
+		
+		if (bestPath.getDistance() == -1){
+			System.out.println("\nNo route to the sink node could be found");
+		}
+		else{
+		    System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + bestPath.getDistance());
+		    System.out.println("Shortest path: " + bestPath.toString());
 		// end timer and print total time
-		long end = System.currentTimeMillis();
-		System.out.println("\nElapsed time: " + (end - start) + " milliseconds");
+			long end = System.currentTimeMillis();
+			System.out.println("\nElapsed time: " + (end - start) + " milliseconds");
 	}
-
+	}
 }
