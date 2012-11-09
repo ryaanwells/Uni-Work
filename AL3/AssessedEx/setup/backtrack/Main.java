@@ -32,13 +32,13 @@ public class Main {
 
 		reader.close();	
 		bGraph.bestPath(floatNode, sinkNode, nodeTotal);
-		Path bestPath = bGraph.getPath();
+		LinkedList<AdjListNode> bestPath = bGraph.getPath();
 		
-		if (bestPath.getDistance() == -1){
+		if (bestPath.peek() == null){
 			System.out.println("\nNo route to the sink node could be found");
 		}
 		else{
-		    System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + bestPath.getDistance());
+		    System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + bestPath.peek().getWeight());
 		    System.out.println("Shortest path: " + bestPath.toString());
 		// end timer and print total time
 			long end = System.currentTimeMillis();

@@ -20,7 +20,13 @@ public class Path {
 	}
 	
 	public Path(Path p){
-		this.path = p.path;
+		this.path = new int[p.size][2];
+		for(int i = 0; i<size; i++){
+			if (p.path[i][0] != -1){
+				this.path[i][0] = p.path[i][0];
+				this.path[i][1] = p.path[i][1];
+			}
+		}
 		this.length = p.length;
 		this.size = p.size;
 		this.start = p.start;

@@ -8,7 +8,9 @@ public class Graph {
 
 	private Vertex[] vertices; // the (array of) vertices
 	private int numVertices = 0; // number of vertices
-	private Path bestPath = null;
+	private LinkedList<AdjListNode> bestPath = null;
+	private int floatNode;
+	private int sinkNode;
 
 	// possibly other fields representing properties of the graph
 
@@ -98,20 +100,52 @@ public class Graph {
 		}
 	}
 	
-	public Path getPath(){
+	public LinkedList<AdjListNode> getPath(){
 		return bestPath;
 	}
 	
 	public void bestPath(int flt, int snk, int size){
-		if(this.bestPath == null || this.bestPath.getFloat() != flt || this.bestPath.getSink() != snk){
+		if(this.bestPath == null || floatNode != flt || sinkNode != snk){
 			resetVisited();
-			Path workingPath = new Path(size,flt,snk);
-			workingPath.addToPath(flt,0);
+			LinkedList<AdjListNode> workingPath = new LinkedList<AdjListNode>();
+			workingPath.addFirst(new AdjListNode(flt,0));
 			vertices[flt].setVisited(true);
-			Try(workingPath);
+			Try(workingPath, snk);
 		}
 	}
-
+	
+	private void Try(LinkedList<AdjListNode> wp, int sink){
+		Vertex start = vertices[wp.peek().getVertexNumber()];
+		for(AdjListNode a: start.getAdjList()){
+			if(!vertices[a.getVertexNumber()].getVisited()){
+				wp.addFirst(new AdjListNode(a.getVertexNumber(),wp.peek().getWeight() + a.getWeight()));
+				vertices[a.getVertexNumber()].setVisited(true);
+				if(this.bestPath == null || wp.peek().getWeight()<this.bestPath.peek().getWeight()){
+					if(a.getVertexNumber() == sink){
+						this.bestPath = deepCopy(wp);
+						System.out.println(this.bestPath.toString());
+					}
+					else{
+						Try(wp, sink);
+					}
+				}
+				System.out.println(wp.toString());
+				wp.removeFirst();
+				vertices[a.getVertexNumber()].setVisited(false);
+			}
+		}
+	}
+	
+	private LinkedList<AdjListNode> deepCopy(LinkedList<AdjListNode> a){
+		LinkedList<AdjListNode> copy = new LinkedList<AdjListNode>();
+		Object[] aArray = a.toArray();
+		for(int i=0; i<aArray.length;i++)
+			copy.addLast((AdjListNode) aArray[i]);
+		return copy;
+	}
+	
+	
+/**
 	private void Try(Path wp){
 		Vertex start = vertices[wp.getLatest()];
 		for(AdjListNode a: start.getAdjList()){
@@ -131,9 +165,6 @@ public class Graph {
 			}
 		}
 	}
-	
-	
-	/**
 	public Path Try(int dest, Path cp, Path bp){
 		Vertex current = vertices[cp.getLatest()];
 		for (AdjListNode v: current.getAdjList()){
