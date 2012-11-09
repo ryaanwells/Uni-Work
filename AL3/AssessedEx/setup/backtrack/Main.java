@@ -39,7 +39,11 @@ public class Main {
 		}
 		else{
 		    System.out.println("Shortest distance from vertex " + floatNode + " to vertex " + sinkNode + " is " + bestPath.peek().getWeight());
-		    System.out.println("Shortest path: " + bestPath.toString());
+		    System.out.print("Shortest path: ");
+		    while(bestPath.peek()!= null){
+		    	AdjListNode next = (AdjListNode) bestPath.removeLast();
+		    	System.out.print(next.getVertexNumber() + " ");
+		    }
 		// end timer and print total time
 			long end = System.currentTimeMillis();
 			System.out.println("\nElapsed time: " + (end - start) + " milliseconds");

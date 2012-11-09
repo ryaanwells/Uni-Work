@@ -123,13 +123,11 @@ public class Graph {
 				if(this.bestPath == null || wp.peek().getWeight()<this.bestPath.peek().getWeight()){
 					if(a.getVertexNumber() == sink){
 						this.bestPath = deepCopy(wp);
-						System.out.println(this.bestPath.toString());
 					}
 					else{
 						Try(wp, sink);
 					}
 				}
-				System.out.println(wp.toString());
 				wp.removeFirst();
 				vertices[a.getVertexNumber()].setVisited(false);
 			}

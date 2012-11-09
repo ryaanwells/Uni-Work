@@ -1,0 +1,18 @@
+Shortest distance from vertex 2 to vertex 5 is 11
+Shortest path: 2 1 0 5 
+Elapsed time: 31 milliseconds
+Shortest distance from vertex 3 to vertex 4 is 1199
+Shortest path: 3 0 4 
+Elapsed time: 55 milliseconds
+Shortest distance from vertex 3 to vertex 4 is 1157
+Shortest path: 3 36 4 
+Elapsed time: 410 milliseconds
+Shortest distance from vertex 3 to vertex 4 is 1152
+Shortest path: 3 49 4 
+Elapsed time: 885 milliseconds
+Shortest distance from vertex 4 to vertex 3 is 1152
+Shortest path: 4 49 3 
+Elapsed time: 18044 milliseconds
+Shortest distance from vertex 24 to vertex 152 is 17
+Shortest path: 24 582 964 837 152 
+Elapsed time: 57134 milliseconds

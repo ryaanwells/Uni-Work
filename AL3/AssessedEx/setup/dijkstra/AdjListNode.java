@@ -31,5 +31,4 @@ public class AdjListNode {
 	public void setWeight(int w){
 		weight = w;
 	}
-	
 }
