@@ -1,0 +1,11 @@
+# Test while-commands.
+
+proc main ():
+# Read a number, and write all squares 
+# up to and including that number.
+	int m = read()
+	int i = read()
+	for i to m:
+		write(i*m)
+		i = i+1 . 
+.
