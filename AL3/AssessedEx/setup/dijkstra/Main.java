@@ -16,18 +16,10 @@ public class Main {
 	FileReader reader = new FileReader(inputFileName);
 	Scanner in = new Scanner(reader);
 
-	int floatNode, sinkNode, vWeight;
+	int floatNode, sinkNode;
 	int nodeTotal = Integer.parseInt(in.next());
 
-	Graph dGraph = new Graph(nodeTotal);
-	for (int i = 0; i<nodeTotal; i++){
-	    for (int j = 0; j<nodeTotal; j++){
-		vWeight = Integer.parseInt(in.next());
-		if (vWeight != 0){
-		    dGraph.getVertex(i).addToAdjList(j,vWeight);
-		}
-	    }
-	}
+	Graph dGraph = new Graph(nodeTotal,in);
 	floatNode = Integer.parseInt(in.next());
 	sinkNode = Integer.parseInt(in.next());
 

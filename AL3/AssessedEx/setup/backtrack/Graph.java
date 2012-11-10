@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
 /**
  class to represent an undirected graph using adjacency lists
@@ -24,6 +25,20 @@ public class Graph {
 			vertices[i] = new Vertex(i);
 	}
 
+	public Graph(int n, Scanner is){
+		numVertices = n;
+		vertices = new Vertex[n];
+		for (int i = 0; i < n; i++){
+			vertices[i] = new Vertex(i);
+		    for (int j = 0; j<n; j++){
+				int vWeight = Integer.parseInt(is.next());
+				if (vWeight != 0){
+				    this.getVertex(i).addToAdjList(j,vWeight);
+					}
+			    }
+		}
+	}
+	
 	public int size() {
 		return numVertices;
 	}
