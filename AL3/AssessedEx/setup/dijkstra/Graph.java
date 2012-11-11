@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Graph {
 
 	private Vertex[] vertices; // the (array of) vertices
-	private int numVertices = 0; // number of vertices
+	private int numVertices; // number of vertices
 
 	// possibly other fields representing properties of the graph
 
@@ -23,7 +23,7 @@ public class Graph {
 	}
 	
 	public Graph(int n, Scanner is){
-		numVertices = n;
+	        numVertices = n;
 		vertices = new Vertex[n];
 		for (int i = 0; i < n; i++){
 			vertices[i] = new Vertex(i);

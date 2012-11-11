@@ -98,7 +98,6 @@ public class Main {
 		}
 	    }
 	}
-	long end = System.currentTimeMillis();
 	if(!found){
 	    System.out.println("\nNo route to the sink node could be found.");
 	}
@@ -119,7 +118,7 @@ public class Main {
 	}
 
 	// end timer and print total time
-
+	long end = System.currentTimeMillis();
 	System.out.println("\nElapsed time: " + (end - start) + " milliseconds");
     }
 

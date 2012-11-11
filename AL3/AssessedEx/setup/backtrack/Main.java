@@ -23,7 +23,7 @@ public class Main {
 		sinkNode = Integer.parseInt(in.next());
 
 		reader.close();	
-		bGraph.bestPath(floatNode, sinkNode, nodeTotal);
+		bGraph.bestPath(floatNode, sinkNode);
 		LinkedList<AdjListNode> bestPath = bGraph.getPath();
 		
 		if (bestPath.peek() == null){

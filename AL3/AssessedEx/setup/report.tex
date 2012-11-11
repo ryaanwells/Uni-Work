@@ -1,7 +1,7 @@
 \documentclass{article}
-\usepackage{algorithm2e}
-
-\title{Algorithmics 3 Assessed Exercise\\ \vspace{4mm} 
+\usepackage[lined,boxed]{algorithm2e}
+\usepackage[top=3cm,bottom=3cm,left=3cm,right=4cm]{geometry}
+\title{Algorithmics 3 Assessed Exercise\\ 
 Status and Implementation Reports}
 
 \author{\bf Ryan Wells\\ \bf 1002253w}
@@ -10,6 +10,8 @@ Status and Implementation Reports}
 
 \begin{document}
 \maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
 
 \section*{Status report}
 
@@ -20,20 +22,169 @@ algorithms are fully functional and operate in expeted runtimes.
 \section*{Implementation report}
 Below I show  the implementation of the creation of the graph. Both
 variations of the algorithm use this creation method.
-\begin{algorithm}
-  \Input{A file described inside
-\begin{itemize}
-\item[(a)] 
-I implemented the Dijkstra search algorithm based on the pseudo-code
-provided in the lecture notes, however I shall explain my
-implementation here. 
+\IncMargin{1em}
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \SetKwData{Num}{numVertices} \SetKwData{Vertices}{vertices}
+  \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+  
+  \Input{An intger value $n$ declaring the number of vertices, Scanner $IS$ of the entire adjacency matrix of the graph}
+  \Output{A directed weighted graph as is described in $IS$}
+  \BlankLine
+  \Begin{
+      $\Num\leftarrow n$\;
+      $\Vertices\leftarrow Vertex[n]$\;
+      \For{$i\leftarrow 0$ \KwTo $n$}{
+        $\Vertices[i]\leftarrow$ new Vertex(i)\;
+        \For{$j\leftarrow 0$ \KwTo $n$}{
+          $vWeight\leftarrow$ next integer from \emph{IS}\;
+          \If{$vWeight$ != 0}{
+            \emph{Make arc from $\Vertices[i]$ to  $\Vertices[j]$ with weight $vWeight$}
+          }
+        }
+      }
+    }
+    \caption{One constructor of a Graph}
+  \end{algorithm}
+  \DecMargin{1em}
+\newPage
+  \begin{itemize}
+  \item[(a)] 
+    I implemented the Dijkstra search algorithm based on the pseudo-code
+    provided in the lecture notes, my exact implementation is below. I decided not to use the boolean Visited inside the Vertex class and opted for a faster method of using an array to store what Vertices have been visited. 
+
+    \begin{algorithm}[H]
+      \SetAlgoLined
+      \SetKwData{Float}{float} \SetKwData{Sink}{sink} \SetKwData{NodeTotal}{nodeTotal}
+      \SetKwData{Scanner}{fileScanner} 
+      \SetKwData{Sa}{Visited} 
+      \SetKwData{D}{distance}
+      \SetKwData{Vertex}{vertex} \SetKwFunction{Graph}{Graph} \SetKwData{G}{dGraph}
+      \SetKwData{Active}{active} \SetKwData{Found}{found}
+      \SetKwInOut{Input}{input} \SetKwInOut{Output}{output}
+      \Input{A file name $f$ contaning data about the Graph and path, assumed to be correct}
+      \Output{On standard output: Distance from \Float to \Sink, path and computation time}
+      \BlankLine
+      \Begin{
+          $\Scanner \leftarrow$ Scanner for $f$\;
+          $\NodeTotal \leftarrow$ next line of \Scanner\;
+          $\G \leftarrow$ \Graph{$\NodeTotal$,$f$}\;
+          $\Float \leftarrow$ next line of \Scanner\;
+          $\Sink \leftarrow$ next line of \Scanner\;
+          $\D \leftarrow$ array containing the distance from root for each node\;
+          $\Sa \leftarrow$ array containing whether or not a node has been visited\;
+          \For{$i\leftarrow 0$ \KwTo \NodeTotal}{
+        $\Sa[i] \leftarrow 0$\;
+        $\D[i] \leftarrow$ distance from \Float to $\Vertex[i]$\;
+        \lIf{$\D[i] != -1$ }{
+          Predecessor of $\Vertex[i] \leftarrow \Float$\;
+        }
+        \lElse{
+          Predecessor of $\Vertex[i] \leftarrow -1$\;
+        }
+      }
+      $\Sa[\Float] \leftarrow 1$\;
+      $\Active \leftarrow false$\;
+      $\Found \leftarrow false$\;
+      \lIf{$\Vertex[\Float]$ has outward connections in graph}{$\Active \leftarrow true$\;}
+      \While{\Active}{
+        \emph{$\Vertex[i]\leftarrow$ node with shortest distance to \Float not yet visited}\;
+        \If{no such node exists}{
+          $\Active \leftarrow false$\;
+          break\;
+        }
+        $\Sa[i] \leftarrow 1$\;
+        \If{$\Vertex[i] == \Vertex[\Sink]$}{
+          $\Active \leftarrow false$\;
+          $\Found \leftarrow true$\;
+        }
+        \For{$\Vertex[j]$ in \G not yet visited}{
+          \uIf{$\Vertex[j]$ has not been reached yet and can be reached}{
+            Predecessor of $\Vertex[j] \leftarrow \Vertex[i]$\;
+            $\D[j] \leftarrow \Vertex[i]$ + distance from $\Vertex[i]$ to $\Vertex[j]$\;
+          }
+          \ElseIf{$\Vertex[j]$ has been reached previously}{
+            \If{distance through $\Vertex[i]$ to $\Vertex[j] < \D[j]$}{
+              Predecessor of $\Vertex[j] \leftarrow \Vertex[i]$\;
+              $\D[j] \leftarrow \Vertex[i]$ + distance from $\Vertex[i]$ to $\Vertex[j]$\;
+            }
+          }            
+        }
+        $\Active = false$\;
+        \If{further unvisited nodes can be reached}{
+          $\Active = true$\;
+        }
+      }
+      \If{\Found}{
+        \emph{Traverse \G from $\Vertex[\Sink]$ to $\Vertex[\Float]$ using the Predecessor, adding each \Vertex to a stack to reverse order}\;
+      }
+    }
+    \caption{Dijkstra Shortest Path}
+    \label{alg:dijkstra}
+  \end{algorithm}
+
 
 \item[(b)]
-Here, explain how you implemented the Backtrack search to compute and return the required information. Include a discussion of any steps that you took to improve efficiency.
-\end{itemize}
+I have implemented the Backtrack search using the pseudo-code given at the end of the assignment handout, however I do some preliminary checks before running the algorithm properly. To get the best path for backtrack, because it is such an exhaustive algorithm, you first call a function called bestPath(float, sink) which will only run the backtrack search if the float and sink nodes are different from the ones relating to the current path or if the current path is null. If this is not qualified then nothing will happen. A get method is needed to access the path, which is stored inside the Graph class. The bestPath is stored inside the Graph class.
 
+I attempted to store the path as a doubly indexed integer array with the x value corresponding to the Vertex ID and the second as the accumulative distance so far so I could add in O(1) and remove in O(1) time. I encountered many problems which may have been solved but I decided that under the time constraints using a LinkedList of AdjListNodes was a more suitable option. Also, I decided to use each Vertex's Visited boolean since the function is recursive. The Backtrack algorithm here is assuming that this is the first time a path has been determined on this Graph, and on the first call of this method the workingPath only contains the Float vertex. 
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \SetKwInOut{Input}{input} \SetKwInOut{Output}{output}
+  \SetKwData{WP}{workingPath} \SetKwData{Sink}{sink} \SetKwData{Vertices}{vertices}
+  \SetKwData{Start}{current} \SetKwData{Vertex}{vertex} \SetKwData{Bestpath}{bestPath}
+  \Input{LinkedList$<$AdjListNode$>$ \WP, integer \Sink}
+  \Begin{
+      $\Start \leftarrow $ node referred to by the head of \WP\;
+      \For{$\Vertex$ in Adjacency List of $\Start$}{
+        \If{not yet visited}{
+          \emph{Visit and add to head of \WP}\;
+          \If{$\Bestpath == null$ or \WP is a shorter path than the \Bestpath}{
+            \uIf{head of \WP is \Sink}{
+              \emph{$\Bestpath \leftarrow$ deep copy of \WP}\;
+            }
+            \Else{
+              \emph{Recursively call this algorithm on \WP}\;
+            }
+          }
+          \emph{Remove and un-visit the head of \WP}
+        }
+      }
+    }
+    To print path, print each Vertex starting from the end of the \WP\;
+\caption{Backtrack Search Algorithm}
+\label{alg:backtrack}
+\end{algorithm}
+
+\end{itemize}
+\newpage
 \section*{Empirical results}
-\tag{sec:emp}
-Summarise the running times of your two programs on the data sets provided. If the program fails to terminate in, say, two minutes, simply report non-termination. 
+Below are the results from texting the algorithms on my personal 3.4GHz computer running Debain Squeeze.
+\newline
+
+\hskip-2.0cm\begin{tabular}[h]{|r|r|l|}\hline
+Test Files & Dijkstra & Backtrack \\ \hline
+&Shortest distance from vertex 2 to vertex 5 is 11 & Shortest distance from vertex 2 to vertex 5 is 11 \\
+data6.txt & Shortest path: 2 1 0 5 & Shortest path: 2 1 0 5 \\
+&Elapsed time: 15 milliseconds & Elapsed time: 15 milliseconds \\ \hline
+&Shortest distance from vertex 3 to vertex 4 is 1199 & Shortest distance from vertex 3 to vertex 4 is 1199\\
+data20.txt&Shortest path: 3 0 4  & Shortest path: 3 0 4 \\
+&Elapsed time: 25 milliseconds & Elapsed time: 29 milliseconds \\ \hline
+&Shortest distance from vertex 3 to vertex 4 is 1157 & Shortest distance from vertex 3 to vertex 4 is 1157\\
+data40.txt&Shortest path: 3 36 4 & Shortest path: 3 36 4 \\
+&Elapsed time: 54 milliseconds & Elapsed time: 129 milliseconds \\ \hline
+&Shortest distance from vertex 3 to vertex 4 is 1152 & Shortest distance from vertex 3 to vertex 4 is 1152\\
+data60.txt&Shortest path: 3 49 4 & Shortest path: 3 49 4 \\
+&Elapsed time: 80 milliseconds & Elapsed time: 470 milliseconds \\ \hline
+&Shortest distance from vertex 4 to vertex 3 is 1152 & Shortest distance from vertex 4 to vertex 3 is 1152\\
+data80.txt&Shortest path: 4 49 3 & Shortest path: 4 49 3 \\
+&Elapsed time: 100 milliseconds & Elapsed time: 11472 milliseconds \\ \hline
+&Shortest distance from vertex 24 to vertex 152 is 17 & Shortest distance from vertex 24 to vertex 152 is 17\\
+data1000.txt&Shortest path: 24 582 964 837 152 & Shortest path: 24 582 964 837 152 \\
+&Elapsed time: 901 milliseconds & Elapsed time: 35789 milliseconds \\ \hline
+\end{tabular}
+
 
 \end{document}

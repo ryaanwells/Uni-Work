@@ -119,7 +119,7 @@ public class Graph {
 		return bestPath;
 	}
 	
-	public void bestPath(int flt, int snk, int size){
+	public void bestPath(int flt, int snk){
 		if(this.bestPath == null || floatNode != flt || sinkNode != snk){
 			resetVisited();
 			LinkedList<AdjListNode> workingPath = new LinkedList<AdjListNode>();
@@ -156,50 +156,4 @@ public class Graph {
 			copy.addLast((AdjListNode) aArray[i]);
 		return copy;
 	}
-	
-	
-/**
-	private void Try(Path wp){
-		Vertex start = vertices[wp.getLatest()];
-		for(AdjListNode a: start.getAdjList()){
-			if(!vertices[a.getVertexNumber()].getVisited()){
-				wp.addToPath(a.getVertexNumber(), a.getWeight());
-				vertices[a.getVertexNumber()].setVisited(true);
-				if(this.bestPath == null || wp.getDistance()<this.bestPath.getDistance()){
-					if(a.getVertexNumber() == wp.getSink()){
-						this.bestPath = new Path(wp);
-					}
-					else{
-						Try(wp);
-					}
-				}
-				wp.remove();
-				vertices[a.getVertexNumber()].setVisited(false);
-			}
-		}
-	}
-	public Path Try(int dest, Path cp, Path bp){
-		Vertex current = vertices[cp.getLatest()];
-		for (AdjListNode v: current.getAdjList()){
-			if (vertices[v.getVertexNumber()].getVisited() != true){
-				cp.addToPath(v.getVertexNumber(),v.getWeight());
-				vertices[v.getVertexNumber()].setVisited(true);
-				if ((cp.getDistance()<bp.getDistance()) || bp.getDistance()== -1){
-					if (v.getVertexNumber() == dest){
-						bp = new Path(cp);
-						System.out.println(bp.toString());
-					}
-					else {
-						System.out.println("trying");
-						bp = Try(dest,cp,bp);
-					}
-				}		
-			cp.remove();
-			vertices[v.getVertexNumber()].setVisited(false);
-			}				
-		}
-	return bp;
-	}
-	*/
-
 }
