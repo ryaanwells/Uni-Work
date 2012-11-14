@@ -1,0 +1,33 @@
+#include<stdio.h>
+
+int main(int argc, char *argv[]){
+	int i, j, nthread;
+	unsigned long block, limit;
+	block = 1;
+	limit = 100;
+	nthread = 1;
+	for (i = 1; i < argc; ) {
+		if ((j = i + 1) == argc) {
+			fprintf(stderr,"usage: ./mtprimes [-b block] [-l limit] [-t nthread]\n");
+			return -1;
+		}
+		if (strcmp(argv[i], "-b") == 0){
+			sscanf(argv[j], "%lu", &block);
+			printf("success");
+		}
+		else if (strcmp(argv[i], "-l") == 0){
+			sscanf(argv[j], "%lu", &limit);
+			printf("success");
+		}
+		else if (strcmp(argv[i], "-t") == 0){
+			sscanf(argv[j], "%d", &nthread);
+			printf("success");
+		}
+		else {
+			fprintf(stderr, "Unknown flag: %s %s\n", argv[i], argv[j]);
+			return -1;
+		}
+		i = j + 1;
+	}
+	printf("%lu%lu%d", block, limit, nthread);
+}
