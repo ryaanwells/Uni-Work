@@ -27,6 +27,8 @@ int main(int argc, char *argv[]){
 		i = j + 1;
 	}
 	
+	/* GENERATION AND STARTING THREADS HERE */
+
 	struct timeval start, stop;
 	unsigned long msec;
 	double msperprime;
