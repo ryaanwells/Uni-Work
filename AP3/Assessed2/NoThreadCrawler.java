@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.regex.*;
 public class NoThreadCrawler {
 
@@ -13,37 +12,12 @@ public class NoThreadCrawler {
 		}
 		String preReg = Regex.cvtPattern(args[0]);
 		Pattern regPat = Pattern.compile(preReg);
+		DirectoryTree d = new DirectoryTree();
 		if (args.length != 1){
 			for(int i=1; i<=args.length-1; i++){
-				processDirectory(args[i], regPat);
+				d.processDirectory(args[i], regPat);
 			}
 		}
 	}
 
-	public static void processDirectory(String name, Pattern p) {
-		try {
-			File file = new File(name); // create a File object
-			if (file.isDirectory()) { // a directory - could be symlink
-				String entries[] = file.list();
-				if (entries != null) { // not a symlink
-					for (String entry : entries) {
-						if (entry.compareTo(".") == 0)
-							continue;
-						if (entry.compareTo("..") == 0)
-							continue;
-						processDirectory(name + "/" + entry,p);
-					}
-				}
-			}
-			if (file.isFile()){
-				Matcher m = p.matcher(file.getName());
-				if (m.matches()){
-					System.out.println(name);
-				}
-			}
-		} catch (Exception e) {
-			System.err.println("Error processing " + name + ": " + e);
-		}
-	}
-	
 }
