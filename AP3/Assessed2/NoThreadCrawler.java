@@ -14,18 +14,18 @@ public class NoThreadCrawler {
 		String preReg = Regex.cvtPattern(args[0]);
 		Pattern regPat = Pattern.compile(preReg);
 		DirectoryTree d = new DirectoryTree();
-		ConcurrentLinkedQueue<String> CLQ = new ConcurrentLinkedQueue<String>(); 
+		ConcurrentQueue CQ = new ConcurrentQueue(10); 
 
 		if (args.length != 1){
 			for(int i=1; i<=args.length-1; i++){
-				d.processDirectory(args[i], regPat, CLQ);
+				d.processDirectory(args[i], regPat, CQ);
 			}
 		}
 		else{
-			d.processDirectory(".", regPat, CLQ);
+			d.processDirectory(".", regPat, CQ);
 		}
 		ConcurrentSkipListSet<String> CSL = new ConcurrentSkipListSet<String>();
-		for(String s: CLQ){
+		for(String s: CQ){
 			CSL.add(s);
 		}
 		System.out.println();

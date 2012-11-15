@@ -1,4 +1,3 @@
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 
@@ -6,22 +5,22 @@ public class HarvestThread implements Runnable{
 
 	private String name;
 	private ConcurrentSkipListSet<String> CSL;
-	private ConcurrentLinkedQueue<String> CLQ;
+	private ConcurrentQueue CQ;
 	
-	public HarvestThread(int i, ConcurrentSkipListSet<String> C,
-			ConcurrentLinkedQueue<String>CL){
+	public HarvestThread(int i,ConcurrentQueue ConQ, 
+			ConcurrentSkipListSet<String> C){
 		name = "Harvest " + i;
 		CSL = C;
-		CLQ = CL;
+		CQ = ConQ;
 	}
 	
 	public void run(){
 		while(true){
 			try{
 				String fn;
-				fn = CLQ.poll();
+				fn = CQ.dequeue();
 				CSL.add(fn);
-			} catch(Exception e){return;}
+			} catch(InterruptedException e){return;}
 		}
 	}
 	

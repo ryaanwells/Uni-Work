@@ -19,7 +19,7 @@ public class DirectoryTree {
 	public DirectoryTree(){
 	}
 
-	public void processDirectory(String name, Pattern p, ConcurrentLinkedQueue<String> CLQ) {
+	public void processDirectory(String name, Pattern p, ConcurrentQueue CQ) {
 		try {
 			File file = new File(name); // create a File object
 			if (file.isDirectory()) { // a directory - could be symlink
@@ -30,7 +30,7 @@ public class DirectoryTree {
 							continue;
 						if (entry.compareTo("..") == 0)
 							continue;
-						processDirectory(name + "/" + entry,p, CLQ);
+						processDirectory(name + "/" + entry,p, CQ);
 					}
 				}
 			}
@@ -38,7 +38,7 @@ public class DirectoryTree {
 				Matcher m = p.matcher(file.getName());
 				if (m.matches()){
 					System.out.println(name);
-					CLQ.add(name);
+					CQ.enqueue(name);
 				}
 			}
 		} catch (Exception e) {
