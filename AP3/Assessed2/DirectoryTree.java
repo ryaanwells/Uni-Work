@@ -37,6 +37,7 @@ public class DirectoryTree {
 			if (file.isFile()){
 				Matcher m = p.matcher(file.getName());
 				if (m.matches()){
+					System.out.println(name);
 					CLQ.add(name);
 				}
 			}
