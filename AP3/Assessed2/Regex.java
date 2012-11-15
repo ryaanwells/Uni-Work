@@ -47,7 +47,7 @@ public class Regex {
 	// after creating the RegEx string and constructing a Pattern,
 	// it then attempts to match each line read from System.in against
 	// the pattern, printing each matching line on System.out
-	/**
+	
 	public static void main(String Arg[]) {
 		// convert bash pattern to RegEx pattern, print it out
 		String pattern = Regex.cvtPattern(Arg[0]);
@@ -67,5 +67,5 @@ public class Regex {
 				System.out.println(line);
 		}
 	}
-	*/
+	
 }
