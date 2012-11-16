@@ -1,38 +1,46 @@
 import java.io.File;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class HarvestThread{
+public class HarvestThread implements Runnable{
 
 	private String name;
 	private ConcurrentSkipListSet<String> CSL;
-	private ConcurrentQueue CQ;
+	private LinkedBlockingQueue<String> LBQ;
 	private Pattern p;
 	
-	public HarvestThread(int i,ConcurrentQueue ConQ, 
+	public HarvestThread(int i,LinkedBlockingQueue<String> L, 
 			ConcurrentSkipListSet<String> C, Pattern p){
 		name = "Harvest " + i;
 		CSL = C;
-		CQ = ConQ;
+		LBQ = L;
 	}
 	
 	public void run(){
 		while(true){
 			try{
 				String fn;
-				fn = CQ.dequeue();
+				fn = LBQ.take();
 				File file = new File(fn);
-				File[] contents = file.listFiles();
-				for(File f: contents){
-					String fileName = f.getName();
-					Matcher m = p.matcher(fileName);
-					if (m.matches()){
-						System.out.println(fileName);
-						CSL.add(fileName);
+				if (file.isDirectory()){
+				String[] contents = file.list();
+					if (contents != null) {
+						for (String f : contents) {
+							if (f != null) {
+								File ff = new File(f);
+								if (!ff.isDirectory() && ff != null) {
+									Matcher m = p.matcher(f);
+									if (m.matches()) {
+										CSL.add(f);
+									}
+								}
+							}
 					}
 				}
+			}
 			} catch(InterruptedException e){return;}
 		}
 	}

@@ -14,22 +14,23 @@ public class NoThreadCrawler {
 		String preReg = Regex.cvtPattern(args[0]);
 		Pattern regPat = Pattern.compile(preReg);
 		DirectoryTree d = new DirectoryTree();
-		ConcurrentQueue CQ = new ConcurrentQueue(10); 
+		LinkedBlockingQueue<String> LBQ = new LinkedBlockingQueue<String>();
 		ConcurrentSkipListSet<String> CSL = new ConcurrentSkipListSet<String>();
 		
-		HarvestThread h1 = new HarvestThread(1,CQ,CSL,regPat);
-		h1.run();
-		
+		Thread h1 = new Thread(new HarvestThread(1,LBQ,CSL,regPat));
+		h1.start();
 		if (args.length != 1){
 			for(int i=1; i<=args.length-1; i++){
-				System.out.println("here");
-				d.processDirectory(args[i], CQ);
+				d.processDirectory(args[i], LBQ);
 			}
 		}
 		else{
-			d.processDirectory(".",CQ);
+			d.processDirectory(".",LBQ);
 		}
-
+		h1.interrupt();
+		try{
+			h1.join();
+		}catch (Exception e){};
 		
 		System.out.println();
 		for(String s: CSL){

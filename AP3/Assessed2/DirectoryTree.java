@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +20,7 @@ public class DirectoryTree {
 	public DirectoryTree(){
 	}
 
-	public void processDirectory(String name, ConcurrentQueue CQ) {
+	public void processDirectory(String name, LinkedBlockingQueue<String> LBQ) {
 		try {
 			File file = new File(name); // create a File object
 			if (file.isDirectory()) { // a directory - could be symlink
@@ -30,9 +31,12 @@ public class DirectoryTree {
 							continue;
 						if (entry.compareTo("..") == 0)
 							continue;
-						CQ.enqueue(name + "/" + entry);
-						//System.out.println(name + "/" + entry);
-						processDirectory(name + "/" + entry, CQ);
+						File second = new File(entry);
+						if (second.isDirectory()){
+							LBQ.put(name + "/" + entry);
+						}
+						//System.out.println("DPrint: " +name + "/" + entry);
+						processDirectory(name + "/" + entry, LBQ);
 					}
 				}
 			}
