@@ -1,14 +1,18 @@
+import java.io.File;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
-public class HarvestThread implements Runnable{
+public class HarvestThread{
 
 	private String name;
 	private ConcurrentSkipListSet<String> CSL;
 	private ConcurrentQueue CQ;
+	private Pattern p;
 	
 	public HarvestThread(int i,ConcurrentQueue ConQ, 
-			ConcurrentSkipListSet<String> C){
+			ConcurrentSkipListSet<String> C, Pattern p){
 		name = "Harvest " + i;
 		CSL = C;
 		CQ = ConQ;
@@ -19,7 +23,16 @@ public class HarvestThread implements Runnable{
 			try{
 				String fn;
 				fn = CQ.dequeue();
-				CSL.add(fn);
+				File file = new File(fn);
+				File[] contents = file.listFiles();
+				for(File f: contents){
+					String fileName = f.getName();
+					Matcher m = p.matcher(fileName);
+					if (m.matches()){
+						System.out.println(fileName);
+						CSL.add(fileName);
+					}
+				}
 			} catch(InterruptedException e){return;}
 		}
 	}

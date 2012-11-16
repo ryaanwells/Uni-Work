@@ -15,19 +15,22 @@ public class NoThreadCrawler {
 		Pattern regPat = Pattern.compile(preReg);
 		DirectoryTree d = new DirectoryTree();
 		ConcurrentQueue CQ = new ConcurrentQueue(10); 
-
+		ConcurrentSkipListSet<String> CSL = new ConcurrentSkipListSet<String>();
+		
+		HarvestThread h1 = new HarvestThread(1,CQ,CSL,regPat);
+		h1.run();
+		
 		if (args.length != 1){
 			for(int i=1; i<=args.length-1; i++){
-				d.processDirectory(args[i], regPat, CQ);
+				System.out.println("here");
+				d.processDirectory(args[i], CQ);
 			}
 		}
 		else{
-			d.processDirectory(".", regPat, CQ);
+			d.processDirectory(".",CQ);
 		}
-		ConcurrentSkipListSet<String> CSL = new ConcurrentSkipListSet<String>();
-		for(String s: CQ){
-			CSL.add(s);
-		}
+
+		
 		System.out.println();
 		for(String s: CSL){
 			System.out.println(s);

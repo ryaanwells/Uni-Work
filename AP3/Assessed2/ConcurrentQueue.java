@@ -1,6 +1,5 @@
 
 public class ConcurrentQueue {
-	private ConcurrentNode head;
 	private int size;
 	private int input;
 	private int output;
@@ -18,6 +17,7 @@ public class ConcurrentQueue {
 	public synchronized void enqueue(String s){
 		while(total == size){
 			try{
+				System.out.println("waitingE");
 				wait();
 			} catch (Exception e){}
 			queue[input] = s;
@@ -28,8 +28,10 @@ public class ConcurrentQueue {
 	}
 	
 	public synchronized String dequeue() throws InterruptedException{
-		while(total == 0)
+		while(total == 0){
+			System.out.println("waitingD");			
 			wait();
+		}
 		String s = queue[output];
 		output = (output +1)%size;
 		total--;
