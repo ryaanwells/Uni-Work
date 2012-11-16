@@ -201,6 +201,29 @@ com
 				  int exitaddr = obj.currentOffset();
 				  obj.patch12(condaddr, exitaddr);
 				}
+    |   ^(FOR
+                { int startaddr = obj.currentOffset();
+                }
+            ID  { String id = $ID.text;
+                  Address varaddr = addrTable.get(id);
+                  int assnaddr = obj.currentOffset();
+                }
+            expr
+                { 
+                  obj.emit12(SVM.STOREL,varaddr.offset);
+                  int expr1 = obj.currentOffset();
+                  
+                }
+            expr
+                {
+                  int expr2 = obj.currentOffset();
+                  obj.patch12(assnaddr,
+                }
+            com)
+                {
+                  int exitaddr = obj.currentOffset();
+                }
+            
 	|	^(SEQ com*)
 	;
 
