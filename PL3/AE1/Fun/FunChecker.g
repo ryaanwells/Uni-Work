@@ -254,8 +254,7 @@ com
     |   ^(FOR ID t=expr u=expr com)              //EXTENSION
                 { checkType(Type.INT,t, $FOR);   //EXTENSION
                   checkType(Type.INT,u, $FOR);   //EXTENSION
-                  Type tvar = 
-                      retrieve($ID.text, $FOR);  //EXTENSION
+                  Type tvar = retrieve($ID.text, $FOR);  //EXTENSION
                   checkType(Type.INT,tvar,$FOR); //EXTENSION
                 }
     

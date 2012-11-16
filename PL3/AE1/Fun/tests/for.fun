@@ -3,8 +3,8 @@
 proc main ():
 # Read a number, and write all squares 
 # up to and including that number.
-	int m = read()
-	int n = read()
+     	int m = 4
+	int n = 5
 	int i = 0;
 	for i=n to m:
 		write(i*m)

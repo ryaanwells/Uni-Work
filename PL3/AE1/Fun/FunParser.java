@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 Fun.g 2012-11-09 14:36:03
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 Fun.g 2012-11-16 18:57:08
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -389,7 +389,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, PROC, formal, var_decl, seq_com
+                    // elements: var_decl, ID, seq_com, PROC, formal
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -505,7 +505,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: expr, formal, ID, FUNC, type, seq_com, var_decl
+                    // elements: seq_com, var_decl, type, expr, formal, ID, FUNC
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -615,7 +615,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, type
+                    // elements: type, ID
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -738,7 +738,7 @@ public class FunParser extends Parser {
 
 
             // AST REWRITE
-            // elements: type, expr, ID
+            // elements: ID, expr, type
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1051,7 +1051,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, expr, ASSN
+                    // elements: expr, ID, ASSN
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1100,7 +1100,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: actual, ID
+                    // elements: ID, actual
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1225,7 +1225,7 @@ public class FunParser extends Parser {
 
 
                             // AST REWRITE
-                            // elements: expr, c1, c2
+                            // elements: c2, expr, c1
                             // token labels: 
                             // rule labels: retval, c1, c2
                             // token list labels: 
@@ -1289,7 +1289,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: seq_com, WHILE, expr
+                    // elements: seq_com, expr, WHILE
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1359,7 +1359,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: e2, ID, seq_com, e1, FOR
+                    // elements: ID, FOR, seq_com, e1, e2
                     // token labels: 
                     // rule labels: retval, e1, e2
                     // token list labels: 
@@ -2057,7 +2057,7 @@ public class FunParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, actual
+                    // elements: actual, ID
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 

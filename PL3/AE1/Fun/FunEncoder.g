@@ -201,27 +201,31 @@ com
 				  int exitaddr = obj.currentOffset();
 				  obj.patch12(condaddr, exitaddr);
 				}
-    |   ^(FOR
-                { int startaddr = obj.currentOffset();
-                }
-            ID  { String id = $ID.text;
+    |   ^(FOR ID  
+                { String id = $ID.text;
                   Address varaddr = addrTable.get(id);
                   int assnaddr = obj.currentOffset();
                 }
             expr
                 { 
                   obj.emit12(SVM.STOREL,varaddr.offset);
-                  int expr1 = obj.currentOffset();
-                  
+                  obj.emit12(SVM.LOADL,varaddr.offset);
+                  int beginLoop = obj.currentOffset();
                 }
             expr
                 {
-                  int expr2 = obj.currentOffset();
-                  obj.patch12(assnaddr,
+                  obj.emit1(SVM.CMPGT);
+                  int exitJump = obj.currentOffset();
+                  obj.emit12(SVM.JUMPT,0);
                 }
             com)
                 {
+                  obj.emit12(SVM.LOADL,varaddr.offset);
+                  obj.emit12(SVM.LOADLIT,1);
+                  obj.emit1(SVM.ADD);
+                  obj.emit12(SVM.JUMP,beginLoop);
                   int exitaddr = obj.currentOffset();
+                  obj.patch12(exitJump,exitaddr);
                 }
             
 	|	^(SEQ com*)
