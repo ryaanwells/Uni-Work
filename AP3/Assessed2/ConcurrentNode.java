@@ -1,23 +1,22 @@
 
 public class ConcurrentNode {
 	private String fileName;
-	private ConcurrentNode next;
+	private boolean end;
 	
 	public ConcurrentNode(){
 		fileName = null;
-		next = null;
 	}
 	
-	public ConcurrentNode(String s, ConcurrentNode n){
+	public ConcurrentNode(String s, boolean n){
 		fileName = s;
-		next = n;
+		end = n;
 	}
 	
 	public String getFileName(){
 		return fileName;
 	}
 	
-	public ConcurrentNode getNext(){
-		return next;
+	public boolean isEnd(){
+		return end;
 	}
 }

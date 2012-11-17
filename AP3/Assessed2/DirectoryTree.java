@@ -1,8 +1,5 @@
 import java.io.File;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -17,13 +14,17 @@ public class DirectoryTree {
     * @param name    The name of a directory to visit
     */
 	
-	public DirectoryTree(){
+	private LinkedBlockingQueue<ConcurrentNode> LBQ;
+	
+	public DirectoryTree(LinkedBlockingQueue<ConcurrentNode> L){
+		LBQ = L;
 	}
 
-	public void processDirectory(String name, LinkedBlockingQueue<String> LBQ) {
+	public void processDirectory(String name) {
 		try {
 			File file = new File(name); // create a File object
 			if (file.isDirectory()) { // a directory - could be symlink
+				LBQ.put(new ConcurrentNode(name,false));
 				String entries[] = file.list();
 				if (entries != null) { // not a symlink
 					for (String entry : entries) {
@@ -31,12 +32,7 @@ public class DirectoryTree {
 							continue;
 						if (entry.compareTo("..") == 0)
 							continue;
-						File second = new File(entry);
-						if (second.isDirectory()){
-							LBQ.put(name + "/" + entry);
-						}
-						//System.out.println("DPrint: " +name + "/" + entry);
-						processDirectory(name + "/" + entry, LBQ);
+						processDirectory(name + "/" + entry);
 					}
 				}
 			}

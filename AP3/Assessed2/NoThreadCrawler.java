@@ -13,26 +13,42 @@ public class NoThreadCrawler {
 		}
 		String preReg = Regex.cvtPattern(args[0]);
 		Pattern regPat = Pattern.compile(preReg);
-		DirectoryTree d = new DirectoryTree();
-		LinkedBlockingQueue<String> LBQ = new LinkedBlockingQueue<String>();
+		LinkedBlockingQueue<ConcurrentNode> LBQ = new LinkedBlockingQueue<ConcurrentNode>();
 		ConcurrentSkipListSet<String> CSL = new ConcurrentSkipListSet<String>();
+		DirectoryTree d = new DirectoryTree(LBQ);
+		Thread[] workers;
 		
-		Thread h1 = new Thread(new HarvestThread(1,LBQ,CSL,regPat));
-		h1.start();
+		if (System.getenv("CRAWLER_THREADS")!= null){
+			workers = new Thread[Integer.parseInt(System.getenv("CRAWLER_THREADS"))];
+		}
+		else{
+			workers = new Thread[20];
+		}
+		
+		for (int i = 0; i< workers.length; i++){
+			workers[i] = new Thread(new HarvestThread(LBQ,CSL,regPat));
+			workers[i].start();
+		}
+
 		if (args.length != 1){
 			for(int i=1; i<=args.length-1; i++){
-				d.processDirectory(args[i], LBQ);
+				d.processDirectory(args[i]);
 			}
 		}
 		else{
-			d.processDirectory(".",LBQ);
+			d.processDirectory(".");
 		}
-		h1.interrupt();
-		try{
-			h1.join();
-		}catch (Exception e){};
 		
-		System.out.println();
+		try {
+			LBQ.put(new ConcurrentNode("",true));
+		} catch (InterruptedException e1) {}
+		
+		for (int i = 0; i < workers.length; i++) {
+			try{
+				workers[i].join();
+			} catch (Exception e){};
+		}
+
 		for(String s: CSL){
 			System.out.println(s);
 		}
