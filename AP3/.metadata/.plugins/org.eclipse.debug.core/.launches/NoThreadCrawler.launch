@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="NoThreadCrawler"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="*.c /home/ryan/programs/Uni-Work"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="*.c"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Assessed2"/>
 </launchConfiguration>
