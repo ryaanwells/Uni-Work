@@ -20,28 +20,28 @@ public class DirectoryTree {
 		LBQ = L;
 	}
 
-	public void processDirectory(String name) {
-		try {
-			File file = new File(name); // create a File object
-			if (file.isDirectory()) { // a directory - could be symlink
-				LBQ.put(new ConcurrentNode(name,false));
-				String entries[] = file.list();
-				if (entries != null) { // not a symlink
-					for (String entry : entries) {
-						if (entry.compareTo(".") == 0)
-							continue;
-						if (entry.compareTo("..") == 0)
-							continue;
-						processDirectory(name + "/" + entry);
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.err.println("Error processing " + name + ": " + e);
+    public void processDirectory(String name) {
+	try {
+	    File file = new File(name); // create a File object
+	    if (file.isDirectory()) { // a directory - could be symlink				
+		String entries[] = file.list(); 
+		LBQ.put(new ConcurrentNode(name,false));
+		if (entries != null) { // not a symlink
+		    for (String entry : entries) {
+			if (entry.compareTo(".") == 0)
+			    continue;
+			if (entry.compareTo("..") == 0)
+			    continue;
+			processDirectory(name + "/" + entry);
+		    }
 		}
+	    }
+	} catch (Exception e) {
+	    System.err.println("Error processing " + name + ": " + e);
 	}
-	
-
+    }
+    
+    
    /**
     * The program starts here.
     * @param args The arguments from the command line
