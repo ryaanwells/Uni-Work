@@ -1,6 +1,3 @@
-import java.util.regex.*;
-import java.util.*;
-
 /**
  * class showing how to translate from bash pattern to RegEx pattern
  * and how to then use the resulting Regex pattern to match input from System.in
@@ -41,31 +38,5 @@ public class Regex {
 		}
 		pat.append('$');
 		return new String(pat);
-	}
-
-	// simple main program - expects bash pattern in Arg[0]
-	// after creating the RegEx string and constructing a Pattern,
-	// it then attempts to match each line read from System.in against
-	// the pattern, printing each matching line on System.out
-	
-	public static void main(String Arg[]) {
-		// convert bash pattern to RegEx pattern, print it out
-		String pattern = Regex.cvtPattern(Arg[0]);
-		System.out.print(Arg[0] + " --> ");
-		System.out.println(pattern);
-		// create a scanner to read System.in
-		Scanner sc = new Scanner(System.in);
-		// compile RegEx pattern into Pattern object
-		Pattern p = Pattern.compile(pattern);
-		// for each line of input
-		while (sc.hasNext()) {
-			String line = sc.nextLine();
-			// create a matcher against that line of input
-			Matcher m = p.matcher(line);
-			// if it matches the pattern, print it out
-			if (m.matches())
-				System.out.println(line);
-		}
-	}
-	
+	}	
 }

@@ -1,6 +1,7 @@
 import java.util.regex.*;
 import java.util.concurrent.*;
-public class NoThreadCrawler {
+
+public class fileCrawler {
 
 	/**
 	 * @param args
