@@ -1,0 +1,12 @@
+
+Submission report: 1002253w
+
+I declare that all code, other than source provided by Prof JS Sventek
+in Regex.java and DirectoryTree.java (with amendments by myself) is my
+own.
+
+This is a complete multi-threaded  submission
+
+I have tested my code against the provided test cases and each case is
+successful with marginal time improvements against a non-threaded
+example. 
