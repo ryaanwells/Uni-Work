@@ -3,7 +3,8 @@
 // Specification of the Fun contextual analyser.
 //
 // Developed June 2012 by David Watt (University of Glasgow).
-//
+// Extended November 2012 by Ryan Wells 
+//                          (Student, University of Glasgow).
 //////////////////////////////////////////////////////////////
 
 
@@ -201,32 +202,28 @@ com
 				  int exitaddr = obj.currentOffset();
 				  obj.patch12(condaddr, exitaddr);
 				}
-    |   ^(FOR ID  
-                { String id = $ID.text;
-                  Address varaddr = addrTable.get(id);
-                  int assnaddr = obj.currentOffset();
-                }
-            expr
-                { 
-                  obj.emit12(SVM.STOREL,varaddr.offset);
-                  obj.emit12(SVM.LOADL,varaddr.offset);
-                  int beginLoop = obj.currentOffset();
-                }
-            expr
-                {
-                  obj.emit1(SVM.CMPGT);
-                  int exitJump = obj.currentOffset();
-                  obj.emit12(SVM.JUMPT,0);
-                }
-            com)
-                {
-                  obj.emit12(SVM.LOADL,varaddr.offset);
-                  obj.emit12(SVM.LOADLIT,1);
-                  obj.emit1(SVM.ADD);
-                  obj.emit12(SVM.JUMP,beginLoop);
-                  int exitaddr = obj.currentOffset();
-                  obj.patch12(exitJump,exitaddr);
-                }
+    |   ^(FOR ID expr                                   //EXTENSION
+                { String id = $ID.text;                 //EXTENSION
+                  Address varaddr = addrTable.get(id);  //EXTENSION
+                  obj.emit12(SVM.STOREL,varaddr.offset);//EXTENSION
+                  obj.emit12(SVM.LOADL,varaddr.offset); //EXTENSION
+                  int beginLoop = obj.currentOffset();  //EXTENSION
+                }                                       //EXTENSION
+            expr                                        //EXTENSION
+                {                                       //EXTENSION
+                  obj.emit1(SVM.CMPGT);                 //EXTENSION
+                  int exitJump = obj.currentOffset();   //EXTENSION
+                  obj.emit12(SVM.JUMPT,0);              //EXTENSION
+                }                                       //EXTENSION
+            com)                                        //EXTENSION
+                {                                       //EXTENSION
+                  obj.emit12(SVM.LOADL,varaddr.offset); //EXTENSION
+                  obj.emit12(SVM.LOADLIT,1);            //EXTENSION
+                  obj.emit1(SVM.ADD);                   //EXTENSION
+                  obj.emit12(SVM.JUMP,beginLoop);       //EXTENSION
+                  int exitaddr = obj.currentOffset();   //EXTENSION
+                  obj.patch12(exitJump,exitaddr);       //EXTENSION
+                }                                       //EXTENSION
             
 	|	^(SEQ com*)
 	;
