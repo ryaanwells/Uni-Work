@@ -1,0 +1,11 @@
+hello_server: hello_server.o
+	gcc -o hello_server.o
+
+hello_client: hello_client.o
+	gcc -o hello_client.o
+
+hello_server.o: hello_server.c
+	gcc -w -Wall -pedantic -c hello_server.c
+
+hello_client.o: hello_client.c
+	gcc -w -Wall -pedantic -c hello_client.c
