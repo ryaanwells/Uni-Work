@@ -4,58 +4,75 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <errno.h>
+#include <netdb.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define BUFLEN 1500
 
 int main(int argc, char* argv[])
 {
-	int fd, connfd;
-	struct sockaddr_in addr, cliaddr;
-	socklen_t cliaddrlen = sizeof(cliaddr);
-	ssize_t i, rcount;
-	char buf[BUFLEN];
 
-	addr.sin_addr.s_addr = INADDR_ANY;
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(5000);
-	// Make Socket
-	if(fd = socket(AF_INET,SOCK_STREAM,0)==-1){
-		//deal with no socket
-		fprintf(stderr,"%s","Socket not connected");
-		return -1;
-	}
-	//Bind
-	if(bind(fd, (struct sockaddr *)&addr,sizeof(addr)) == -1){
-		//deal with no connection
-		fprintf(stderr,"%s","Bind not made");
-		close(fd);
-		return -1;
-	}
-	//Listen
-	if(listen(fd, 1) == -1){
-		//deal with failure
-		fprintf(stderr,"%s","Listen failed");
-		close (fd);
-		return -1;
-	}
-	//Connect
-	if((connfd = accept(fd, (struct sockaddr *) &cliaddr, &cliaddrlen)) ==-1){
-		//deal with failure
-		fprintf(stderr,"%s","accept failed");
-		close (fd);
-		return -1;
-	}
-	//Read
-	if((rcount=read(connfd,buf,BUFLEN))==-1){
-		//deal with failure
-		fprintf(stderr,"%s","read failed");
-	}
-	for(i=0; i < rcount; i++){
-		if(buf[i] == EOF){
-			close(connfd);
-		}
-		printf("%c",buf[i]);
-	}
-	//Close
+  if(argc<2 || argc>3){
+    fprintf(stdout,"%s\n","Usage: ./hello_client address IP");
+  }
+  int fd, connfd;
+  char buf[BUFLEN];
+  char resp[] = "Server, are you there?";
+  int resplen = strlen(resp);
+  ssize_t rcount;
+  struct addrinfo *ai, *ai0, hints;
+  int i;
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_family = PF_UNSPEC;;
+  hints.ai_socktype = SOCK_STREAM;
+
+  if((i = getaddrinfo(argv[1], argv[2], &hints, &ai0)) !=0){
+    fprintf(stderr, "%s%s\n","Unable to lookup IP: ", gai_strerror(i));
+    exit(1);
+  }
+
+  for(ai = ai0; ai != NULL; ai = ai->ai_next){
+    if((fd = socket(ai->ai_family,ai->ai_socktype,ai->ai_protocol))==-1){
+      //deal with no socket
+      fprintf(stderr,"%s\n","Socket not connected");
+      fprintf(stderr,"%i\n",errno);
+      continue;
+    }
+    
+    if(connect(fd, ai->ai_addr, ai->ai_addrlen) == -1){
+      fprintf(stderr,"%s\n", "Unable to connect");
+      close(fd);
+      continue;
+    }
+
+    break;
+  }
+
+  if(ai == NULL){
+    fprintf(stderr,"%s\n","No connection able to be made");
+    return -1;
+  }
+
+  //Write
+  if((write(fd,resp,resplen)) == -1){
+    fprintf(stderr,"%s\n","could not write");
+  }
+  //close(fd);
+  
+  //Read
+  if((rcount=read(fd,buf,BUFLEN))==-1){
+    //deal with failure
+    fprintf(stderr,"%s\n","read failed");
+    fprintf(stderr,"%i\n",errno);
+  }
+  for(i=0;i<rcount;i++){
+    fprintf(stdout,"%c",buf[i]);
+  }
+  fprintf(stdout,"\n");
+  close(fd);
+  //Close
+  return 0;
 }
 
