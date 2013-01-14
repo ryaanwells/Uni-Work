@@ -206,8 +206,8 @@ com
                 { String id = $ID.text;                 //EXTENSION
                   Address varaddr = addrTable.get(id);  //EXTENSION
                   obj.emit12(SVM.STOREL,varaddr.offset);//EXTENSION
-                  obj.emit12(SVM.LOADL,varaddr.offset); //EXTENSION
                   int beginLoop = obj.currentOffset();  //EXTENSION
+                  obj.emit12(SVM.LOADL,varaddr.offset); //EXTENSION
                 }                                       //EXTENSION
             expr                                        //EXTENSION
                 {                                       //EXTENSION
@@ -220,6 +220,7 @@ com
                   obj.emit12(SVM.LOADL,varaddr.offset); //EXTENSION
                   obj.emit12(SVM.LOADLIT,1);            //EXTENSION
                   obj.emit1(SVM.ADD);                   //EXTENSION
+                  obj.emit12(SVM.STOREL,varaddr.offset);
                   obj.emit12(SVM.JUMP,beginLoop);       //EXTENSION
                   int exitaddr = obj.currentOffset();   //EXTENSION
                   obj.patch12(exitJump,exitaddr);       //EXTENSION
