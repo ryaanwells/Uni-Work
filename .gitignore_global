@@ -65,5 +65,11 @@ local.properties
 # PDT-specific
 .buildpath
 
-# No PDF
+# LaTeX
 *.pdf
+*.*~
+*.log
+*.toc
+*.aux
+*.bbl
+*.blg
