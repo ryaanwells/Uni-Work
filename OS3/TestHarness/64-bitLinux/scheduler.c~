@@ -1,0 +1,41 @@
+#include "generic_queue.h"
+#include "diagnostics.h"
+#include "scheduler.h"
+
+GQueue *gq;
+TCB *current;
+TCB *idle;
+
+void init(){
+	gq = create_gqueue();
+	current = NULL;
+	idle = get_idle_task();
+}
+
+void add_runnable_TCB(TCB *t){
+	if(!(gqueue_enqueue(gq, t))){
+		DIAGNOSTICS("Unable to add to queue, exiting\n");
+	}
+}
+
+void block(){
+	move_from_CPU_to_TCB(current);
+	add_blocked_TCB(current);
+	if(!(gqueue_dequeue(gq,(void **) &current))){
+		DIAGNOSTICS("Unable to remove from queue\n");
+	}
+	move_from_TCB_to_CPU(current);
+}
+
+void scheduler(){
+	if(!(current == NULL)){
+		move_from_CPU_to_TCB(current);
+		if(!(gqueue_enqueue(gq,current))){
+			DIAGNOSTICS("Unable to add to queue\n");
+		}
+		if(!(gqueue_dequeue(gq,(void **)&current))){
+			DIAGNOSTICS("Unable to add to queue\n");
+		}
+		move_from_TCB_to_CPU(current);
+	}
+}
