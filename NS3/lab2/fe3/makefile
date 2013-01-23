@@ -23,3 +23,4 @@ t_client.o: t_client.c
 
 cleanup: *.o *~ 
 	rm -rf *.o dt_server d_client t_client
+	rm -rf *~

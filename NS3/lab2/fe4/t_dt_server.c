@@ -61,8 +61,8 @@ int makeDNSTCP(int port){
 
 void *processConn(void *args){
 
-	const char dateform[] = "%x\r\n";
-	const char timeform[] = "%X\r\n";
+	const char *dateform = "%x\r\n";
+	const char *timeform = "%X\r\n";
 	const char datest[] = "DATE\r\n";
 	const char timest[] = "TIME\r\n";
 
