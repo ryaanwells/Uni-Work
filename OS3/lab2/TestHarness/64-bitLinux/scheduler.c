@@ -30,9 +30,10 @@ void add_runnable_TCB(TCB *t){
 }
 
 void block(){
-	int i;
+	int i, priority;
 	DIAGNOSTICS("Scheduler: Received blocking notification\n");
 	move_from_CPU_to_TCB(current);
+	DIAGNOSTICS("Scheduler: Changing priority from %d to %d\n",priority,priority+delta);
 	DIAGNOSTICS("Scheduler: Adding current task to blocked queue\n");
 	add_blocked_TCB(current);
 	DIAGNOSTICS("Scheduler: Changing current to first on ready queue\n");
