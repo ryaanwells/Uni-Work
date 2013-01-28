@@ -42,36 +42,48 @@ int connsock(int port){
 }
 
 int main(int argc, char* argv[]){
-	int fd, connfd;
-	struct sockaddr_in cliaddr;
-	socklen_t cliaddrlen = sizeof(cliaddr);
-	
-	char buf[512];
-	char resp[512];
-	int resplength;
-	ssize_t rcount;
-	char* start, end;
-
-	if((fd = connsock(8080)) == -1){
-		fprintf(stderr,"%s\n%i\n","setup failed.",errno);
-		return -1;
+  int fd, connfd;
+  struct sockaddr_in cliaddr;
+  socklen_t cliaddrlen = sizeof(cliaddr);
+  
+  char buf[512];
+  char resp[] = "HELLO!\n";
+  int resplength;
+  ssize_t rcount;
+  char *start, *end, *ptr;
+  resplength = strlen(resp);
+  
+  if((fd = connsock(8080)) == -1){
+    fprintf(stderr,"%s\n%i\n","setup failed.",errno);
+    return -1;
+  }
+  
+  
+  if((connfd = accept(fd, (struct sockaddr *) &cliaddr, &cliaddrlen)) == -1){
+    fprintf(stderr, "%s\n%i\n","accept failed.",errno);
+    close(fd);
+    return -1;
+  }
+  
+  if((rcount = read(connfd,buf,512))>=0){
+    
+    start = strstr(buf,"GET");
+    end = strstr(buf,"HTTP/1.1");
+    /* DEBUG HERE */
+    fprintf(stdout,"%s\n",buf);
+    if(start){
+      if(end){
+	ptr = start+3;
+	while(ptr++!=end-2){
+	  fprintf(stdout,"%c",*ptr);
 	}
-
-
-	if((connfd = accept(fd, (struct sockaddr *) &cliaddr, &cliaddrlen)) == -1){
-		fprintf(stderr, "%s\n%i\n","accept failed.",errno);
-		close(fd);
-		return -1;
+	fprintf(stdout,"\n");
+	if((write(connfd,resp,resplength)) == -1){
+	  fprintf(stderr,"%s\n","no write");
 	}
-	
-	if((rcount = read(fd,buf,512))>=0){
-		start = strstr(buf,"GET");
-		end = strstr(buf,"HTTP/1.1");
-		if(start){
-			if(end){
-				fprintf(stderr,"%s\n","read correctly!");
-			}
-		}	
-	}
+      }
+    }
+  }
+
 }
-	
+
