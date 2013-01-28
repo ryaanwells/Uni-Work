@@ -47,10 +47,11 @@ int main(int argc, char* argv[]){
   socklen_t cliaddrlen = sizeof(cliaddr);
   
   char buf[512];
-  char resp[] = "HELLO!\n";
+  char resp[] = "HELLO!\r\n";
+  char badresp[] = "400 BAD REQUEST\r\n";
   int resplength;
   ssize_t rcount;
-  char *start, *end, *ptr;
+  char *start=NULL, *end=NULL, *ptr;
   resplength = strlen(resp);
   
   if((fd = connsock(8080)) == -1){
@@ -71,19 +72,23 @@ int main(int argc, char* argv[]){
     end = strstr(buf,"HTTP/1.1");
     /* DEBUG HERE */
     fprintf(stdout,"%s\n",buf);
-    if(start){
-      if(end){
-	ptr = start+3;
-	while(ptr++!=end-2){
-	  fprintf(stdout,"%c",*ptr);
+        
+    if(start!=NULL&&end!=NULL){
+      ptr = start+3;
+      while(ptr++!=end-2){
+	fprintf(stderr,"%c",*ptr);
 	}
-	fprintf(stdout,"\n");
-	if((write(connfd,resp,resplength)) == -1){
-	  fprintf(stderr,"%s\n","no write");
-	}
+      fprintf(stdout,"\n");
+      if((write(connfd,resp,resplength)) == -1){
+	fprintf(stderr,"%s\n","no write");
+      }
+    } 
+    else{
+      resplength=strlen(badresp);
+      if((write(connfd,badresp,resplength)) == -1){
+	fprintf(stderr,"%s\n","no write");
       }
     }
   }
-
 }
 
