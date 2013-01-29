@@ -1,3 +1,6 @@
+#define _GNU_SOURCE
+
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -6,6 +9,8 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+
+#define BUFLEN 
 
 int connsock(int port){
 	struct sockaddr_in servaddr;
@@ -48,10 +53,13 @@ int main(int argc, char* argv[]){
   
   char buf[512];
   char resp[] = "HELLO!\r\n";
+  char *hostname[255];
+  char *cwd;
+  char *file;
   char badresp[] = "400 BAD REQUEST\r\n";
   int resplength;
   ssize_t rcount;
-  char *start=NULL, *end=NULL, *ptr;
+  char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
   resplength = strlen(resp);
   
   if((fd = connsock(8080)) == -1){
@@ -68,17 +76,34 @@ int main(int argc, char* argv[]){
   
   if((rcount = read(connfd,buf,512))>=0){
     
-    start = strstr(buf,"GET");
-    end = strstr(buf,"HTTP/1.1");
-    /* DEBUG HERE */
-    fprintf(stdout,"%s\n",buf);
-        
-    if(start!=NULL&&end!=NULL){
-      ptr = start+3;
-      while(ptr++!=end-2){
-	fprintf(stderr,"%c",*ptr);
+    getp = strstr(buf,"GET");
+    http = strcasestr(buf,"HTTP/1.1");
+    host = strcasestr(buf,"Host:");
+    eomp = strcasestr(buf,"\r\n\r\n");
+    
+    if((cwd=get_current_dir_name()) != NULL){
+      fprintf(stdout,"CWD: %s:%d\n",cwd,strlen(cwd));
+    }
+    if((file=realloc(cwd,(strlen(cwd)+((http-2)-(getp+4)-5)*sizeof(char))))!=NULL){
+      file=strncat(file,(getp+4),((http-2)-(getp+4)+1));
+    }
+
+    /* DEBUG HERE 
+       fprintf(stderr,"BUF: %s\n",buf);
+       fprintf(stderr,"GETP:%c HTTP:%c HOST:%c\n",*getp,*http,*host);
+       fprintf(stdout,"FILE: %s:%d\n",file,strlen(file));/*
+    */
+    /* If this is a valid start line */
+    if(getp!=NULL&&http!=NULL&&host!=NULL&&eomp!=NULL){
+      ptr = getp+4;
+      while(ptr++!=http-2){
+	fprintf(stdout,"%c",*ptr);
 	}
       fprintf(stdout,"\n");
+      if(gethostname(hostname,255)==-1){
+	fprintf(stdout,"%s\n","unable to get hostname");
+      }
+      fprintf(stdout,"%s:%d\n",hostname,strlen(hostname));
       if((write(connfd,resp,resplength)) == -1){
 	fprintf(stderr,"%s\n","no write");
       }
@@ -90,5 +115,6 @@ int main(int argc, char* argv[]){
       }
     }
   }
+  free(cwd);
 }
 

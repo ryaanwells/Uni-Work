@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	}
 	int fd, connfd;
 	char buf[BUFLEN];
-	char resp[] = "GET www.here.com HTTP/1.1\r\n";
+	char resp[] = "GET /this/index.html HTTP/1.1\r\nHost:Valjean\r\n\r\n";
 	int resplen = strlen(resp);
 	ssize_t rcount;
 	struct addrinfo *ai, *ai0, hints;
