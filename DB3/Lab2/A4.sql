@@ -1,7 +1,7 @@
-Select Band.Name as Band_Name, keys.Name as Keyboard_Player
-From Band LEFT OUTER JOIN (Select Member.Name,MemberOf.BID
-    from Memberof, Member
-    where INSTRUMENT='keyboards' AND Member.MID=MemberOf.MID)keys
-ON Band.BID=keys.BID
-order by Band.Name, Keys.name
+SELECT BAND.NAME AS Band_Name, KEYS.NAME AS Keyboard_Player
+FROM BAND LEFT OUTER JOIN (SELECT MEMBER.NAME,MEMBEROF.BID
+    FROM MEMBEROF, MEMBER
+    WHERE INSTRUMENT='keyboards' AND MEMBER.MID=MEMBEROF.MID)KEYS
+ON BAND.BID=KEYS.BID
+ORDER BY BAND.NAME, KEYS.NAME
 go
