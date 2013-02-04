@@ -1,6 +1,7 @@
-Select Band.name, Mult.TITLE
-From Band, Release, (Select distinct a.rid, a.title
-    from Song a, Song b
-    where a.RID<>b.RID AND a.title=b.title) Mult
-Where Band.BID=Release.BID And Release.RID=Mult.RID
-go
+SELECT BAND.NAME AS Band_Name, SONG.TITLE AS Song_Title
+FROM BAND, SONG, RELEASE
+WHERE BAND.BID=RELEASE.BID AND RELEASE.RID=SONG.RID
+GROUP BY BAND.NAME, SONG.TITLE
+HAVING count(*)>1
+ORDER BY BAND.NAME
+GO

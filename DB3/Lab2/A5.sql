@@ -39,5 +39,5 @@ go
 select mid
 from MemberOf
 where MemberOf.INSTRUMENT='vocals'
-
+go
 
