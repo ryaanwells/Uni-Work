@@ -20,6 +20,11 @@
 *.tar
 *.zip
 
+# LATEX CRAP #
+##############
+*.dvi
+*.pdf
+
 # Logs and databases #
 ######################
 *.log
