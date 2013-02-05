@@ -1,10 +1,21 @@
-select Member.NAME as Guitarist_Name, Band.Name as Band_Name, Mems.STARTYEAR as Start_Year, Mems.ENDYEAR as End_Year
+select Member.Name as Guitarist_Name, Band.Name as Band_Name, Mems.STARTYEAR as Start_Year, Mems.ENDYEAR as End_Year
 From Member, Band, (Select * From MemberOf where INSTRUMENT='guitar')Mems
 Where Band.Bid=Mems.Bid AND Member.MID=Mems.MID
 ORDER BY Member.NAME, Mems.StartYEar
 go
 
-Select *
-From MemberOf
-Where Instrument='guitar'
+
+SELECT *
+FROM (
+    SELECT MEMBEROF.MID, MEMBEROF.STARTYEAR As year
+    FROM MEMBEROF
+    WHERE MEMBEROF.STARTYEAR>0 AND MEMBEROF.INSTRUMENT='guitar'
+    UNION
+    SELECT MEMBEROF.MID, MIN(RELEASE.YEAR) AS year
+    FROM BAND, RELEASE, MEMBEROF
+    WHERE BAND.BID=RELEASE.BID AND MEMBEROF.INSTRUMENT='guitar' 
+    AND MEMBEROF.BID = BAND.BID AND (MEMBEROF.STARTYEAR IS NULL)
+    GROUP BY MEMBEROF.MID) MEMS, MEMBER
+WHERE MEMS.MID=MEMBER.MID
+ORDER BY MEMBER.NAME
 go
