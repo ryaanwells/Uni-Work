@@ -1,5 +1,6 @@
 \documentclass{report}
-
+\usepackage{verbatim}
+\usepackage{graphicx}
 \title{DB3 REPORT}
 \author{Ryan Wells -- 1002253W \n Chris James -- 1003019J}
 
@@ -7,8 +8,248 @@
 \maketitle
 \newpage
 \section*{Query 1}
+Query C is our optimized query. It has the lowest overall cost in
+comparison to Query A and B and also a lower size cost. This is due to
+Query A not having any nested queries and less projections than the
+other two. \\
+\subsection*{Query A}
+\begin{verbatim}
+
+/* Get a song that is on a bands album with the song 
+   title occurs more than once and remove the duplicates
+   (using HAVING count(*)>1) 
+*/
+SELECT BAND.NAME AS Band_Name, SONG.TITLE AS Song_Title
+FROM BAND, SONG, RELEASE 
+WHERE BAND.BID = RELEASE.BID AND SONG.RID = RELEASE.RID 
+AND SONG.TITLE in
+(
+    SELECT TITLE
+    FROM
+    (
+        Select TITLE, COUNT(TITLE)
+        From Song 
+        group by title
+        having count(title)>1
+    )
+)
+GROUP BY BAND.NAME, SONG.TITLE
+HAVING count(*)>1
+ORDER BY BAND.NAME
+GO
+\end{verbatim}
+\includegraphics[width=0.8\textwidth]{Q1A}
+\subsection*{Query B}
+\begin{verbatim}
+/*  Select songs where the titles match,
+    the Songs Release ID's (RID) dont match,
+    each song is on it's respective release,
+    and the band has that song on one of its
+    albums.    
+*/
+SELECT DISTINCT BAND.NAME AS Band_Name, S1.TITLE AS Song_Title
+  FROM BAND,RELEASE R1,RELEASE R2 ,SONG S1, SONG S2
+  WHERE S1.TITLE = S2.TITLE
+  AND S1.RID <> S2.RID
+  AND R1.RID = S1.RID
+  AND R2.RID = S2.RID
+  AND BAND.BID = R1.BID
+  AND BAND.BID = R2.BID
+ORDER BY Band_Name
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q1B}
+\subsection*{Query C}
+\begin{verbatim}
+/*  Select every song that is on an album by a band
+    and project only those that occur more than once
+*/
+SELECT BAND.NAME AS Band_Name, SONG.TITLE AS Song_Title
+FROM BAND, SONG, RELEASE
+WHERE BAND.BID=RELEASE.BID AND RELEASE.RID=SONG.RID
+GROUP BY BAND.NAME, SONG.TITLE
+HAVING count(*)>1
+ORDER BY BAND.NAME
+GO
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q1}
+\subsection*{Output}
+\begin{verbatim}
+ BAND_NAME        SONG_TITLE                            
+ ---------------  ------------------------------------- 
+ Blind Guardian   Banish From Sanctuary                 
+ Blind Guardian   Barbara Ann                           
+ Blind Guardian   Goodbye My Friend                     
+ Blind Guardian   Inquisition                           
+ Blind Guardian   Journey Through The Dark              
+ Blind Guardian   Lost In The Twilight Hall             
+ Blind Guardian   The Quest For Tanelorn                
+ Blind Guardian   Time What Is Time                     
+ Blind Guardian   Traveler In Time                      
+ Blind Guardian   Valhalla                              
+ Blind Guardian   Welcome To Dying                      
+ Bruce Dickinson  Accident Of Birth                     
+ Bruce Dickinson  Book Of Thel                          
+ Bruce Dickinson  Chemical Wedding                      
+ Bruce Dickinson  Gates Of Urizen                       
+ Bruce Dickinson  Killing Floor                         
+ Bruce Dickinson  King In Crimson                       
+ Bruce Dickinson  Laughing In The Hiding Bush           
+ Bruce Dickinson  Tears Of The Dragon                   
+ Bruce Dickinson  The Tower                             
+ Bruce Dickinson  Trumpets Of Jericho                   
+ Candlemass       A Sorcerer's Pledge                   
+ Candlemass       At The Gallows End                    
+ Candlemass       Bewitched                             
+ Candlemass       Dark Are The Veils Of Death           
+ Candlemass       Dark Reflections                      
+ Candlemass       Demons Gate                           
+ Candlemass       Mirror Mirror                         
+ Candlemass       Samarithan                            
+ Candlemass       Solitude                              
+ Candlemass       The Well Of Souls                     
+ Candlemass       Through The Infinitive Halls Of Death 
+ Candlemass       Under The Oak                         
+ Crimson Glory    In Dark Places                        
+ Savatage         24 Hours Ago                          
+ Savatage         Gutter Ballet                         
+ Savatage         Hall Of The Mountain King             
+ Savatage         Hounds                                
+ Savatage         Legions                               
+ Savatage         Of Rage And War                       
+ Savatage         Sleep                                 
+ Savatage         Strange Wings                         
+ Savatage         When The Crowds Are Gone              
+
+ 43 record(s) selected
+\end{verbatim}
+
+
 \section*{Query 2}
+\subsection*{Output}
+\begin{verbatim}
+ BAND_NAME           BONUS_NUM    
+ ------------------  ------------ 
+ Blind Guardian      6            
+ Bruce Dickinson     0            
+ Candlemass          1            
+ Cirith Ungol        1            
+ Crimson Glory       3            
+ Dark Tranquility    0            
+ Demons & Wizards    0            
+ EverEve             1            
+ Gamma Ray           1            
+ Helloween           1            
+ Iced Earth          1            
+ Iron Maiden         0            
+ Memento Mori        0            
+ Nevermore           1            
+ Opeth               2            
+ Samael              0            
+ Sanctuary           0            
+ Savatage            6            
+ Theatre Of Tragedy  0            
+ Tristania           0            
+
+ 20 record(s) selected
+\end{verbatim}
+
+
 \section*{Query 3}
+\subsection*{Output}
+\begin{verbatim}
+ GUITARIST_NAME         BAND_NAME           START_YEAR     END_YEAR    
+ ---------------------  ------------------  -------------  ----------- 
+ Adrian Smith           Iron Maiden         1981           1988        
+ Adrian Smith           Bruce Dickinson     1997           1999        
+ Adrian Smith           Iron Maiden         2000           (null)      
+ Al Pitrelli            Savatage            1995           1998        
+ Alex Skolnick          Savatage            1994           1994        
+ Anders H. Hidle        Tristania           1997           (null)      
+ Andre Olbrich          Blind Guardian      1990           (null)      
+ Ben Jackson            Crimson Glory       1986           (null)      
+ Chris Caffery          Savatage            1989           1989        
+ Chris Caffery          Savatage            1995           (null)      
+ Criss Oliva            Savatage            1985           1993        
+ Dave Murray            Iron Maiden         1982           (null)      
+ Frank Claussen         Theatre Of Tragedy  1998           (null)      
+ Fredrik Johansson      Dark Tranquility    1999           1999        
+ Geir Flikkeid          Theatre Of Tragedy  1996           1996        
+ Janick Gers            Iron Maiden         1990           (null)      
+ Jeff Loomis            Nevermore           1995           (null)      
+ Jerry Fogle            Cirith Ungol        1984           1986        
+ Jim Morris             Demons & Wizards    1999           1999        
+ Jon Drenning           Crimson Glory       1986           (null)      
+ Jon Schaffer           Iced Earth          1991           (null)      
+ Jon Schaffer           Demons & Wizards    1999           (null)      
+ Kai Hansen             Helloween           1985           1988        
+ Kai Hansen             Gamma Ray           1989           (null)      
+ Klas Bergwall          Candlemass          1986           1986        
+ Larry Tarnowski        Iced Earth          1998           (null)      
+ Lars Johansson         Candlemass          1987           1990        
+ Lenny Rutledge         Sanctuary           1988           1990        
+ Marcus Siepen          Blind Guardian      1990           (null)      
+ Martin Henriksson      Dark Tranquility    2000           (null)      
+ Mats Bjorkman          Candlemass          1986           1990        
+ Michael Weikath        Helloween           1985           (null)      
+ Mikael Akerfeldt       Opeth               1996           (null)      
+ Mike Wead              Memento Mori        1993           1994        
+ Morten Veland          Tristania           1997           (null)      
+ Nikkey Argento         Memento Mori        1993           1994        
+ Niklas Sundin          Dark Tranquility    1999           (null)      
+ Pal Bjastad            Theatre Of Tragedy  1995           1995        
+ Pat O'Brien            Nevermore           1996           1996        
+ Peter Lindgren         Opeth               1996           (null)      
+ Randy Shawver          Iced Earth          1991           1996        
+ Roy Z                  Bruce Dickinson     1994           1999        
+ Sean Blosl             Sanctuary           1988           1990        
+ Stefan Kiefer          EverEve             1996           (null)      
+ Thorsten Weibenberger  EverEve             1996           (null)      
+ Tim Calvert            Nevermore           1999           1999        
+ Tommy Lindal           Theatre Of Tragedy  1995           1996        
+ Tommy Olsson           Theatre Of Tragedy  1998           (null)      
+ Vorphalak              Samael              1995           (null)      
+
+ 49 record(s) selected
+\end{verbatim}
+
+
 \section*{Query 4}
+\subsection*{Output}
+\begin{verbatim}
+ BAND_NAME           KEYBOARD_PLAYER    
+ ------------------  ------------------ 
+ Blind Guardian      (null)             
+ Bruce Dickinson     (null)             
+ Candlemass          (null)             
+ Cirith Ungol        (null)             
+ Crimson Glory       (null)             
+ Dark Tranquility    Martin Brandstrom  
+ Demons & Wizards    (null)             
+ EverEve             Michael Zeissl     
+ Gamma Ray           (null)             
+ Helloween           (null)             
+ Iced Earth          (null)             
+ Iron Maiden         (null)             
+ Memento Mori        Miguel Robaina     
+ Nevermore           (null)             
+ Opeth               (null)             
+ Samael              Rodolphe H.        
+ Samael              Xy                 
+ Sanctuary           (null)             
+ Savatage            Jon Oliva          
+ Theatre Of Tragedy  Lorentz Aspen      
+ Tristania           Einar Moen         
+
+ 21 record(s) selected
+\end{verbatim}
+
 \section*{Query 5}
+\subsection*{Output}
+\begin{verbatim}
+ BAND_NAME       SINGER_NAME     ALBUM_NAME                 SONG_NUM    
+ --------------  --------------  -------------------------  ----------- 
+ Blind Guardian  Hansi Kursch    Nightfall In Middle Earth  22          
+
+ 1 record(s) selected
+\end{verbatim}
 \end{document}

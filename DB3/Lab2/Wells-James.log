@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.8.30)  6 FEB 2013 16:53
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.8.30)  6 FEB 2013 19:41
 entering extended mode
  %&-line parsing enabled.
 **Wells-James.tex
@@ -28,52 +28,120 @@ File: size10.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
+)
+(/usr/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks14
+\verbatim@line=\toks15
+\verbatim@in@stream=\read1
+)
+(/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 90.
+
+(/usr/share/texmf/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2007/01/08 v0.04d Graphics/color for pdfTeX
+\Gread@gobject=\count88
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
 ) (./Wells-James.aux)
 \openout1 = `Wells-James.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 7.
+(Font)              <12> on input line 8.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 7.
+(Font)              <8> on input line 8.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 7.
+(Font)              <6> on input line 8.
 
 ! Undefined control sequence.
 \@author ->Ryan Wells -- 1002253W \n 
                                      Chris James -- 1003019J
-l.7 \maketitle
+l.8 \maketitle
               
 ? 
 [1
 
-{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}] [1] (./Wells-James.aux) 
-) 
+{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 11--15
+
+ []
+
+<Q1A.jpg, id=7, 707.64375pt x 903.375pt>
+File: Q1A.jpg Graphic file (type jpg)
+ <use Q1A.jpg> [1] [2 <./Q1A.jpg>]
+<Q1B.jpg, id=17, 707.64375pt x 787.94376pt>
+File: Q1B.jpg Graphic file (type jpg)
+ <use Q1B.jpg>
+<Q1.jpg, id=18, 502.87875pt x 672.5125pt>
+File: Q1.jpg Graphic file (type jpg)
+ <use Q1.jpg> [3 <./Q1B.jpg>] [4 <./Q1.jpg>] [5]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 160--160
+[] \OT1/cmtt/m/n/10 GUITARIST_NAME         BAND_NAME           START_YEAR     E
+ND_YEAR[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 161--161
+[] \OT1/cmtt/m/n/10 ---------------------  ------------------  -------------  -
+----------[] 
+ []
+
+[6] [7]
+Overfull \hbox (11.99689pt too wide) in paragraph at lines 249--249
+[] \OT1/cmtt/m/n/10 BAND_NAME       SINGER_NAME     ALBUM_NAME                 
+SONG_NUM[] 
+ []
+
+
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 250--250
+[] \OT1/cmtt/m/n/10 --------------  --------------  -------------------------  
+-----------[] 
+ []
+
+[8] (./Wells-James.aux) ) 
 Here is how much of TeX's memory you used:
- 244 strings out of 256216
- 2602 string characters out of 1917072
- 48804 words of memory out of 1500000
- 3605 multiletter control sequences out of 10000+200000
- 7280 words of font info for 26 fonts, out of 1200000 for 2000
+ 644 strings out of 256216
+ 7648 string characters out of 1917072
+ 61424 words of memory out of 1500000
+ 3974 multiletter control sequences out of 10000+200000
+ 7755 words of font info for 28 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 23i,6n,17p,127b,179s stack positions out of 5000i,500n,6000p,200000b,15000s
-</usr/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb></usr/share/texmf/fonts/ty
-pe1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr12.pfb></u
-sr/share/texmf/fonts/type1/bluesky/cm/cmr17.pfb>
-Output written on Wells-James.pdf (2 pages, 18387 bytes).
+ 25i,6n,19p,206b,251s stack positions out of 5000i,500n,6000p,200000b,15000s
+</usr/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb></
+usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/
+bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr17.pfb></usr/s
+hare/texmf/fonts/type1/bluesky/cm/cmtt10.pfb>
+Output written on Wells-James.pdf (9 pages, 190631 bytes).
 PDF statistics:
- 25 PDF objects out of 1000 (max. 8388607)
+ 55 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
