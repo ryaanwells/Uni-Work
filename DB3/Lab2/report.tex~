@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage{verbatim}
+
+\title{DB3 REPORT}
+\author{Ryan Wells -- 1002253W \n Chris James -- 1003019J}
+
+\maketitle
+
+\begin{document}
+HELLO boay
+\end{document}
