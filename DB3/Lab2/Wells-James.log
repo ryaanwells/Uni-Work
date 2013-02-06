@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.8.30)  6 FEB 2013 19:41
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.8.30)  6 FEB 2013 21:54
 entering extended mode
  %&-line parsing enabled.
 **Wells-James.tex
@@ -90,7 +90,7 @@ l.8 \maketitle
 [1
 
 {/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 11--15
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
 
  []
 
@@ -102,46 +102,331 @@ File: Q1B.jpg Graphic file (type jpg)
  <use Q1B.jpg>
 <Q1.jpg, id=18, 502.87875pt x 672.5125pt>
 File: Q1.jpg Graphic file (type jpg)
- <use Q1.jpg> [3 <./Q1B.jpg>] [4 <./Q1.jpg>] [5]
-Overfull \hbox (6.74693pt too wide) in paragraph at lines 160--160
+ <use Q1.jpg> [3 <./Q1B.jpg>] [4 <./Q1.jpg>]
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 143--143
+[]\OT1/cmtt/m/n/10 Unioned this with a table of all band names and 0s marked as
+ BONUSNUM.[] 
+ []
+
+[5] <Q2A.jpg, id=28, 605.26125pt x 1018.80624pt>
+File: Q2A.jpg Graphic file (type jpg)
+ <use Q2A.jpg> [6] [7 <./Q2A.jpg>] <Q2.jpg, id=36, 502.87875pt x 1018.80624pt>
+File: Q2.jpg Graphic file (type jpg)
+ <use Q2.jpg> [8]
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 198--198
+[]   \OT1/cmtt/m/n/10 created a table of tuples featuring all bands with bonus 
+songs.[] 
+ []
+
+[9 <./Q2.jpg>] <Q2C.jpg, id=43, 605.26125pt x 1134.2375pt>
+File: Q2C.jpg Graphic file (type jpg)
+ <use Q2C.jpg>
+[10] [11 <./Q2C.jpg>]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 273--273
+[]\OT1/cmtt/m/n/10 /* Starting innermost, this unions the (BID,StartYear,EndYea
+r) of a[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 274--274
+[]   \OT1/cmtt/m/n/10 member where there is a start year relating to that membe
+rs time in[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 276--276
+[]   \OT1/cmtt/m/n/10 EarliestRelease is the earliest release for that band mem
+ber in[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 284--284
+[]        \OT1/cmtt/m/n/10 SELECT BAND.BID,MEMBEROF.MID, MEMBEROF.STARTYEAR As 
+STARTYEAR,[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 287--287
+[]        \OT1/cmtt/m/n/10 WHERE MEMBEROF.STARTYEAR>0 AND MEMBEROF.INSTRUMENT='
+guitar'[] 
+ []
+
+[12]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 295--295
+[]        \OT1/cmtt/m/n/10 WHERE BAND.BID=RELEASE.BID AND MEMBEROF.INSTRUMENT='
+guitar'[] 
+ []
+
+
+Overfull \hbox (11.99689pt too wide) in paragraph at lines 296--296
+[]        \OT1/cmtt/m/n/10 AND MEMBEROF.BID = BAND.BID AND (MEMBEROF.STARTYEAR 
+IS NULL)[] 
+ []
+
+<Q3A.jpg, id=54, 829.0975pt x 1249.66875pt>
+File: Q3A.jpg Graphic file (type jpg)
+ <use Q3A.jpg> [13]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 307--307
+[]\OT1/cmtt/m/n/10 /* Starting innermost, this unions the (BID,StartYear,EndYea
+r) of a[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 308--308
+[]   \OT1/cmtt/m/n/10 member where there is a start year relating to that membe
+rs time in[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 310--310
+[]   \OT1/cmtt/m/n/10 EarliestRelease is the earliest release for that band mem
+ber in[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 315--315
+[]    \OT1/cmtt/m/n/10 GPLAYERS.STARTYEAR AS Start_Year, GPLAYERS.ENDYEAR AS En
+d_Year[] 
+ []
+
+[14 <./Q3A.jpg>] <Q3B.jpg, id=61, 829.0975pt x 903.375pt>
+File: Q3B.jpg Graphic file (type jpg)
+ <use Q3B.jpg>
+[15]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 351--351
+[]\OT1/cmtt/m/n/10 /* Starting innermost, this unions the (BID,StartYear,EndYea
+r) of a[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 352--352
+[]   \OT1/cmtt/m/n/10 member where there is a start year relating to that membe
+rs time in[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 354--354
+[]   \OT1/cmtt/m/n/10 EarliestRelease is the earliest release for that band mem
+ber in[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 368--368
+[]        \OT1/cmtt/m/n/10 SELECT BAND.BID,MEMBEROF.MID, MEMBEROF.STARTYEAR As 
+STARTYEAR,[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 371--371
+[]        \OT1/cmtt/m/n/10 WHERE MEMBEROF.STARTYEAR>0 AND MEMBEROF.INSTRUMENT='
+guitar'[] 
+ []
+
+[16 <./Q3B.jpg>]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 379--379
+[]        \OT1/cmtt/m/n/10 WHERE BAND.BID=RELEASE.BID AND MEMBEROF.INSTRUMENT='
+guitar'[] 
+ []
+
+
+Overfull \hbox (11.99689pt too wide) in paragraph at lines 380--380
+[]        \OT1/cmtt/m/n/10 AND MEMBEROF.BID = BAND.BID AND (MEMBEROF.STARTYEAR 
+IS NULL)[] 
+ []
+
+<Q3.jpg, id=68, 829.0975pt x 1134.2375pt>
+File: Q3.jpg Graphic file (type jpg)
+ <use Q3.jpg>
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 391--391
 [] \OT1/cmtt/m/n/10 GUITARIST_NAME         BAND_NAME           START_YEAR     E
 ND_YEAR[] 
  []
 
-
-Overfull \hbox (22.4968pt too wide) in paragraph at lines 161--161
+[17 <./Q3.jpg>]
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 392--392
 [] \OT1/cmtt/m/n/10 ---------------------  ------------------  -------------  -
 ----------[] 
  []
 
-[6] [7]
-Overfull \hbox (11.99689pt too wide) in paragraph at lines 249--249
+[18]
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 456--456
+[]\OT1/cmtt/m/n/10 /* The KPLAYERS Table is that of each keyboard player that h
+as featured[] 
+ []
+
+
+Overfull \hbox (11.99689pt too wide) in paragraph at lines 458--458
+[]   \OT1/cmtt/m/n/10 Band Left Outer Joins with this to give a table of all ba
+nd names[] 
+ []
+
+
+Overfull \hbox (32.9967pt too wide) in paragraph at lines 460--460
+[]   \OT1/cmtt/m/n/10 Then the only check left is that the band name from band 
+matches that[] 
+ []
+
+<Q4A.jpg, id=76, 502.87875pt x 787.94376pt>
+File: Q4A.jpg Graphic file (type jpg)
+ <use Q4A.jpg> [19]
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 478--478
+[]\OT1/cmtt/m/n/10 /* Finds keyboard players and nulls by creating a table with
+ a left[] 
+ []
+
+[20 <./Q4A.jpg>] <Q4B.jpg, id=83, 707.64375pt x 787.94376pt>
+File: Q4B.jpg Graphic file (type jpg)
+ <use Q4B.jpg>
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 503--503
+[]   \OT1/cmtt/m/n/10 members which are keyboard players to their respective ba
+nds and[] 
+ []
+
+[21 <./Q4B.jpg>] <Q4.jpg, id=87, 502.87875pt x 672.5125pt>
+File: Q4.jpg Graphic file (type jpg)
+ <use Q4.jpg>
+[22 <./Q4.jpg>]
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 565--565
+[]\OT1/cmtt/m/n/10 /* ALLSONGS Shows every release by ID and its corresponding 
+number of[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 566--566
+[]   \OT1/cmtt/m/n/10 songs, which has been achieved here through a count. MAXS
+ONGS uses[] 
+ []
+
+
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 567--567
+[]   \OT1/cmtt/m/n/10 a similar method to find the maximum number of songs that
+ any album[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 568--568
+[]   \OT1/cmtt/m/n/10 has. This means when they are inner joined, any releases 
+that have[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 569--569
+[]   \OT1/cmtt/m/n/10 the maximum number of songs are included, allowing for mu
+ltiple[] 
+ []
+
+
+Overfull \hbox (6.74693pt too wide) in paragraph at lines 570--570
+[]   \OT1/cmtt/m/n/10 albums to feature the most songs, for instance two could 
+have 25[] 
+ []
+
+[23] <Q5A.jpg, id=94, 963.6pt x 1249.66875pt>
+File: Q5A.jpg Graphic file (type jpg)
+ <use Q5A.jpg>
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 604--604
+[]\OT1/cmtt/m/n/10 /* MostProlific picks the album with the largest number of s
+ongs that[] 
+ []
+
+[24 <./Q5A.jpg>]
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 605--605
+[]   \OT1/cmtt/m/n/10 has a singer. This ensures that the album returned HAS a 
+singer on[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 606--606
+[]   \OT1/cmtt/m/n/10 the album. This is achieved by finding the number of trac
+ks on the[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 607--607
+[]   \OT1/cmtt/m/n/10 album with the most number of tracks that has a singer an
+d then[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 608--608
+[]   \OT1/cmtt/m/n/10 inner joining this with all the albums and the number of 
+tracks on[] 
+ []
+
+[25]
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 649--649
+[]\OT1/cmtt/m/n/10 AND (MEMBEROF.STARTYEAR <= Release.YEAR or MEMBEROF.STARTYEA
+R IS NULL)[] 
+ []
+
+<Q5B.jpg, id=102, 1219.55624pt x 1365.1pt>
+File: Q5B.jpg Graphic file (type jpg)
+ <use Q5B.jpg>
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 659--659
+[]\OT1/cmtt/m/n/10 /* MostProlific picks the album with the largest number of s
+ongs that[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 660--660
+[]   \OT1/cmtt/m/n/10 has a singer. This ensures that the album returned HAS a 
+singer on[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 661--661
+[]   \OT1/cmtt/m/n/10 the album. This is achieved by finding the number of trac
+ks on the[] 
+ []
+
+
+Overfull \hbox (1.49698pt too wide) in paragraph at lines 662--662
+[]   \OT1/cmtt/m/n/10 album with the most number of tracks that has a singer an
+d then[] 
+ []
+
+
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 663--663
+[]   \OT1/cmtt/m/n/10 inner joining this with all the albums and the number of 
+tracks on[] 
+ []
+
+[26 <./Q5B.jpg>]
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 704--704
+[]\OT1/cmtt/m/n/10 AND (MEMBEROF.STARTYEAR <= Release.YEAR or MEMBEROF.STARTYEA
+R IS NULL)[] 
+ []
+
+<Q5.jpg, id=106, 1321.93875pt x 1480.53125pt>
+File: Q5.jpg Graphic file (type jpg)
+ <use Q5.jpg> [27]
+Overfull \hbox (11.99689pt too wide) in paragraph at lines 712--712
 [] \OT1/cmtt/m/n/10 BAND_NAME       SINGER_NAME     ALBUM_NAME                 
 SONG_NUM[] 
  []
 
 
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 250--250
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 713--713
 [] \OT1/cmtt/m/n/10 --------------  --------------  -------------------------  
 -----------[] 
  []
 
-[8] (./Wells-James.aux) ) 
+[28 <./Q5.jpg>] (./Wells-James.aux) ) 
 Here is how much of TeX's memory you used:
- 644 strings out of 256216
- 7648 string characters out of 1917072
- 61424 words of memory out of 1500000
- 3974 multiletter control sequences out of 10000+200000
+ 704 strings out of 256216
+ 8276 string characters out of 1917072
+ 63424 words of memory out of 1500000
+ 4022 multiletter control sequences out of 10000+200000
  7755 words of font info for 28 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
  25i,6n,19p,206b,251s stack positions out of 5000i,500n,6000p,200000b,15000s
-</usr/share/texmf/fonts/type1/bluesky/cm/cmbx12.pfb></
-usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/
-bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr17.pfb></usr/s
-hare/texmf/fonts/type1/bluesky/cm/cmtt10.pfb>
-Output written on Wells-James.pdf (9 pages, 190631 bytes).
+</usr/share/texmf/fonts/type1/bluesky/cm/c
+mbx12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/
+fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr17
+.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmtt10.pfb>
+Output written on Wells-James.pdf (29 pages, 1101707 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
+ 130 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -7,6 +7,10 @@
 \begin{document}
 \maketitle
 \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Q1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Query 1}
 Query C is our optimized query. It has the lowest overall cost in
 comparison to Query A and B and also a lower size cost. This is due to
@@ -123,8 +127,109 @@ GO
  43 record(s) selected
 \end{verbatim}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Q2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Query 2}
+Query C is our optimized query. Even though A and B have the same
+cost adding indices to either has reduced the cost. Also, we believe
+that on a larger scale Query A should perform betteras the nested
+query selecting only the songs that are a bonus song should reduce the
+space complexity of the search. 
+\subsection*{Query A}
+\begin{verbatim}
+/* First found all songs considered bonus sons (labelled BSONGS),
+created a table of tuples featuring all bands with bonus songs.
+Unioned this with a table of all band names and 0s marked as BONUSNUM.
+Selected Max BONUSNUM values after Union*/
+SELECT GPLAYERS.NAME AS Band_Name, MAX(BONUSNUM) AS Bonus_Num
+FROM
+(
+    (
+        SELECT BAND.NAME, Count(BSONGS.TITLE) AS BONUSNUM
+        FROM BAND, RELEASE, 
+        (
+            SELECT *
+            FROM SONG
+            WHERE SONG.CDBONUS = 'Y'
+        ) BSONGS
+        WHERE BAND.BID = RELEASE.BID
+        AND RELEASE.RID = BSONGS.RID
+        GROUP BY BAND.NAME
+        ) 
+        UNION 
+        ( 
+            SELECT BAND.NAME, (0) AS BONUSNUM
+            FROM BAND
+        )
+    ) GPLAYERS
+GROUP BY GPLAYERS.NAME
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q2A}
+\subsection*{Query B}
+\begin{verbatim}
+/*  Starting innermost, this is a union of (band name,0)
+    tuples with (band name that has bonus tracks, number 
+    of bonus tracks) as this will introduce the results
+    of bands that have no bonus tracks. Taking the MAX
+    of these will eliminate the duplicates (where elements
+    with a bonus track occur twice due to this methodology)
+    removes the duplicates (which will be the (band name,
+    0) results).
+*/
+SELECT RESULTS.NAME AS Band_Name, MAX(RESULTS.TOTS) AS Bonus_Num
+FROM(
+    SELECT BAND.NAME,(0)as TOTS
+    FROM BAND
+    UNION
+    SELECT BAND.NAME, COUNT(SONG.RID)
+    FROM BAND, RELEASE, SONG
+    WHERE BAND.BID=RELEASE.BID AND RELEASE.RID=SONG.RID AND
+SONG.CDBONUS='Y'
+    GROUP BY BAND.NAME
+    )RESULTS
+GROUP BY RESULTS.NAME
+GO
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q2}
+\subsection*{Query C}
+\begin{verbatim}
+/* First found all songs considered bonus sons (labelled BSONGS),
+   created a table of tuples featuring all bands with bonus songs.
+   Unioned this with a table of all band names and 0s marked as
+   BONUSNUM.
+   Selected Max BONUSNUM values after Union.
+
+*/
+CREATE INDEX bnames on BAND(NAME)
+go
+CREATE INDEX bsongs on SONG(CDBONUS)
+go
+SELECT GPLAYERS.NAME AS Band_Name, MAX(BONUSNUM) AS Bonus_Num
+FROM
+(
+    (
+        SELECT BAND.NAME, Count(BSONGS.TITLE) AS BONUSNUM
+        FROM BAND, RELEASE, 
+        (
+            SELECT *
+            FROM SONG
+            WHERE SONG.CDBONUS = 'Y'
+        ) BSONGS
+        WHERE BAND.BID = RELEASE.BID
+        AND RELEASE.RID = BSONGS.RID
+        GROUP BY BAND.NAME
+        ) 
+        UNION 
+        ( 
+            SELECT BAND.NAME, (0) AS BONUSNUM
+            FROM BAND
+        )
+    ) GPLAYERS
+GROUP BY GPLAYERS.NAME
+go
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q2C}
 \subsection*{Output}
 \begin{verbatim}
  BAND_NAME           BONUS_NUM    
@@ -153,8 +258,134 @@ GO
  20 record(s) selected
 \end{verbatim}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Q3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Query 3}
+Query C is our optimized query. We decided to optimize primarily by
+using the faster ``UNION ALL'' instead of using ``UNION'' and having a
+distinct higher up the table as this decreased the overall cost of the
+query. Also adding two indices to the table has helped the overall
+cost and the expense of making these indices was outweighed by this
+gain. 
+\subsection*{Query A}
+\begin{verbatim}
+/* Starting innermost, this unions the (BID,StartYear,EndYear) of a
+   member where there is a start year relating to that members time in
+   a band with the (BID,StartYear,EarliestRelease) where the
+   EarliestRelease is the earliest release for that band member in
+   that band and where the start year is null.
+*/
+SELECT MEMBER.NAME as Guitarist_Name, Band.Name as Band_Name,
+Mems.STARTYEAR as Start_Year, MEMS.ENDYEAR as END_YEAR
+FROM MEMBER, BAND,
+(
+    (
+        SELECT BAND.BID,MEMBEROF.MID, MEMBEROF.STARTYEAR As STARTYEAR,
+        MEMBEROF.ENDYEAR as ENDYEAR
+        FROM MEMBEROF,BAND,RELEASE
+        WHERE MEMBEROF.STARTYEAR>0 AND MEMBEROF.INSTRUMENT='guitar'
+        AND MEMBEROF.BID=BAND.BID AND BAND.BID=RELEASE.BID
+    )
+    UNION
+    (
+        SELECT BAND.BID, MEMBEROF.MID, MIN(RELEASE.YEAR) AS year,
+        MEMBEROF.ENDYEAR
+        FROM BAND, RELEASE, MEMBEROF
+        WHERE BAND.BID=RELEASE.BID AND MEMBEROF.INSTRUMENT='guitar' 
+        AND MEMBEROF.BID = BAND.BID AND (MEMBEROF.STARTYEAR IS NULL)
+        GROUP BY MEMBEROF.MID, BAND.BID,MEMBEROF.ENDYEAR
+    )
+) MEMS
+WHERE MEMS.MID=MEMBER.MID AND BAND.BID=MEMS.BID
+ORDER BY MEMBER.NAME, MEMS.STARTYEAR
+go
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q3A}
+\subsection*{Query B}
+\begin{verbatim}
+/* Starting innermost, this unions the (BID,StartYear,EndYear) of a
+   member where there is a start year relating to that members time in
+   a band with the (BID,StartYear,EarliestRelease) where the
+   EarliestRelease is the earliest release for that band member in
+   that band and where the start year is null.
+*/
+(
+    SELECT MEMBER.NAME AS Guitarist_Name, BAND.NAME AS Band_Name,
+    GPLAYERS.STARTYEAR AS Start_Year, GPLAYERS.ENDYEAR AS End_Year
+    FROM MEMBER, BAND, 
+    (
+        SELECT * 
+        FROM MEMBEROF 
+        WHERE INSTRUMENT='guitar'
+    ) GPLAYERS
+    WHERE GPLAYERS.STARTYEAR IS NOT NULL
+    AND GPLAYERS.MID = MEMBER.MID
+    AND GPLAYERS.BID = BAND.BID
+) 
+UNION
+(
+    SELECT MEMBER.NAME AS Guitarist_Name, BAND.NAME AS Band_Name,
+    FIRSTRELEASE.YEAR AS Start_Year, GPLAYERS.ENDYEAR AS End_Year
+    FROM MEMBER, BAND, 
+    (
+        SELECT * 
+        FROM MEMBEROF 
+        WHERE INSTRUMENT='guitar'
+    ) GPLAYERS, 
+    (
+        SELECT BID, MIN(RELEASE.YEAR) AS YEAR
+        FROM RELEASE
+        GROUP BY BID
+    ) FIRSTRELEASE
+    WHERE GPLAYERS.STARTYEAR IS NULL
+    AND GPLAYERS.MID = MEMBER.MID
+    AND GPLAYERS.BID = BAND.BID
+    AND GPLAYERS.BID = FIRSTRELEASE.BID
+)
+ORDER BY Guitarist_Name, Start_Year
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q3B}
+\subsection*{Query C}
+\begin{verbatim}
+/* Starting innermost, this unions the (BID,StartYear,EndYear) of a
+   member where there is a start year relating to that members time in
+   a band with the (BID,StartYear,EarliestRelease) where the
+   EarliestRelease is the earliest release for that band member in
+   that band and where the start year is null.
+*/
+CREATE INDEX syear ON MEMBEROF(STARTYEAR)
+go
+CREATE INDEX bnames ON BAND(NAME)
+go
+CREATE INDEX RELEASEBIDS ON RELEASE(BID)
+go
+SELECT MEMBER.NAME as Guitarist_Name, Band.Name as Band_Name,
+Mems.STARTYEAR as Start_Year, MEMS.ENDYEAR as END_YEAR
+FROM MEMBER, BAND,
+(
+    (
+        SELECT BAND.BID,MEMBEROF.MID, MEMBEROF.STARTYEAR As STARTYEAR,
+        MEMBEROF.ENDYEAR as ENDYEAR
+        FROM MEMBEROF,BAND,RELEASE
+        WHERE MEMBEROF.STARTYEAR>0 AND MEMBEROF.INSTRUMENT='guitar'
+        AND MEMBEROF.BID=BAND.BID AND BAND.BID=RELEASE.BID
+    )
+    UNION
+    (
+        SELECT BAND.BID, MEMBEROF.MID, MIN(RELEASE.YEAR) AS year,
+        MEMBEROF.ENDYEAR
+        FROM BAND, RELEASE, MEMBEROF
+        WHERE BAND.BID=RELEASE.BID AND MEMBEROF.INSTRUMENT='guitar' 
+        AND MEMBEROF.BID = BAND.BID AND (MEMBEROF.STARTYEAR IS NULL)
+        GROUP BY MEMBEROF.MID, BAND.BID,MEMBEROF.ENDYEAR
+    )
+) MEMS
+WHERE MEMS.MID=MEMBER.MID AND BAND.BID=MEMS.BID
+ORDER BY MEMBER.NAME, MEMS.STARTYEAR
+go
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q3}
 \subsection*{Output}
 \begin{verbatim}
  GUITARIST_NAME         BAND_NAME           START_YEAR     END_YEAR    
@@ -212,8 +443,77 @@ GO
  49 record(s) selected
 \end{verbatim}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Q4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Query 4}
+Query C is our optimized query. Query C is Query A optimized by
+removing redundant code and changing the way we pass tuples through
+the query. We considered using an index, but the benefits of the index
+did not counterbalance the cost.
+\subsection*{Query A}
+\begin{verbatim}
+/* The KPLAYERS Table is that of each keyboard player that has featured
+   in a band.
+   Band Left Outer Joins with this to give a table of all band names
+   with either the keyboard players or nulls.
+   Then the only check left is that the band name from band matches that
+   of the keyboard player.
+*/
+SELECT BAND.NAME AS Band_Name, KPLAYERS.MNAME AS Keyboard_Player
+FROM BAND LEFT OUTER JOIN 
+(
+    SELECT BAND.NAME AS BNAME, MEMBER.NAME AS MNAME 
+    FROM BAND, MEMBER, MEMBEROF 
+    WHERE MEMBEROF.INSTRUMENT = 'keyboards' 
+    AND BAND.BID = MEMBEROF.BID 
+    AND MEMBER.MID = MEMBEROF.MID 
+    ) KPLAYERS
+ON BAND.NAME = KPLAYERS.BNAME 
+ORDER BY BAND.NAME
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q4A}
+\subsection*{Query B}
+\begin{verbatim}
+/* Finds keyboard players and nulls by creating a table with a left
+   outer join between Band and any keyboard Players.
+   Then filters this using MIDs and BIDs from MemberOf and Band,
+   uses Distinct to remove duplicates that occur
+*/
+SELECT DISTINCT PLAYERS.BAND_NAME, PLAYERS.Keyboard_Player
+FROM MEMBEROF, BAND, 
+(
+    SELECT BAND.NAME AS Band_Name, KEYS.NAME AS Keyboard_Player
+    FROM BAND LEFT OUTER JOIN 
+    (
+        SELECT MEMBER.NAME,MEMBEROF.BID
+        FROM MEMBEROF, MEMBER
+        WHERE INSTRUMENT='keyboards' AND MEMBER.MID=MEMBEROF.MID
+    )KEYS
+ON BAND.BID=KEYS.BID
+) PLAYERS
+WHERE MEMBEROF.BID = BAND.BID
+AND PLAYERS.Band_NAME = BAND.NAME
+ORDER BY PLAYERS.BAND_NAME, PLAYERS.Keyboard_Player
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q4B}
+\subsection*{Query C}
+\begin{verbatim}
+/* Selects all bands and the 'LEFT OUTER JOIN' allocates the band
+   members which are keyboard players to their respective bands and
+   inserts nulls in place for the other bands.
+*/ 
+SELECT BAND.NAME AS Band_Name, KEYS.NAME AS Keyboard_Player
+FROM BAND
+LEFT OUTER JOIN (
+    SELECT MEMBER.NAME,MEMBEROF.BID
+    FROM MEMBEROF, MEMBER
+    WHERE INSTRUMENT='keyboards' AND MEMBER.MID=MEMBEROF.MID
+    )KEYS
+ON BAND.BID=KEYS.BID
+ORDER BY BAND.NAME, KEYS.NAME
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q4}
 \subsection*{Output}
 \begin{verbatim}
  BAND_NAME           KEYBOARD_PLAYER    
@@ -243,7 +543,170 @@ GO
  21 record(s) selected
 \end{verbatim}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Q5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Query 5}
+\subsection*{Query A}
+Query C is our optimized query. Both of our queries return the same
+results for the given test data, but Query C will guarantee that there
+is a singer on the top album returned. This was an intricacy
+discovered too late for the change of one of our queries, so we are
+aware that both queries may return different information depending on
+the test data set.
+The only optimization we could find for Query B (the one that
+primarily guarantees a singer on the album) was to create an index on
+the Members instruments. The cost of this is more than the saving of
+the index, so this is only really valid if the query will be run more
+than it is updated. However, and more interestingly, Query A will be
+an optimization on Query B if there is a guarantee that every album
+has a singer on the album.
+\begin{verbatim}
+/* ALLSONGS Shows every release by ID and its corresponding number of
+   songs, which has been achieved here through a count. MAXSONGS uses
+   a similar method to find the maximum number of songs that any album
+   has. This means when they are inner joined, any releases that have
+   the maximum number of songs are included, allowing for multiple
+   albums to feature the most songs, for instance two could have 25
+   and 25 could be the highest any has. What then happens is the
+   singer is matched to a band through checks on foreign keys.
+*/
+SELECT BAND.NAME as Band_Name, MEMBER.NAME as Singer_Name,
+RELEASE.TITLE AS Album_Name, THESONGS.SONG_NUMBER AS Song_Num
+FROM RELEASE, MEMBER, MEMBEROF, BAND, 
+(
+    SELECT ALLSONGS.RID, ALLSONGS.NUM as Song_Number
+    FROM 
+    (
+        SELECT RELEASE.RID as RID, count(SONG.TITLE)as NUM
+        FROM RELEASE, SONG
+        WHERE RELEASE.RID = SONG.RID
+        GROUP BY RELEASE.RID
+    ) ALLSONGS
+    INNER JOIN
+    (
+        SELECT MAX(count(SONG.TITLE))as NUM
+        FROM RELEASE, SONG
+        WHERE RELEASE.RID = SONG.RID
+        GROUP BY RELEASE.RID
+    ) MAXSONGS 
+    ON ALLSONGS.NUM = MAXSONGS.NUM
+) THESONGS
+WHERE RELEASE.RID = THESONGS.RID
+AND RELEASE.BID = BAND.BID 
+AND MEMBER.MID = MEMBEROF.MID
+AND MEMBEROF.BID = BAND.BID
+AND MEMBEROF.INSTRUMENT = 'vocals'
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q5A}
+\subsection*{Query B}
+\begin{verbatim}
+/* MostProlific picks the album with the largest number of songs that
+   has a singer. This ensures that the album returned HAS a singer on
+   the album. This is achieved by finding the number of tracks on the
+   album with the most number of tracks that has a singer and then
+   inner joining this with all the albums and the number of tracks on
+   them. Then the singer is found for these albums.
+*/
+SELECT BAND.NAME AS Band_Name, MEMBER.NAME AS Singer_Name,
+RELEASE.TITLE AS Album_Name, MostProlific.Total AS Song_Num
+From BAND, RELEASE, MEMBEROF, MEMBER, 
+(
+    SELECT AlbumTracks.RID, AlbumTracks.Total
+    FROM 
+    (
+        SELECT RELEASE.RID, COUNT(RELEASE.Title) AS total
+        FROM RELEASE, SONG
+        WHERE RELEASE.RID=SONG.RID 
+        GROUP BY RELEASE.RID
+        ORDER BY COUNT(RELEASE.Title) DESC
+        ) AlbumTracks 
+        INNER JOIN 
+        (
+        SELECT MAX(COUNT(RELEASE.Title)) AS total
+        FROM RELEASE, SONG, MEMBEROF
+        WHERE RELEASE.RID=SONG.RID AND RELEASE.BID=MEMBEROF.BID 
+        AND 
+        (   
+             RELEASE.YEAR>=MEMBEROF.STARTYEAR 
+             OR 
+             MEMBEROF.STARTYEAR IS NULL
+        )
+        AND 
+        (
+             RELEASE.YEAR<=MEMBEROF.ENDYEAR 
+             OR 
+             MEMBEROF.ENDYEAR IS NULL
+        ) 
+        AND MEMBEROF.INSTRUMENT='vocals'
+        GROUP BY RELEASE.RID
+        ORDER BY COUNT(RELEASE.TITLE) DESC
+    ) MostSongs
+    ON AlbumTracks.total=MostSongs.total
+) MostProlific
+WHERE BAND.BID=Release.BID AND Release.RID=MostProlific.RID 
+AND MEMBEROF.INSTRUMENT='vocals' AND MEMBEROF.MID=MEMBER.MID
+AND (MEMBEROF.STARTYEAR <= Release.YEAR or MEMBEROF.STARTYEAR IS NULL)
+AND (MEMBEROF.ENDYEAR >=RELEASE.YEAR OR MEMBEROF.ENDYEAR IS NULL) 
+AND MEMBEROF.BID=BAND.BID
+go
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q5B}
+\subsection*{Query C}
+\begin{verbatim}
+CREATE INDEX meminst on MemberOf(Instrument)
+go
+/* MostProlific picks the album with the largest number of songs that
+   has a singer. This ensures that the album returned HAS a singer on
+   the album. This is achieved by finding the number of tracks on the
+   album with the most number of tracks that has a singer and then
+   inner joining this with all the albums and the number of tracks on
+   them. Then the singer is found for these albums.
+*/
+SELECT BAND.NAME AS Band_Name, MEMBER.NAME AS Singer_Name,
+RELEASE.TITLE AS Album_Name, MostProlific.Total AS Song_Num
+From BAND, RELEASE, MEMBEROF, MEMBER, 
+(
+    SELECT AlbumTracks.RID, AlbumTracks.Total
+    FROM 
+    (
+        SELECT RELEASE.RID, COUNT(RELEASE.Title) AS total
+        FROM RELEASE, SONG
+        WHERE RELEASE.RID=SONG.RID 
+        GROUP BY RELEASE.RID
+        ORDER BY COUNT(RELEASE.Title) DESC
+        ) AlbumTracks 
+        INNER JOIN 
+        (
+        SELECT MAX(COUNT(RELEASE.Title)) AS total
+        FROM RELEASE, SONG, MEMBEROF
+        WHERE RELEASE.RID=SONG.RID AND RELEASE.BID=MEMBEROF.BID 
+        AND 
+        (   
+             RELEASE.YEAR>=MEMBEROF.STARTYEAR 
+             OR 
+             MEMBEROF.STARTYEAR IS NULL
+        )
+        AND 
+        (
+             RELEASE.YEAR<=MEMBEROF.ENDYEAR 
+             OR 
+             MEMBEROF.ENDYEAR IS NULL
+        ) 
+        AND MEMBEROF.INSTRUMENT='vocals'
+        GROUP BY RELEASE.RID
+        ORDER BY COUNT(RELEASE.TITLE) DESC
+    ) MostSongs
+    ON AlbumTracks.total=MostSongs.total
+) MostProlific
+WHERE BAND.BID=Release.BID AND Release.RID=MostProlific.RID 
+AND MEMBEROF.INSTRUMENT='vocals' AND MEMBEROF.MID=MEMBER.MID
+AND (MEMBEROF.STARTYEAR <= Release.YEAR or MEMBEROF.STARTYEAR IS NULL)
+AND (MEMBEROF.ENDYEAR >=RELEASE.YEAR OR MEMBEROF.ENDYEAR IS NULL) 
+AND MEMBEROF.BID=BAND.BID
+go
+\end{verbatim}
+\includegraphics[width=0.7\textwidth]{Q5}
 \subsection*{Output}
 \begin{verbatim}
  BAND_NAME       SINGER_NAME     ALBUM_NAME                 SONG_NUM    
