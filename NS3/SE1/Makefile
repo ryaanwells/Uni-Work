@@ -1,4 +1,4 @@
-CFLAGS = -pthread -w -Wall -pedantic -g -c
+CFLAGS = -pthread -W -Wall -g -c
 
 all: TCPFunct HTTPServ HTTPClient
 	rm -f *.o
@@ -22,6 +22,6 @@ HTTPServ.o:
 HTTPClient.o:
 	gcc $(CFLAGS) HTTPClient.c
 
-cleanup:
+clean:
 	rm -f *.o
 	rm -f *~

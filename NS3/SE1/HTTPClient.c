@@ -1,11 +1,11 @@
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <errno.h>
-#include <netdb.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -18,16 +18,16 @@ int main(int argc, char* argv[])
 		fprintf(stdout,"%s\n","Usage: ./d_client address");
 		return -1;
 	}
-	int fd, connfd;
+	int fd;
 	char buf[BUFLEN];
-	char resp[] = "GET /index.html HTTP/1.1\r\nHost:bo720-3-03.dcs.gla.ac.uk\r\n\r\n";
+	char resp[] = "GET /index.html HTTP/1.1\r\nHost:Javert\r\n\r\n";
 	int resplen = strlen(resp);
 	ssize_t rcount;
-	struct addrinfo *ai, *ai0, hints;
+	struct addrinfo hints, *ai, *ai0;
 	int i, j;
 	i=1;
 	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = PF_UNSPEC;;
+	hints.ai_family = PF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	if((i = getaddrinfo(argv[1], "8080", &hints, &ai0)) !=0){
 		fprintf(stderr, "%s%s\n","Unable to lookup IP: ", gai_strerror(i));
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	}
 	
 	//Write
-	for(j=0;j<10;j++){
+	for(j=0;j<1;j++){
 		if((write(fd,resp,resplen)) == -1){
 			fprintf(stderr,"%s\n","could not write");
 		}
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 		for(i=0;i<rcount;i++){
 			fprintf(stderr,"%c",buf[i]);
 		}
-		wait(10);
+		/*wait(10);*/
 	}
 	close(fd);
 	freeaddrinfo(ai0);

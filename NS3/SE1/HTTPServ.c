@@ -1,16 +1,15 @@
 #define _GNU_SOURCE
 
-
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-
-#define BUFLEN 
 
 int connsock(int port){
 	struct sockaddr_in servaddr;
@@ -47,17 +46,20 @@ int connsock(int port){
 }
 
 int main(int argc, char* argv[]){
+  if(argc==-2){
+    fprintf(stdout,"Usage %s port\n",argv[1]);
+    return 1;
+  }
   int fd, connfd;
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
   
   char buf[1024];
   char resp[] = "HELLO!\r\n";
-  char *hostname[275];
+  char hostname[275];
   char *cwd;
   char *file;
   const char badresp[] = "400 BAD REQUEST\r\n";
-  const char *mode = "r";
   int resplength;
   ssize_t rcount;
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
@@ -86,7 +88,7 @@ int main(int argc, char* argv[]){
     eomp = strcasestr(buf,"\r\n\r\n");
     
     if((cwd=get_current_dir_name()) != NULL){
-      fprintf(stdout,"CWD: %s:%d\n",cwd,strlen(cwd));
+      fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
     }
     if((file=realloc(cwd,(strlen(cwd)+((http-2)-(getp+4)-1)*sizeof(char))))!=NULL){
       file=strncat(file,(getp+4),((http-2)-(getp+4)+1));
@@ -95,7 +97,7 @@ int main(int argc, char* argv[]){
     /* DEBUG HERE */
        fprintf(stderr,"BUF: %s\n",buf);
        fprintf(stderr,"GETP:%c HTTP:%c HOST:%c\n",*getp,*http,*host);
-       fprintf(stdout,"FILE: %s:%d\n",file,strlen(file));
+       fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
     
     /* If this is a valid start line */
 	   if(getp!=NULL&&http!=NULL&&host!=NULL&&eomp!=NULL){
@@ -111,22 +113,30 @@ int main(int argc, char* argv[]){
 		   if(gethostname(hostname,255)==-1){
 			   fprintf(stdout,"%s\n","unable to get hostname");
 		   }
-		   fprintf(stdout,"%s:%d\n",hostname,strlen(hostname));
+		   fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 		   
 		   /* If the hostname matches the current host */
 		   if((strncmp(host+5,hostname,strlen(hostname-1)))==0 ){
 			   fprintf(stdout,"%s\n","matches!");
-			   if((fp=fopen(file,mode))!=NULL){
-				   fprintf(stdout,"%s\n","File Exists!");
+			   fprintf(stdout,"%s\n",file);
+			   fprintf(stdout,"%d\n",strcmp("/home/ryan/src/Uni-Work/NS3/SE1/index.html",file));
+			   file=strdup(file);
+			   if((fp=fopen(file,"r"))!=NULL){
+			     fprintf(stdout,"File Exists!\n");
 			   }
-			   fclose(fp);
+			   else{
+			     fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
+			   }
+			   if(fp!=NULL){
+			     fclose(fp);
+			   }
 		   }
 		   else{
 			   newhn=strcat(hostname,".dcs.gla.ac.uk");
 			   fprintf(stdout,"%s\n",newhn);
 			   if((strncmp(host+5,newhn,strlen(newhn-1)))==0){
 				   fprintf(stdout,"%s\n","Matches full!");
-				   if((fp=fopen(file,mode))!=NULL){
+				   if((fp=fopen(file,"rb"))!=NULL){
 					   fprintf(stdout,"%s\n","File exists!");
 				   }
 				   fclose(fp);
@@ -147,5 +157,6 @@ int main(int argc, char* argv[]){
   }
   fprintf(stdout,"%s\n","Ended");
   free(cwd);
+  return 1;
 }
 
