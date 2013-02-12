@@ -1,0 +1,21 @@
+<HTML>
+  <HEADER><TITLE>rango</TITLE></HEADER>
+  <BODY>
+	Rango says: Hello World!
+	
+	{% if cat_list %}
+	<UL>
+	  {% for cat in cat_list %}
+	  <LI><A HREF="/rango/cat/{{cat.url}}">{{cat.name}}</A></LI>
+	  {% endfor %}
+	</UL>
+	{% else %}
+	<P>No categories at present.</P>
+	{% endif %}
+	<A HREF="/rango/cat_add/">Add Category</A>
+	<BR>
+	<A HREF="/rango/page_add/{{category_name_url}}"> Add page </A>
+	<BR>
+	<IMG SRC="{{ STATIC_URL }}imgs/minions.jpg" />
+  </BODY>
+</HTML>

@@ -1,0 +1,7 @@
+<HTML>
+  <HEADER><TITLE>rango</TITLE></HEADER>
+  <BODY>
+	rango says: Hello World!
+	<IMG SRC="{{ STATIC_URL }}imgs/minions.jpg" />
+  </BODY>
+</HTML>

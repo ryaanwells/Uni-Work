@@ -1,0 +1,13 @@
+<BODY>
+<H2>{{category_name}}</H2>
+
+{% if pages %}
+        <UL>
+        {% for page in pages %}
+                <LI><A HREF="{{page.url}}">{{page.title}}</A></LI>
+        {% endfor %}
+                </UL>
+{% else %}
+        <P>No pages in category.</P>
+{% endif %}
+</BODY>

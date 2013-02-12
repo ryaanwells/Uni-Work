@@ -1,0 +1,12 @@
+from django.template import RequestContext, loader
+from django.http import HttpResponse
+
+from rango.models import Category, Page
+
+def index(request):
+    template = loader.get_template('rango/index.html')
+    
+    cat_list = Category.objects.all()
+    
+    context = RequestContext(request, {'cat_list': cat_list})
+    return HttpResponse(template.render(context))
