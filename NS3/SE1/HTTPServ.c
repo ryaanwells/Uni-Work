@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
   
   char *buf =(char *) malloc(sizeof(char)*(256+1));
   int offset = 0;
-  char resp[] = "HELLO!\r\n";
+  char *resp = (char *) malloc(sizeof(char)*(256));
   char hostname[275];
   char *cwd;
   char *file;
@@ -138,9 +138,7 @@ int main(int argc, char* argv[]){
 		  else{
 			  fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
 		  }
-		  if(fp!=NULL){
-			 fclose(fp);
-		  }
+		  
 	  }
 	  else{
 		  newhn=strcat(hostname,".dcs.gla.ac.uk");
@@ -150,12 +148,21 @@ int main(int argc, char* argv[]){
 			  if((fp=fopen(file,"rb"))!=NULL){
 				  fprintf(stdout,"%s\n","File exists!");
 			  }
-			  fclose(fp);
 		  }
 	  }
 	  fprintf(stdout,"%s\n","got to here");
+	  offset=0;
+	  while((fgets(resp+offset,256,fp))!=NULL){
+	    offset=offset+256;
+	    fprintf(stderr,"%s\n",resp);
+	    resp = realloc(resp,(strlen(resp)+256)*sizeof(char));
+	  }
+	  resplength = strlen(resp);
 	  if((write(connfd,resp,resplength)) == -1){
 		  fprintf(stderr,"%s\n","no write");
+	  }
+	  if(fp!=NULL){
+	    fclose(fp);
 	  }
   } 
   else{
