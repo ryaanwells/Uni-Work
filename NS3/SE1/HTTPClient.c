@@ -15,12 +15,12 @@ int main(int argc, char* argv[])
 {
 	
 	if(argc !=2 ){
-		fprintf(stdout,"%s\n","Usage: ./d_client address");
+		fprintf(stdout,"%s\n","Usage: ./HTTPClient address");
 		return -1;
 	}
 	int fd;
 	char buf[BUFLEN];
-	char resp[] = "GET /index.html HTTP/1.1\r\nHost:Javert\r\n\r\n";
+	char resp[] = "GET /index.html HTTP/1.1\r\nHost:localhost\r\n\r\n";
 	int resplen = strlen(resp);
 	ssize_t rcount;
 	struct addrinfo hints, *ai, *ai0;
