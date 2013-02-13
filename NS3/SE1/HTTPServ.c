@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
   
-  char *buf =(char *) malloc(sizeof(256+1));
+  char *buf =(char *) malloc(sizeof(char)*(256+1));
   int offset = 0;
   char resp[] = "HELLO!\r\n";
   char hostname[275];
@@ -95,17 +95,19 @@ int main(int argc, char* argv[]){
   http = strcasestr(buf,"HTTP/1.1");
   host = strcasestr(buf,"Host:");
   eomp = strcasestr(buf,"\r\n\r\n");
+  *eomp='\0';
+  
   fprintf(stderr,"BUF: %s\n",buf);
   fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
-  
+
   if((cwd=get_current_dir_name()) != NULL){
       fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
   }
   if((file=malloc((strlen(cwd)+40*sizeof(char))))!=NULL){
-	  *(http-1)='\0';
-	  file=strcat(file,(cwd));
-      file=strcat(file,(getp+4));
-  }
+    *(--http)='\0';
+    file=strcat(file,(cwd));
+    file=strcat(file,(getp+4));
+    }
   /* DEBUG HERE */
   
   fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
@@ -127,7 +129,7 @@ int main(int argc, char* argv[]){
 	  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 	  
 	  /* If the hostname matches the current host */
-	  if((strncmp(host+5,hostname,strlen(hostname-1)))==0 ){
+	  if((strncmp(host+5,hostname,strlen(hostname)))==0 ){
 		  fprintf(stdout,"%s\n","matches!");
 		  fprintf(stdout,"%s\n",file);
 		  if((fp=fopen(file,"r"))!=NULL){
@@ -137,13 +139,13 @@ int main(int argc, char* argv[]){
 			  fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
 		  }
 		  if(fp!=NULL){
-			  /*fclose(fp);*/
+			 fclose(fp);
 		  }
 	  }
 	  else{
 		  newhn=strcat(hostname,".dcs.gla.ac.uk");
 		  fprintf(stdout,"%s\n",newhn);
-		  if((strncmp(host+5,newhn,strlen(newhn-1)))==0){
+		  if((strncmp(host+5,newhn,strlen(newhn)))==0){
 			  fprintf(stdout,"%s\n","Matches full!");
 			  if((fp=fopen(file,"rb"))!=NULL){
 				  fprintf(stdout,"%s\n","File exists!");
