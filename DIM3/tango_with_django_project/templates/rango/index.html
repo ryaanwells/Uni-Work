@@ -2,7 +2,16 @@
   <HEADER><TITLE>rango</TITLE></HEADER>
   <BODY>
 	Rango says: Hello World!
-	
+	<P>
+        {% if user.is_authenticated %}
+                Welcome {{ user.username }}  |
+                <A href="/rango/restricted/">Restricted Page</A> |
+                <A href="/rango/logout/">Logout</A>
+        {% else %}
+                <A href="/rango/register/">Register</A> |
+                <A href="/rango/login/">Login</A>
+        {% endif %}
+	</P>
 	{% if cat_list %}
 	<UL>
 	  {% for cat in cat_list %}
