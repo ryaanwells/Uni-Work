@@ -1,3 +1,0 @@
-INDEX VERSION 1.126+/users/level3/1002253w/Programs/Uni-Work/PSD/.metadata/.plugins/org.eclipse.jdt.core
-3619706732.index
-2856559205.index
