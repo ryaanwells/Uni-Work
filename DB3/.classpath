@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="LAB-3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/db3.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/jcommon-0.7.2.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/jfreechart-0.9.6.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/jxl.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/mm.mysql-2.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/poi-3.0-alpha2-20060616.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/poi-scratchpad-3.0-alpha2-20060616.jar"/>
+	<classpathentry kind="lib" path="/users/level3/software/public/DB3/tonicpoint.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

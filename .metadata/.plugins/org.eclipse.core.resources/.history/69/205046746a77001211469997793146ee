@@ -1,0 +1,31 @@
+import java.sql.*;
+
+class ConnectionManager {
+    private Connection conn;
+    
+    private static final String connectionString
+	= "jdbc:oracle:thin:your_oracle_name/password@crooked.dcs.gla.ac.uk:1521:L3";
+
+    public ConnectionManager() throws SQLException, ClassNotFoundException {
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+	
+	initiateConnection();
+    }
+
+    private void initiateConnection() throws SQLException {
+	conn = DriverManager.getConnection(connectionString);
+    }
+
+    public Statement getStatement() throws SQLException {
+	if(conn == null) {
+	    initiateConnection();
+	}
+	
+	return conn.createStatement();
+    }
+
+    public void closeConnection() throws SQLException {
+	conn.close();
+	conn = null;
+    }
+}
