@@ -1,4 +1,6 @@
+import os
 # Django settings for tango_with_django_project project.
+os.environ['DJANGO_SETTINGS_MODULE'] = "tango_with_django_project.settings"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -12,7 +14,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/users/level3/1002253w/Programs/Uni-Work/DIM3/tango_with_django_project/rango.db', # Or path to database file if using sqlite3.
+        'NAME':     os.getcwd()+'.db', # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -45,7 +47,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/users/level3/1002253w/Programs/Uni-Work/DIM3/tango_with_django_project/media/imgs/'
+MEDIA_ROOT = os.getcwd()+'/media/imgs/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -67,7 +69,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/users/level3/1002253w/Programs/Uni-Work/DIM3/tango_with_django_project/static',
+    os.getcwd()+'/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -107,7 +109,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/users/level3/1002253w/Programs/Uni-Work/DIM3/tango_with_django_project/templates',
+    os.getcwd()+'/templates',
 
 )
 

@@ -1,5 +1,6 @@
 from rango.models import Category, Page
-
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = "myproject.settings"
 c = Category(name='home')
 c.save()
 Page(category=c, title='Home - Property Search', url='http://www.home.co.uk', views=0).save()
