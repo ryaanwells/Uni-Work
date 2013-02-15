@@ -5,7 +5,11 @@ import java.awt.Dimension;
 
 class DiscographyQuery {
     private static final String queryStart
-	= "******** QUERY ******** ";
+	= "SELECT release.title as Title, release.year as Year, release.type as Type, " +
+			"release.rating as Rating, count(song.rid) as Song_Num " +
+			"FROM release, song, band " +
+			"WHERE song.RID=release.RID AND release.BID=band.BID " + 
+			"AND release.BID = ";
 	/*
 	 * This query fetches the release title as Title, release year as Year,
 	 * release type as Type, release rating as Rating, the number of titles in the release
@@ -15,7 +19,8 @@ class DiscographyQuery {
 	 * grouping is used to facilitate the count function
 	 */
 	    private static final String queryEnd
-	= "*** QUERY: group and order by here ****";
+	= "GROUP BY release.title, release.year, release.type, release.rating, song.rid " +
+	    "ORDER BY release.year";
 
     public static JComponent doQuery(Statement s, int bid) 
 	throws SQLException {

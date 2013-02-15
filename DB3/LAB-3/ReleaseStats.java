@@ -6,7 +6,9 @@ import java.awt.image.*;
 
 class ReleaseStats {
     private static final String query
-	= "********* QUERY ********** ";
+	= "SELECT release.year, count(release.year) " +
+			"FROM release " +
+			"GROUP BY release.year";
 	/*
 	 * This query fetches the release year as Year, the number of releases as
 	 * Num_Releases from the release table

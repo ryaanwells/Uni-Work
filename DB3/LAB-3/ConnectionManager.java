@@ -4,7 +4,7 @@ class ConnectionManager {
     private Connection conn;
     
     private static final String connectionString
-	= "jdbc:oracle:thin:L3_12_1002253w/1002253w@crooked.dcs.gla.ac.uk:1521:L3";
+	= "jdbc:oracle:thin:L3_12_1002253W/1002253@crooked.dcs.gla.ac.uk:1521:L3";
 
     public ConnectionManager() throws SQLException, ClassNotFoundException {
 	Class.forName("oracle.jdbc.driver.OracleDriver");

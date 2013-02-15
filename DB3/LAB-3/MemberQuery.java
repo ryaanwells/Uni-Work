@@ -5,7 +5,12 @@ import java.awt.Dimension;
 
 class MemberQuery {
     private static final String queryStart
-	= "**** QUERY ***** ";
+	= "SELECT member.mid, member.name as Name, memberof.instrument as Instrument " +
+			"FROM member, memberof, band " +
+			"WHERE memberof.endYear is NULL " +
+			"AND memberof.bid = band.bid " +
+			"AND member.mid = memberof.mid " +
+			"AND band.bid = ";
 	/*
 	 * This query fetches the member id (mid), name as Name, instrument played as Instrument
 	 * from a join of the member, memberof and band tables
@@ -14,9 +19,10 @@ class MemberQuery {
 	 * results are ordered by member id (mid)
 	 */
     private static final String queryEnd
-	= "*** QUERY: order by clause here *** ";
+	= "ORDER by member.mid";
 
-    public static JComponent doQuery(Statement s, int bid) 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static JComponent doQuery(Statement s, int bid) 
 	throws SQLException {
 
 	ResultSet result = s.executeQuery(queryStart + bid + " " + queryEnd);
