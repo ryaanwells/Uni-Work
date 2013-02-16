@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
   char *buf =(char *) malloc(sizeof(char)*(256+1));
   int offset = 0;
   char *resp = (char *) malloc(sizeof(char)*(256+1));
-  char hostname[275];
+  char hostname[270];
   char *cwd;
   char *file;
   const char badresp[] = "400 BAD REQUEST\r\n";
@@ -125,13 +125,14 @@ int main(int argc, char* argv[]){
 	  fprintf(stdout,"\n");
 	  
 	  /* Get the Hostname */
-	  if(gethostname(hostname,255)==-1){
+	  if(gethostname(hostname,269)==-1){
 		  fprintf(stdout,"%s\n","unable to get hostname");
 	  }
 	  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 	  
 	  /* If the hostname matches the current host */
-	  if((strncasecmp(host+5,hostname,strlen(hostname)))==0 ){
+	  fprintf(stdout,"comparison: %d\n",strncasecmp(host+6,hostname,strlen(hostname)));
+	  if((strncasecmp(host+6,hostname,strlen(hostname)))==0 ){
 		  fprintf(stdout,"%s\n","matches!");
 		  fprintf(stdout,"%s\n",file);
 		  if((fp=fopen(file,"r"))!=NULL){
