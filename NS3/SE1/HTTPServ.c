@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
   char *buf =(char *) malloc(sizeof(char)*(256+1));
   int offset = 0;
   char *resp = (char *) malloc(sizeof(char)*(256+1));
-  char hostname[] = "localhost";
+  char hostname[275];
   char *cwd;
   char *file;
   const char badresp[] = "400 BAD REQUEST\r\n";
@@ -118,19 +118,20 @@ int main(int argc, char* argv[]){
 	  
 	  /* Print the requested filename */
 	  ptr = getp+4;
+	  http++;
 	  while(ptr++!=http-2){
-		  fprintf(stdout,"%c",*ptr);
+	    fprintf(stdout,"%c",*ptr);
 	  }
 	  fprintf(stdout,"\n");
 	  
 	  /* Get the Hostname */
-	  /*if(gethostname(hostname,255)==-1){
+	  if(gethostname(hostname,255)==-1){
 		  fprintf(stdout,"%s\n","unable to get hostname");
-		  }*/
+	  }
 	  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 	  
 	  /* If the hostname matches the current host */
-	  if((strncmp(host+5,hostname,strlen(hostname)))==0 ){
+	  if((strncasecmp(host+5,hostname,strlen(hostname)))==0 ){
 		  fprintf(stdout,"%s\n","matches!");
 		  fprintf(stdout,"%s\n",file);
 		  if((fp=fopen(file,"r"))!=NULL){
@@ -144,7 +145,7 @@ int main(int argc, char* argv[]){
 	  else{
 		  newhn=strcat(hostname,".dcs.gla.ac.uk");
 		  fprintf(stdout,"%s\n",newhn);
-		  if((strncmp(host+5,newhn,strlen(newhn)))==0){
+		  if((strncasecmp(host+5,newhn,strlen(newhn)))==0){
 			  fprintf(stdout,"%s\n","Matches full!");
 			  if((fp=fopen(file,"rb"))!=NULL){
 				  fprintf(stdout,"%s\n","File exists!");
