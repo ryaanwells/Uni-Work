@@ -56,8 +56,8 @@ int main(int argc, char* argv[]){
   
   char *buf =(char *) malloc(sizeof(char)*(256+1));
   int offset = 0;
-  char *resp = (char *) malloc(sizeof(char)*(256));
-  char hostname[275];
+  char *resp = (char *) malloc(sizeof(char)*(256+1));
+  char hostname[] = "localhost";
   char *cwd;
   char *file;
   const char badresp[] = "400 BAD REQUEST\r\n";
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]){
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
   char *newhn;
   
-  FILE *fp;
+  FILE *fp=NULL;
   resplength = strlen(resp);
   
   if((fd = connsock(8080)) == -1){
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]){
     return -1;
   }
   
-  while((rcount = read(connfd,buf+offset,256))>=0){
+  while((rcount = read(connfd,buf+offset,256))>0){
 	  fprintf(stderr,"%zu\n",rcount);
 	  *(buf+offset+rcount)='\0';
 	  offset=offset+rcount;
@@ -105,6 +105,7 @@ int main(int argc, char* argv[]){
   }
   if((file=malloc((strlen(cwd)+40*sizeof(char))))!=NULL){
     *(--http)='\0';
+    memset(file,'\0',strlen(cwd)+40);
     file=strcat(file,(cwd));
     file=strcat(file,(getp+4));
     }
@@ -123,9 +124,9 @@ int main(int argc, char* argv[]){
 	  fprintf(stdout,"\n");
 	  
 	  /* Get the Hostname */
-	  if(gethostname(hostname,255)==-1){
+	  /*if(gethostname(hostname,255)==-1){
 		  fprintf(stdout,"%s\n","unable to get hostname");
-	  }
+		  }*/
 	  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 	  
 	  /* If the hostname matches the current host */
@@ -152,14 +153,21 @@ int main(int argc, char* argv[]){
 	  }
 	  fprintf(stdout,"%s\n","got to here");
 	  offset=0;
-	  while((fgets(resp+offset,256,fp))!=NULL){
-	    offset=offset+256;
-	    fprintf(stderr,"%s\n",resp);
-	    resp = realloc(resp,(strlen(resp)+256)*sizeof(char));
-	  }
-	  resplength = strlen(resp);
-	  if((write(connfd,resp,resplength)) == -1){
-		  fprintf(stderr,"%s\n","no write");
+	  if(fp==NULL){
+	    if((write(connfd,"404\n",4))== -1){
+	      fprintf(stderr,"no write");
+	    }
+	    close(connfd);
+	  }else{
+	    while((fgets(resp+offset,256,fp))!=NULL){
+	      offset=offset+256;
+	      fprintf(stderr,"%s\n",resp);
+	      resp = realloc(resp,(strlen(resp)+256)*sizeof(char));
+	    }
+	    resplength = strlen(resp);
+	    if((write(connfd,resp,resplength)) == -1){
+	      fprintf(stderr,"%s\n","no write");
+	    }
 	  }
 	  if(fp!=NULL){
 	    fclose(fp);
