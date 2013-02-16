@@ -45,6 +45,29 @@ int connsock(int port){
 	return fd;
 }
 
+int sendSuccess(int connfd, FILE * fd, char * ctype){
+  char stdresp[] = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: \0";
+  char * resp = malloc((strlen(stdresp)+strlen(ctype+1))*sizeof(char));
+  *resp='\0';
+  resp=strcat(resp,stdresp);
+  resp=strcat(resp,ctype);
+  if((write(connfd,resp,strlen(resp)))==-1){
+    fprintf(stderr,"No Write\n");
+    return 0;
+  }
+  free(resp);
+  resp = malloc(256*sizeof(char));
+  memset(resp,'\0',256);
+  while((fgets(resp,256,fd))!=NULL){
+    if((write(connfd,resp,strlen(resp)))==-1){
+      fprintf(stderr,"No Write content");
+      return 0;
+    }
+  }
+  fprintf(stderr,"Printed!");
+  return 1;
+}
+
 int main(int argc, char* argv[]){
   if(argc==-2){
     fprintf(stdout,"Usage %s port\n",argv[1]);
@@ -126,49 +149,41 @@ int main(int argc, char* argv[]){
 	  
 	  /* Get the Hostname */
 	  if(gethostname(hostname,269)==-1){
-		  fprintf(stdout,"%s\n","unable to get hostname");
+	    fprintf(stdout,"%s\n","unable to get hostname");
 	  }
 	  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
 	  
 	  /* If the hostname matches the current host */
 	  fprintf(stdout,"comparison: %d\n",strncasecmp(host+6,hostname,strlen(hostname)));
 	  if((strncasecmp(host+6,hostname,strlen(hostname)))==0 ){
-		  fprintf(stdout,"%s\n","matches!");
-		  fprintf(stdout,"%s\n",file);
-		  if((fp=fopen(file,"r"))!=NULL){
-			  fprintf(stdout,"File Exists!\n");
-		  }
-		  else{
-			  fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
-		  }
-		  
+	    fprintf(stdout,"%s\n","matches!");
+	    fprintf(stdout,"%s\n",file);
+	    if((fp=fopen(file,"r"))!=NULL){
+	      fprintf(stdout,"File Exists!\n");
+	    }
+	    else{
+	      fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
+	    }
+	    
 	  }
 	  else{
-		  newhn=strcat(hostname,".dcs.gla.ac.uk");
-		  fprintf(stdout,"%s\n",newhn);
-		  if((strncasecmp(host+5,newhn,strlen(newhn)))==0){
-			  fprintf(stdout,"%s\n","Matches full!");
-			  if((fp=fopen(file,"rb"))!=NULL){
-				  fprintf(stdout,"%s\n","File exists!");
-			  }
-		  }
+	    newhn=strcat(hostname,".dcs.gla.ac.uk");
+	    fprintf(stdout,"%s\n",newhn);
+	    if((strncasecmp(host+5,newhn,strlen(newhn)))==0){
+	      fprintf(stdout,"%s\n","Matches full!");
+	      if((fp=fopen(file,"rb"))!=NULL){
+		fprintf(stdout,"%s\n","File exists!");
+	      }
+	    }
 	  }
-	  fprintf(stdout,"%s\n","got to here");
-	  offset=0;
 	  if(fp==NULL){
 	    if((write(connfd,"404\n",4))== -1){
 	      fprintf(stderr,"no write");
 	    }
 	    close(connfd);
 	  }else{
-	    while((fgets(resp+offset,256,fp))!=NULL){
-	      offset=offset+256;
-	      fprintf(stderr,"%s\n",resp);
-	      resp = realloc(resp,(strlen(resp)+256)*sizeof(char));
-	    }
-	    resplength = strlen(resp);
-	    if((write(connfd,resp,resplength)) == -1){
-	      fprintf(stderr,"%s\n","no write");
+	    if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
+	      fprintf(stderr,"Failed");
 	    }
 	  }
 	  if(fp!=NULL){
@@ -176,11 +191,11 @@ int main(int argc, char* argv[]){
 	  }
   } 
   else{
-	  resplength=strlen(badresp);
-	  if((write(connfd,badresp,resplength)) == -1){
-		  fprintf(stderr,"%s\n","no write");
-	  }
-	  close(connfd);
+    resplength=strlen(badresp);
+    if((write(connfd,badresp,resplength)) == -1){
+      fprintf(stderr,"%s\n","no write");
+    }
+    close(connfd);
   }
   fprintf(stdout,"%s\n","Ended");
   close(connfd);
@@ -190,4 +205,5 @@ int main(int argc, char* argv[]){
   return 1;
 }
 
-
+  
+  
