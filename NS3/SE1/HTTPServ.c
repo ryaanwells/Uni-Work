@@ -48,6 +48,7 @@ int connsock(int port){
 int sendSuccess(int connfd, FILE * fd, char * ctype){
   char stdresp[] = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: \0";
   char * resp = malloc((strlen(stdresp)+strlen(ctype+1))*sizeof(char));
+  size_t count;
   *resp='\0';
   resp=strcat(resp,stdresp);
   resp=strcat(resp,ctype);
@@ -58,14 +59,45 @@ int sendSuccess(int connfd, FILE * fd, char * ctype){
   free(resp);
   resp = malloc(256*sizeof(char));
   memset(resp,'\0',256);
-  while((fgets(resp,256,fd))!=NULL){
-    if((write(connfd,resp,strlen(resp)))==-1){
+  while((count=fread(resp,1,256,fd))!=0){
+    if((write(connfd,resp,count))==-1){
       fprintf(stderr,"No Write content");
       return 0;
     }
   }
   fprintf(stderr,"Printed!\n");
   return 1;
+}
+
+FILE * getFile(char * host,char * file){
+  char hostname[100];
+  char * newhost;
+  FILE *fp = NULL;
+  if(gethostname(hostname,99)==-1){
+    fprintf(stdout,"%s\n","unable to get hostname");
+  }
+  fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
+  if((strncasecmp(host+6,hostname,strlen(hostname)))==0 ){
+    fprintf(stdout,"%s\n","matches!");
+    fprintf(stdout,"%s\n",file);
+    if((fp=fopen(file,"r"))!=NULL){
+      fprintf(stdout,"File Exists!\n");
+    }
+    else{
+      fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
+    }  
+  }
+  else{
+    newhost=strcat(hostname,".dcs.gla.ac.uk\0");
+    fprintf(stdout,"%s\n",newhost);
+    if((strncasecmp(host+5,newhost,strlen(newhost)))==0){
+      fprintf(stdout,"%s\n","Matches full!");
+      if((fp=fopen(file,"rb"))!=NULL){
+	fprintf(stdout,"%s\n","File exists!");
+      }
+    }
+  }
+  return fp;
 }
 
 int main(int argc, char* argv[]){
@@ -79,15 +111,12 @@ int main(int argc, char* argv[]){
   
   char *buf;
   int offset = 0;
-  char hostname[270];
   char *cwd;
   char *file;
   const char badresp[] = "400 BAD REQUEST\r\n";
   int resplength;
   ssize_t rcount;
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
-  char *newhn;
-  
   FILE *fp=NULL;
   
   if((fd = connsock(8080)) == -1){
@@ -105,6 +134,7 @@ int main(int argc, char* argv[]){
     getp = http = host = eomp = NULL;
     offset = 0;
     while((rcount = read(connfd,buf+offset,256))>=0){
+      if(rcount==0) continue;
       fprintf(stderr,"%zu\n",rcount);
       *(buf+offset+rcount)='\0';
       offset=offset+rcount;
@@ -148,34 +178,9 @@ int main(int argc, char* argv[]){
       fprintf(stdout,"\n");
       
       /* Get the Hostname */
-      if(gethostname(hostname,269)==-1){
-	fprintf(stdout,"%s\n","unable to get hostname");
-      }
-      fprintf(stdout,"%s:%zu\n",hostname,strlen(hostname));
       
-      /* If the hostname matches the current host */
-      fprintf(stdout,"comparison: %d\n",strncasecmp(host+6,hostname,strlen(hostname)));
-      if((strncasecmp(host+6,hostname,strlen(hostname)))==0 ){
-	fprintf(stdout,"%s\n","matches!");
-	fprintf(stdout,"%s\n",file);
-	if((fp=fopen(file,"r"))!=NULL){
-	  fprintf(stdout,"File Exists!\n");
-	}
-	else{
-	  fprintf(stderr,"%s: %d\n","ERROR OPENING FILE", errno);
-	}
-	
-      }
-      else{
-	newhn=strcat(hostname,".dcs.gla.ac.uk");
-	fprintf(stdout,"%s\n",newhn);
-	if((strncasecmp(host+5,newhn,strlen(newhn)))==0){
-	  fprintf(stdout,"%s\n","Matches full!");
-	  if((fp=fopen(file,"rb"))!=NULL){
-	    fprintf(stdout,"%s\n","File exists!");
-	  }
-	}
-      }
+      fp = getFile(host,file);
+      
       if(fp==NULL){
 	if((write(connfd,"404\n",4))== -1){
 	  fprintf(stderr,"no write");
