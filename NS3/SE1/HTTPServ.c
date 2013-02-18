@@ -100,10 +100,11 @@ int main(int argc, char* argv[]){
       close(fd);
       return -1;
     }
+    fprintf(stderr,"Accepted new client\n\n");
     buf = (char*) malloc(sizeof(char)*(256+1));
     getp = http = host = eomp = NULL;
     offset = 0;
-    while((rcount = read(connfd,buf+offset,256))>0){
+    while((rcount = read(connfd,buf+offset,256))>=0){
       fprintf(stderr,"%zu\n",rcount);
       *(buf+offset+rcount)='\0';
       offset=offset+rcount;
