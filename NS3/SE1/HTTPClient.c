@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 		
 		//Read
 		if((rcount=read(fd,buf,BUFLEN))==-1){
-			//deal with failure
+			//deal with failurex
 			fprintf(stderr,"%s\n","read failed");
 			fprintf(stderr,"%i\n",errno);
 		}
