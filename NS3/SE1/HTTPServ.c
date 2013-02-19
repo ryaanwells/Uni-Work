@@ -35,7 +35,7 @@ int connsock(int port){
 	}
 	
 	//Listen
-	if(listen(fd, 1) == -1){
+	if(listen(fd, 64) == -1){
 		//deal with failure
 		fprintf(stderr,"%s\n","Listen failed");
 		fprintf(stderr,"%i\n",errno);
@@ -66,6 +66,33 @@ int sendSuccess(int connfd, FILE * fd, char * ctype){
     }
   }
   fprintf(stderr,"Printed!\n");
+  return 1;
+}
+
+int send404(int connfd){
+  char resp[] = "HTTP/1.1 404 Not Found\r\nConnection: close\r\nConnection-Length = 13\r\nContent-Type: text/html\r\n\r\n404 Not Found";
+  if((write(connfd,resp,strlen(resp)))==-1){
+    fprintf(stderr,"No Error Write\n");
+    return 0;
+  }
+  return 1;
+}
+
+int send400(int connfd){
+  char resp[] = "HTTP/1.1 400 Bad Request\r\nConnection: close\r\nConnection-Length = 15\r\nContent-Type: text/html\r\n\r\n400 Bad Request";
+  if((write(connfd,resp,strlen(resp)))==-1){
+    fprintf(stderr,"No Error Write\n");
+    return 0;
+  }
+  return 1;
+}
+
+int send500(int connfd){
+  char resp[] = "HTTP/1.1 500 Internal Server Error\r\nConnection: close\r\nConnection-Length = 25\r\nContent-Type: text/html\r\n\r\n500 Internal Server Error";
+  if((write(connfd,resp,strlen(resp)))==-1){
+    fprintf(stderr,"No Error Write\n");
+    return 0;
+  }
   return 1;
 }
 
@@ -143,6 +170,7 @@ int main(int argc, char* argv[]){
       buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
     }
 
+    /* If the message being sent is not formatted correctly, skip it */
     if(eomp==NULL) continue;
 
     getp = strstr(buf,"GET");
@@ -183,23 +211,20 @@ int main(int argc, char* argv[]){
       fp = getFile(host,file);
       
       if(fp==NULL){
-	if((write(connfd,"404\n",4))== -1){
-	  fprintf(stderr,"no write");
+	if(send404(connfd)==-1){
+	  fprintf(stderr,"no write\n");
 	}
 	close(connfd);
       }else{
 	if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
-	  fprintf(stderr,"Failed");
+	  fprintf(stderr,"Failed\n");
 	}
-      }
-      if(fp!=NULL){
 	fclose(fp);
       }
     } 
     else{
-      resplength=strlen(badresp);
-      if((write(connfd,badresp,resplength)) == -1){
-	fprintf(stderr,"%s\n","no write");
+      if(send400(connfd)==-1){
+	fprintf(stderr,"Failed\n");
       }
       close(connfd);
     }
