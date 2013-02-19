@@ -136,7 +136,7 @@ int main(int argc, char* argv[]){
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
   
-  char *buf;
+  char *buf, *holder;
   int offset = 0;
   char *cwd;
   char *file;
@@ -157,17 +157,24 @@ int main(int argc, char* argv[]){
       return -1;
     }
     fprintf(stderr,"Accepted new client\n\n");
-    buf = (char*) malloc(sizeof(char)*(256+1));
+    holder = (char*) malloc(sizeof(char)*(256+1));
     getp = http = host = eomp = NULL;
     offset = 0;
-    while((rcount = read(connfd,buf+offset,256))>0){
+    while((rcount = read(connfd,holder+offset,256))>0){
       fprintf(stderr,"%zu\n",rcount);
-      *(buf+offset+rcount)='\0';
+      *(holder+offset+rcount)='\0';
       offset=offset+rcount;
-      fprintf(stderr,"%s\n",buf);
-      eomp = strcasestr(buf,"\r\n\r\n");
-      if(eomp!=NULL){ break;}
-      buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
+      fprintf(stderr,"%s\n",holder);
+      eomp = strcasestr(holder,"\r\n\r\n");
+      if(eomp!=NULL){ 
+	*eomp='\0';
+	buf = (char*) malloc(sizeof(char)*(eomp-holder));
+	buf = memcpy(buf,holder,(eomp-holder));
+	holder = memmove(holder,holder+offset-rcount,rcount);
+	offset = rcount;
+	*(holder+rcount)='\0';
+	break;}
+      holder = realloc(holder,(strlen(holder)+257)*sizeof(char));
     }
 
     /* If the message being sent is not formatted correctly, skip it */
@@ -176,8 +183,6 @@ int main(int argc, char* argv[]){
     getp = strstr(buf,"GET");
     http = strcasestr(buf,"HTTP/1.1");
     host = strcasestr(buf,"Host:");
-    eomp = strcasestr(buf,"\r\n\r\n");
-    *eomp='\0';
     
     fprintf(stderr,"BUF: %s\n",buf);
     fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
@@ -196,7 +201,7 @@ int main(int argc, char* argv[]){
     fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
     
     /* If this is a valid start line */
-    if(getp!=NULL&&http!=NULL&&host!=NULL&&eomp!=NULL){
+    if(getp!=NULL&&http!=NULL&&host!=NULL){
       
       /* Print the requested filename */
       ptr = getp+4;
