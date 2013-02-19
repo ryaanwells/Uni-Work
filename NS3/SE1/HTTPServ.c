@@ -133,8 +133,7 @@ int main(int argc, char* argv[]){
     buf = (char*) malloc(sizeof(char)*(256+1));
     getp = http = host = eomp = NULL;
     offset = 0;
-    while((rcount = read(connfd,buf+offset,256))>=0){
-      if(rcount==0) continue;
+    while((rcount = read(connfd,buf+offset,256))>0){
       fprintf(stderr,"%zu\n",rcount);
       *(buf+offset+rcount)='\0';
       offset=offset+rcount;
@@ -143,7 +142,9 @@ int main(int argc, char* argv[]){
       if(eomp!=NULL){ break;}
       buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
     }
-    
+
+    if(eomp==NULL) continue;
+
     getp = strstr(buf,"GET");
     http = strcasestr(buf,"HTTP/1.1");
     host = strcasestr(buf,"Host:");
