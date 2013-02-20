@@ -156,7 +156,6 @@ int main(int argc, char* argv[]){
   
   char *buf,*holder;
   int offset = 0;
-  char *cwd;
   char *file;
   ssize_t rcount;
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
@@ -177,10 +176,10 @@ int main(int argc, char* argv[]){
     fprintf(stderr,"Accepted new client\n\n");
     offset = 0;
     getp = http = host = eomp = NULL;
-    holder = (char*) malloc(sizeof(char)*(256+1));
-    holder = memset(holder,'\0',257);
+    holder = (char*) malloc(sizeof(char)*(512+1));
+    holder = memset(holder,'\0',512);
   read:
-    while(((rcount = read(connfd,holder+offset,256))>0)||((rcount==0)&&(strlen(holder)>0))){
+    while(((rcount = read(connfd,holder+offset,512))>0)||((rcount==0)&&(strlen(holder)>0))){
       fprintf(stderr,"%zu\n",rcount);
       offset = offset + rcount;
       *(holder+offset)='\0';
@@ -192,54 +191,40 @@ int main(int argc, char* argv[]){
 	buf = memcpy(buf,holder,eomp-holder);
 	*holder='\0';
 	holder = memmove(holder,(eomp+4), (holder+offset)-(eomp+3));
-	/*	*((holder+offset)-(eomp+4))='\0';*/
 	offset = strlen(holder);
 	fprintf(stderr,"FOUND HEADER\nBUF: %s\n HOLDER: %s\nOFFSET: %d\n\n",buf,holder,offset);
 	break;
       }
       else if(rcount==0) goto end;
-      holder = realloc(holder,(strlen(holder)+257)*sizeof(char));
+      holder = realloc(holder,(strlen(holder)+513)*sizeof(char));
     }
       
     getp = strstr(buf,"GET");
     http = strcasestr(buf,"HTTP/1.1");
     host = strcasestr(buf,"Host:");
     
-    fprintf(stderr,"BUF: %s\n",buf);
-    fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
-    cwd=malloc(sizeof(char)*80);
-    if((cwd=getcwd(cwd,80)) != NULL){
-      fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
+
+    file=malloc(sizeof(char)*80);
+    if((file=getcwd(file,80)) != NULL){
+      fprintf(stdout,"CWD: %s:%zu\n",file,strlen(file));
     }
-    if((file=malloc((strlen(cwd)+(http-(getp+4))*sizeof(char))))!=NULL){
+    if((file=realloc(file,(strlen(file)+(http-(getp+4))*sizeof(char))))!=NULL){
       *(--http)='\0';
-      memset(file,'\0',strlen(cwd)+(http-(getp+4)));
-      file=strcat(file,(cwd));
       file=strcat(file,(getp+4));
     }
     /* DEBUG HERE */
-    
+
+    fprintf(stderr,"BUF: %s\n",buf);
+    fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
     fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
     
     /* If this is a valid start line */
-    if(getp!=NULL&&http!=NULL&&host!=NULL){
-	
-      /* Print the requested filename */
-      ptr = getp+4;
-      http++;
-      while(ptr++!=http-2){
-	fprintf(stdout,"%c",*ptr);
-      }
-      fprintf(stdout,"\n");
-            
+    if(getp!=NULL&&http!=NULL&&host!=NULL){            
       fp = getFile(host,file,filesize);
-      
       if(fp==NULL){
 	if(send404(connfd)==-1){
 	  fprintf(stderr,"no write\n");
 	}
-	close(connfd);
-	continue;
       }else{
 	if((ptr=strstr(file,".htm"))!=NULL){
 	  if(!sendSuccess(connfd,fp,"text/html",filesize)){
@@ -280,10 +265,9 @@ int main(int argc, char* argv[]){
       close(connfd);
       continue;
     }
-    free(cwd);
     free(file);
     free(buf);
-    cwd = file = buf = NULL;
+    file = buf = NULL;
     if(strlen(holder)!=0) goto read;
   end:
     close(connfd);
