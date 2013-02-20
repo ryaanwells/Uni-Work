@@ -138,7 +138,7 @@ int main(int argc, char* argv[]){
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
   
-  char *buf;
+  char *buf,*holder;
   int offset = 0;
   char *cwd;
   char *file;
@@ -159,18 +159,31 @@ int main(int argc, char* argv[]){
     fprintf(stderr,"Accepted new client\n\n");
     offset = 0;
     getp = http = host = eomp = NULL;
-    buf = (char*) malloc(sizeof(char)*(256+1));
-    buf = memset(buf,'\0',257);
-    while((rcount = read(connfd,buf+offset,256))>0){
+    holder = (char*) malloc(sizeof(char)*(256+1));
+    holder = memset(holder,'\0',257);
+  read:
+    while(((rcount = read(connfd,holder+offset,256))>0)||((rcount==0)&&(strlen(holder)>0))){
       fprintf(stderr,"%zu\n",rcount);
-      *(buf+offset+rcount)='\0';
-      offset=offset+rcount;
-      fprintf(stderr,"%s\n",buf);
-      eomp = strcasestr(buf,"\r\n\r\n");
-      if(eomp!=NULL) break;
-      buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
+      offset = offset + rcount;
+      *(holder+offset)='\0';
+      fprintf(stderr,"%s\n",holder);
+      eomp = strcasestr(holder,"\r\n\r\n");
+      if(eomp!=NULL){ 
+	*eomp='\0';
+	buf = (char *) malloc(eomp-holder);
+	buf = memcpy(buf,holder,eomp-holder);
+	*holder='\0';
+	holder = memmove(holder,(eomp+4), (holder+offset)-(eomp+3));
+	/*	*((holder+offset)-(eomp+4))='\0';*/
+	offset = strlen(holder);
+	fprintf(stderr,"FOUND HEADER\nBUF: %s\n HOLDER: %s\nOFFSET: %d\n\n",buf,holder,offset);
+	break;
+      }
+      else if(rcount==0) goto end;
+      holder = realloc(holder,(strlen(holder)+257)*sizeof(char));
     }
-    
+    /*
+      if((rcount==0)&&(strlen(holder)>0)){*/
     /* If the message being sent is not formatted correctly, skip it */
     if(eomp==NULL){
       continue;
@@ -260,6 +273,9 @@ int main(int argc, char* argv[]){
     free(cwd);
     free(file);
     free(buf);
+    cwd = file = buf = NULL;
+    if(strlen(holder)!=0) goto read;
+  end:
     close(connfd);
     fprintf(stdout,"%s\n","Connection Closed");
   }

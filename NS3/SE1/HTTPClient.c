@@ -20,11 +20,11 @@ int main(int argc, char* argv[])
 	}
 	int fd;
 	char buf[BUFLEN];
-	char resp[] = "GET /index.html HTTP/1.1\r\nHost: Javert\r\n\r\n";
+	char resp[] = "GET /index.html HTTP/1.1\r\nHost: Javert\r\n\r\nGET /index.html HTTP/1.1\r\nHost: Javert\r\n\r\n";
 	int resplen = strlen(resp);
 	ssize_t rcount;
 	struct addrinfo hints, *ai, *ai0;
-	int i, j;
+	int i, j, k;
 	i=1;
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = PF_UNSPEC;
@@ -62,16 +62,18 @@ int main(int argc, char* argv[])
 		}
 		
 		//Read
-		if((rcount=read(fd,buf,BUFLEN))==-1){
-			//deal with failurex
-			fprintf(stderr,"%s\n","read failed");
-			fprintf(stderr,"%i\n",errno);
+		for(k=0;k<2;k++){
+		  if((rcount=read(fd,buf,BUFLEN))==-1){
+		    //deal with failurex
+		    fprintf(stderr,"%s\n","read failed");
+		    fprintf(stderr,"%i\n",errno);
+		  }
+		  
+		  for(i=0;i<rcount;i++){
+		    fprintf(stderr,"%c",buf[i]);
+		  }
+		  /*wait(10);*/
 		}
-		
-		for(i=0;i<rcount;i++){
-			fprintf(stderr,"%c",buf[i]);
-		}
-		/*wait(10);*/
 	}
 	close(fd);
 	freeaddrinfo(ai0);
