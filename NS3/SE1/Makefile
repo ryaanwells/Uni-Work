@@ -1,11 +1,6 @@
 CFLAGS = -pthread -W -Wall -g -c
 
-all: TCPFunct HTTPServ HTTPClient
-	rm -f *.o
-	rm -f *~
-
-TCPFunct: TCPFunct.o
-	gcc TCPFunct.o -o TCPFunct
+all: TSStack.o HTTPServ HTTPClient
 
 HTTPServ: HTTPServ.o
 	gcc HTTPServ.o -o HTTPServ
@@ -13,8 +8,8 @@ HTTPServ: HTTPServ.o
 HTTPClient: HTTPClient.o
 	gcc HTTPClient.o -o HTTPClient
 
-TCPFunct.o:
-	gcc $(CFLAGS) TCPFunct.c
+TSStack.o:
+	gcc $(CFLAGS) TSStack.c
 
 HTTPServ.o:
 	gcc $(CFLAGS) HTTPServ.c
