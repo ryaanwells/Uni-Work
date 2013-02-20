@@ -158,110 +158,110 @@ int main(int argc, char* argv[]){
     }
     fprintf(stderr,"Accepted new client\n\n");
     offset = 0;
-      getp = http = host = eomp = NULL;
-      buf = (char*) malloc(sizeof(char)*(256+1));
-      buf = memset(buf,'\0',257);
-      while((rcount = read(connfd,buf+offset,256))>0){
-	fprintf(stderr,"%zu\n",rcount);
-	*(buf+offset+rcount)='\0';
-	offset=offset+rcount;
-	fprintf(stderr,"%s\n",buf);
-	eomp = strcasestr(buf,"\r\n\r\n");
-	if(eomp!=NULL) break;
-	buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
-      }
+    getp = http = host = eomp = NULL;
+    buf = (char*) malloc(sizeof(char)*(256+1));
+    buf = memset(buf,'\0',257);
+    while((rcount = read(connfd,buf+offset,256))>0){
+      fprintf(stderr,"%zu\n",rcount);
+      *(buf+offset+rcount)='\0';
+      offset=offset+rcount;
+      fprintf(stderr,"%s\n",buf);
+      eomp = strcasestr(buf,"\r\n\r\n");
+      if(eomp!=NULL) break;
+      buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
+    }
+    
+    /* If the message being sent is not formatted correctly, skip it */
+    if(eomp==NULL){
+      continue;
+    }
       
-      /* If the message being sent is not formatted correctly, skip it */
-      if(eomp==NULL){
-	continue;
-      }
-      
-      getp = strstr(buf,"GET");
-      http = strcasestr(buf,"HTTP/1.1");
-      host = strcasestr(buf,"Host:");
-      
-      fprintf(stderr,"BUF: %s\n",buf);
-      fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
-      cwd=malloc(sizeof(char)*80);
-      if((cwd=getcwd(cwd,80)) != NULL){
-	fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
-      }
-      if((file=malloc((strlen(cwd)+(http-(getp+4))*sizeof(char))))!=NULL){
-	*(--http)='\0';
-	memset(file,'\0',strlen(cwd)+(http-(getp+4)));
-	file=strcat(file,(cwd));
-	file=strcat(file,(getp+4));
-      }
-      /* DEBUG HERE */
-      
-      fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
-      
-      /* If this is a valid start line */
-      if(getp!=NULL&&http!=NULL&&host!=NULL){
+    getp = strstr(buf,"GET");
+    http = strcasestr(buf,"HTTP/1.1");
+    host = strcasestr(buf,"Host:");
+    
+    fprintf(stderr,"BUF: %s\n",buf);
+    fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
+    cwd=malloc(sizeof(char)*80);
+    if((cwd=getcwd(cwd,80)) != NULL){
+      fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
+    }
+    if((file=malloc((strlen(cwd)+(http-(getp+4))*sizeof(char))))!=NULL){
+      *(--http)='\0';
+      memset(file,'\0',strlen(cwd)+(http-(getp+4)));
+      file=strcat(file,(cwd));
+      file=strcat(file,(getp+4));
+    }
+    /* DEBUG HERE */
+    
+    fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
+    
+    /* If this is a valid start line */
+    if(getp!=NULL&&http!=NULL&&host!=NULL){
 	
-	/* Print the requested filename */
-	ptr = getp+4;
-	http++;
-	while(ptr++!=http-2){
-	  fprintf(stdout,"%c",*ptr);
-	}
-	fprintf(stdout,"\n");
-	
-	/* Get the Hostname */
-	
-	fp = getFile(host,file);
-	
-	if(fp==NULL){
-	  if(send404(connfd)==-1){
-	    fprintf(stderr,"no write\n");
-	  }
-	  close(connfd);
-	  continue;
-	}else{
-	  if((ptr=strstr(file,".htm"))!=NULL){
-	    if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
-	      fprintf(stderr,"Failed\n");
-	    }
-	    fclose(fp);
-	  }
-	  else if ((ptr=strstr(file,".txt"))!=NULL){
-	    if(!sendSuccess(connfd,fp,"text/plain\r\n\r\n\0")){
-	      fprintf(stderr,"Failed\n");
-	    }
-	    fclose(fp);
-	  }
-	  else if ((ptr=strstr(file,".jp"))!=NULL){
-	    if(!sendSuccess(connfd,fp,"image/jpeg\r\n\r\n\0")){
-	      fprintf(stderr,"Failed\n");
-	    }
-	    fclose(fp);
-	  }
-	  else if ((ptr=strstr(file,".gif"))!=NULL){
-	    if(!sendSuccess(connfd,fp,"image/gif\r\n\r\n\0")){
-	      fprintf(stderr,"Failed\n");
-	    }
-	    fclose(fp);
-	  }
-	  else{
-	    if(!sendSuccess(connfd,fp,"application/octet-stream")){
-	      fprintf(stderr,"Failed\n");
-	    }
-	    fclose(fp);
-	  }
-	}
-      } 
-      else{
-	if(send400(connfd)==-1){
-	  fprintf(stderr,"Failed\n");
+      /* Print the requested filename */
+      ptr = getp+4;
+      http++;
+      while(ptr++!=http-2){
+	fprintf(stdout,"%c",*ptr);
+      }
+      fprintf(stdout,"\n");
+      
+      /* Get the Hostname */
+      
+      fp = getFile(host,file);
+      
+      if(fp==NULL){
+	if(send404(connfd)==-1){
+	  fprintf(stderr,"no write\n");
 	}
 	close(connfd);
 	continue;
+      }else{
+	if((ptr=strstr(file,".htm"))!=NULL){
+	  if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
+	    fprintf(stderr,"Failed\n");
+	  }
+	  fclose(fp);
+	}
+	else if ((ptr=strstr(file,".txt"))!=NULL){
+	  if(!sendSuccess(connfd,fp,"text/plain\r\n\r\n\0")){
+	    fprintf(stderr,"Failed\n");
+	  }
+	  fclose(fp);
+	}
+	else if ((ptr=strstr(file,".jp"))!=NULL){
+	  if(!sendSuccess(connfd,fp,"image/jpeg\r\n\r\n\0")){
+	    fprintf(stderr,"Failed\n");
+	  }
+	  fclose(fp);
+	}
+	else if ((ptr=strstr(file,".gif"))!=NULL){
+	  if(!sendSuccess(connfd,fp,"image/gif\r\n\r\n\0")){
+	    fprintf(stderr,"Failed\n");
+	  }
+	    fclose(fp);
+	}
+	else{
+	  if(!sendSuccess(connfd,fp,"application/octet-stream")){
+	    fprintf(stderr,"Failed\n");
+	  }
+	  fclose(fp);
+	}
       }
-      free(cwd);
-      free(file);
-      free(buf);
+    } 
+    else{
+      if(send400(connfd)==-1){
+	fprintf(stderr,"Failed\n");
+      }
       close(connfd);
-      fprintf(stdout,"%s\n","Connection Closed");
+      continue;
+    }
+    free(cwd);
+    free(file);
+    free(buf);
+    close(connfd);
+    fprintf(stdout,"%s\n","Connection Closed");
   }
   return 1;
 }
