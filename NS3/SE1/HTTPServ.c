@@ -145,15 +145,8 @@ FILE * getFile(char * host,char * file, int * size){
   return fp;
 }
 
-int main(int argc, char* argv[]){
-  if(argc==-2){
-    fprintf(stdout,"Usage %s port\n",argv[1]);
-    return 1;
-  }
-  int fd, connfd;
-  struct sockaddr_in cliaddr;
-  socklen_t cliaddrlen = sizeof(cliaddr);
-  
+void *process(void * conn){
+  int connfd = *(int *)conn;
   char *buf,*holder;
   int offset = 0;
   char *file;
@@ -162,6 +155,112 @@ int main(int argc, char* argv[]){
   int i = 0;
   int *filesize=&i;
   FILE *fp=NULL;
+  offset = 0;
+  getp = http = host = eomp = NULL;
+  holder = (char*) malloc(sizeof(char)*(512+1));
+  holder = memset(holder,'\0',512);
+ read:
+  while(((rcount = read(connfd,holder+offset,512))>0)||((rcount==0)&&(strlen(holder)>0))){
+    fprintf(stderr,"%zu\n",rcount);
+    offset = offset + rcount;
+    *(holder+offset)='\0';
+    fprintf(stderr,"%s\n",holder);
+    eomp = strcasestr(holder,"\r\n\r\n");
+    if(eomp!=NULL){ 
+      *eomp='\0';
+      buf = (char *) malloc(eomp-holder);
+      buf = memcpy(buf,holder,eomp-holder);
+      *holder='\0';
+      holder = memmove(holder,(eomp+4), (holder+offset)-(eomp+3));
+      offset = strlen(holder);
+      fprintf(stderr,"FOUND HEADER\nBUF: %s\n HOLDER: %s\nOFFSET: %d\n\n",buf,holder,offset);
+      break;
+    }
+    else if(rcount==0) goto end;
+    holder = realloc(holder,(strlen(holder)+513)*sizeof(char));
+  }
+  
+  getp = strstr(buf,"GET");
+  http = strcasestr(buf,"HTTP/1.1");
+  host = strcasestr(buf,"Host:");
+  
+  file=malloc(sizeof(char)*80);
+  if((file=getcwd(file,80)) != NULL){
+    fprintf(stdout,"CWD: %s:%zu\n",file,strlen(file));
+  }
+  if((file=realloc(file,(strlen(file)+(http-(getp+4))*sizeof(char))))!=NULL){
+    *(--http)='\0';
+    file=strcat(file,(getp+4));
+  }
+  /* DEBUG HERE */
+  
+  fprintf(stderr,"BUF: %s\n",buf);
+  fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
+  fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
+  
+  /* If this is a valid start line */
+  if(getp!=NULL&&http!=NULL&&host!=NULL){            
+    fp = getFile(host,file,filesize);
+    if(fp==NULL){
+      if(send404(connfd)==-1){
+	fprintf(stderr,"no write\n");
+      }
+    }else{
+      if((ptr=strstr(file,".htm"))!=NULL){
+	if(!sendSuccess(connfd,fp,"text/html",filesize)){
+	  fprintf(stderr,"Failed\n");
+	}
+	fclose(fp);
+      }
+      else if ((ptr=strstr(file,".txt"))!=NULL){
+	if(!sendSuccess(connfd,fp,"text/plain",filesize)){
+	  fprintf(stderr,"Failed\n");
+	}
+	fclose(fp);
+      }
+      else if ((ptr=strstr(file,".jpeg"))||(ptr=strstr(file,".jpg"))!=NULL){
+	if(!sendSuccess(connfd,fp,"image/jpeg",filesize)){
+	  fprintf(stderr,"Failed\n");
+	}
+	fclose(fp);
+      }
+      else if ((ptr=strstr(file,".gif"))!=NULL){
+	if(!sendSuccess(connfd,fp,"image/gif",filesize)){
+	  fprintf(stderr,"Failed\n");
+	}
+	fclose(fp);
+      }
+      else{
+	if(!sendSuccess(connfd,fp,"application/octet-stream",filesize)){
+	  fprintf(stderr,"Failed\n");
+	}
+	fclose(fp);
+      }
+    }
+  } 
+  else{
+    if(send400(connfd)==-1){
+      fprintf(stderr,"Failed\n");
+    }
+  }
+  free(file);
+  free(buf);
+  file = buf = NULL;
+  if(strlen(holder)!=0) goto read;
+ end:
+  close(connfd);
+  fprintf(stdout,"%s\n","Connection Closed");
+  return NULL;
+}
+
+int main(int argc, char* argv[]){
+  if(argc==-2){
+    fprintf(stdout,"Usage %s port\n",argv[1]);
+    return 1;
+  }
+  int fd, connfd;
+  struct sockaddr_in cliaddr;
+  socklen_t cliaddrlen = sizeof(cliaddr);
   
   if((fd = connsock(8080)) == -1){
     fprintf(stderr,"%s\n%i\n","setup failed.",errno);
@@ -174,104 +273,7 @@ int main(int argc, char* argv[]){
       return -1;
     }
     fprintf(stderr,"Accepted new client\n\n");
-    offset = 0;
-    getp = http = host = eomp = NULL;
-    holder = (char*) malloc(sizeof(char)*(512+1));
-    holder = memset(holder,'\0',512);
-  read:
-    while(((rcount = read(connfd,holder+offset,512))>0)||((rcount==0)&&(strlen(holder)>0))){
-      fprintf(stderr,"%zu\n",rcount);
-      offset = offset + rcount;
-      *(holder+offset)='\0';
-      fprintf(stderr,"%s\n",holder);
-      eomp = strcasestr(holder,"\r\n\r\n");
-      if(eomp!=NULL){ 
-	*eomp='\0';
-	buf = (char *) malloc(eomp-holder);
-	buf = memcpy(buf,holder,eomp-holder);
-	*holder='\0';
-	holder = memmove(holder,(eomp+4), (holder+offset)-(eomp+3));
-	offset = strlen(holder);
-	fprintf(stderr,"FOUND HEADER\nBUF: %s\n HOLDER: %s\nOFFSET: %d\n\n",buf,holder,offset);
-	break;
-      }
-      else if(rcount==0) goto end;
-      holder = realloc(holder,(strlen(holder)+513)*sizeof(char));
-    }
-      
-    getp = strstr(buf,"GET");
-    http = strcasestr(buf,"HTTP/1.1");
-    host = strcasestr(buf,"Host:");
-    
-
-    file=malloc(sizeof(char)*80);
-    if((file=getcwd(file,80)) != NULL){
-      fprintf(stdout,"CWD: %s:%zu\n",file,strlen(file));
-    }
-    if((file=realloc(file,(strlen(file)+(http-(getp+4))*sizeof(char))))!=NULL){
-      *(--http)='\0';
-      file=strcat(file,(getp+4));
-    }
-    /* DEBUG HERE */
-
-    fprintf(stderr,"BUF: %s\n",buf);
-    fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
-    fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
-    
-    /* If this is a valid start line */
-    if(getp!=NULL&&http!=NULL&&host!=NULL){            
-      fp = getFile(host,file,filesize);
-      if(fp==NULL){
-	if(send404(connfd)==-1){
-	  fprintf(stderr,"no write\n");
-	}
-      }else{
-	if((ptr=strstr(file,".htm"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"text/html",filesize)){
-	    fprintf(stderr,"Failed\n");
-	  }
-	  fclose(fp);
-	}
-	else if ((ptr=strstr(file,".txt"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"text/plain",filesize)){
-	    fprintf(stderr,"Failed\n");
-	  }
-	  fclose(fp);
-	}
-	else if ((ptr=strstr(file,".jpeg"))||(ptr=strstr(file,".jpg"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"image/jpeg",filesize)){
-	    fprintf(stderr,"Failed\n");
-	  }
-	  fclose(fp);
-	}
-	else if ((ptr=strstr(file,".gif"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"image/gif",filesize)){
-	    fprintf(stderr,"Failed\n");
-	  }
-	    fclose(fp);
-	}
-	else{
-	  if(!sendSuccess(connfd,fp,"application/octet-stream",filesize)){
-	    fprintf(stderr,"Failed\n");
-	  }
-	  fclose(fp);
-	}
-      }
-    } 
-    else{
-      if(send400(connfd)==-1){
-	fprintf(stderr,"Failed\n");
-      }
-      close(connfd);
-      continue;
-    }
-    free(file);
-    free(buf);
-    file = buf = NULL;
-    if(strlen(holder)!=0) goto read;
-  end:
-    close(connfd);
-    fprintf(stdout,"%s\n","Connection Closed");
+    process((void*)&connfd);
   }
   return 1;
 }
