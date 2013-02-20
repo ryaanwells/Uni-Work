@@ -12,37 +12,37 @@
 #include <string.h>
 
 int connsock(int port){
-	struct sockaddr_in servaddr;
-	int fd;
-	// Make Socket
-	if((fd = socket(AF_INET,SOCK_STREAM,0))==-1){
-		//deal with no socket
-		fprintf(stderr,"%s\n","Socket not connected");
-		fprintf(stderr,"%i\n",errno);
-		return -1;
-	}
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = INADDR_ANY;
-	servaddr.sin_port = htons(port);
-	
-	//Bind
-	if(bind(fd, (struct sockaddr *)&servaddr, sizeof(servaddr))==-1){
-		//deal with no connection
-		fprintf(stderr,"%s\n","Bind not made");
-		fprintf(stderr,"%i\n",errno);
-		close(fd);
-		return -1;
-	}
-	
-	//Listen
-	if(listen(fd, 64) == -1){
-		//deal with failure
-		fprintf(stderr,"%s\n","Listen failed");
-		fprintf(stderr,"%i\n",errno);
-		close (fd);
-		return -1;
-	}
-	return fd;
+  struct sockaddr_in servaddr;
+  int fd;
+  // Make Socket
+  if((fd = socket(AF_INET,SOCK_STREAM,0))==-1){
+    //deal with no socket
+    fprintf(stderr,"%s\n","Socket not connected");
+    fprintf(stderr,"%i\n",errno);
+    return -1;
+  }
+  servaddr.sin_family = AF_INET;
+  servaddr.sin_addr.s_addr = INADDR_ANY;
+  servaddr.sin_port = htons(port);
+  
+  //Bind
+  if(bind(fd, (struct sockaddr *)&servaddr, sizeof(servaddr))==-1){
+    //deal with no connection
+    fprintf(stderr,"%s\n","Bind not made");
+    fprintf(stderr,"%i\n",errno);
+    close(fd);
+    return -1;
+  }
+  
+  //Listen
+  if(listen(fd, 64) == -1){
+    //deal with failure
+    fprintf(stderr,"%s\n","Listen failed");
+    fprintf(stderr,"%i\n",errno);
+    close (fd);
+    return -1;
+  }
+  return fd;
 }
 
 int sendSuccess(int connfd, FILE * fd, char * ctype){
@@ -96,6 +96,8 @@ int send500(int connfd){
   return 1;
 }
 
+
+/* NEED TO CHECK HOSTNAME CORRECTLY */
 FILE * getFile(char * host,char * file){
   char hostname[100];
   char * newhost;
@@ -136,12 +138,10 @@ int main(int argc, char* argv[]){
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
   
-  char *buf, *holder;
+  char *buf;
   int offset = 0;
   char *cwd;
   char *file;
-  const char badresp[] = "400 BAD REQUEST\r\n";
-  int resplength;
   ssize_t rcount;
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
   FILE *fp=NULL;
@@ -157,90 +157,114 @@ int main(int argc, char* argv[]){
       return -1;
     }
     fprintf(stderr,"Accepted new client\n\n");
-    holder = (char*) malloc(sizeof(char)*(256+1));
-    getp = http = host = eomp = NULL;
     offset = 0;
-    while((rcount = read(connfd,holder+offset,256))>0){
-      fprintf(stderr,"%zu\n",rcount);
-      *(holder+offset+rcount)='\0';
-      offset=offset+rcount;
-      fprintf(stderr,"%s\n",holder);
-      eomp = strcasestr(holder,"\r\n\r\n");
-      if(eomp!=NULL){ 
-	*eomp='\0';
-	buf = (char*) malloc(sizeof(char)*(eomp-holder));
-	buf = memcpy(buf,holder,(eomp-holder));
-	holder = memmove(holder,holder+offset-rcount,rcount);
-	offset = rcount;
-	*(holder+rcount)='\0';
-	break;}
-      holder = realloc(holder,(strlen(holder)+257)*sizeof(char));
-    }
-
-    /* If the message being sent is not formatted correctly, skip it */
-    if(eomp==NULL) continue;
-
-    getp = strstr(buf,"GET");
-    http = strcasestr(buf,"HTTP/1.1");
-    host = strcasestr(buf,"Host:");
-    
-    fprintf(stderr,"BUF: %s\n",buf);
-    fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
-    
-    if((cwd=get_current_dir_name()) != NULL){
-      fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
-    }
-    if((file=malloc((strlen(cwd)+(http-(getp+4))*sizeof(char))))!=NULL){
-      *(--http)='\0';
-      memset(file,'\0',strlen(cwd)+(http-(getp+4)));
-      file=strcat(file,(cwd));
-      file=strcat(file,(getp+4));
-    }
-    /* DEBUG HERE */
-    
-    fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
-    
-    /* If this is a valid start line */
-    if(getp!=NULL&&http!=NULL&&host!=NULL){
-      
-      /* Print the requested filename */
-      ptr = getp+4;
-      http++;
-      while(ptr++!=http-2){
-	fprintf(stdout,"%c",*ptr);
+      getp = http = host = eomp = NULL;
+      buf = (char*) malloc(sizeof(char)*(256+1));
+      buf = memset(buf,'\0',257);
+      while((rcount = read(connfd,buf+offset,256))>0){
+	fprintf(stderr,"%zu\n",rcount);
+	*(buf+offset+rcount)='\0';
+	offset=offset+rcount;
+	fprintf(stderr,"%s\n",buf);
+	eomp = strcasestr(buf,"\r\n\r\n");
+	if(eomp!=NULL) break;
+	buf = realloc(buf,(strlen(buf)+257)*sizeof(char));
       }
-      fprintf(stdout,"\n");
       
-      /* Get the Hostname */
+      /* If the message being sent is not formatted correctly, skip it */
+      if(eomp==NULL){
+	continue;
+      }
       
-      fp = getFile(host,file);
+      getp = strstr(buf,"GET");
+      http = strcasestr(buf,"HTTP/1.1");
+      host = strcasestr(buf,"Host:");
       
-      if(fp==NULL){
-	if(send404(connfd)==-1){
-	  fprintf(stderr,"no write\n");
+      fprintf(stderr,"BUF: %s\n",buf);
+      fprintf(stderr,"GETP:%c HTTP:%c HOST:%c EOMP:%c\n",*getp,*http,*host,*eomp);
+      cwd=malloc(sizeof(char)*80);
+      if((cwd=getcwd(cwd,80)) != NULL){
+	fprintf(stdout,"CWD: %s:%zu\n",cwd,strlen(cwd));
+      }
+      if((file=malloc((strlen(cwd)+(http-(getp+4))*sizeof(char))))!=NULL){
+	*(--http)='\0';
+	memset(file,'\0',strlen(cwd)+(http-(getp+4)));
+	file=strcat(file,(cwd));
+	file=strcat(file,(getp+4));
+      }
+      /* DEBUG HERE */
+      
+      fprintf(stdout,"FILE:%s :%zu\n",file,strlen(file));
+      
+      /* If this is a valid start line */
+      if(getp!=NULL&&http!=NULL&&host!=NULL){
+	
+	/* Print the requested filename */
+	ptr = getp+4;
+	http++;
+	while(ptr++!=http-2){
+	  fprintf(stdout,"%c",*ptr);
 	}
-	close(connfd);
-      }else{
-	if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
+	fprintf(stdout,"\n");
+	
+	/* Get the Hostname */
+	
+	fp = getFile(host,file);
+	
+	if(fp==NULL){
+	  if(send404(connfd)==-1){
+	    fprintf(stderr,"no write\n");
+	  }
+	  close(connfd);
+	  continue;
+	}else{
+	  if((ptr=strstr(file,".htm"))!=NULL){
+	    if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
+	      fprintf(stderr,"Failed\n");
+	    }
+	    fclose(fp);
+	  }
+	  else if ((ptr=strstr(file,".txt"))!=NULL){
+	    if(!sendSuccess(connfd,fp,"text/plain\r\n\r\n\0")){
+	      fprintf(stderr,"Failed\n");
+	    }
+	    fclose(fp);
+	  }
+	  else if ((ptr=strstr(file,".jp"))!=NULL){
+	    if(!sendSuccess(connfd,fp,"image/jpeg\r\n\r\n\0")){
+	      fprintf(stderr,"Failed\n");
+	    }
+	    fclose(fp);
+	  }
+	  else if ((ptr=strstr(file,".gif"))!=NULL){
+	    if(!sendSuccess(connfd,fp,"image/gif\r\n\r\n\0")){
+	      fprintf(stderr,"Failed\n");
+	    }
+	    fclose(fp);
+	  }
+	  else{
+	    if(!sendSuccess(connfd,fp,"application/octet-stream")){
+	      fprintf(stderr,"Failed\n");
+	    }
+	    fclose(fp);
+	  }
+	}
+      } 
+      else{
+	if(send400(connfd)==-1){
 	  fprintf(stderr,"Failed\n");
 	}
-	fclose(fp);
+	close(connfd);
+	continue;
       }
-    } 
-    else{
-      if(send400(connfd)==-1){
-	fprintf(stderr,"Failed\n");
-      }
+      free(cwd);
+      free(file);
+      free(buf);
       close(connfd);
-    }
-    fprintf(stdout,"%s\n","Ended");
-    close(connfd);
-    free(cwd);
-    free(file);
-    free(buf);
+      fprintf(stdout,"%s\n","Connection Closed");
   }
   return 1;
 }
 
-  
+
   
