@@ -46,7 +46,7 @@ int connsock(int port){
 }
 
 int sendSuccess(int connfd, FILE * fd, char * ctype){
-  char stdresp[] = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: \0";
+  char stdresp[] = "HTTP/1.1 200 OK\r\nContent-Type: \0";
   char * resp = malloc((strlen(stdresp)+strlen(ctype+1))*sizeof(char));
   size_t count;
   *resp='\0';
