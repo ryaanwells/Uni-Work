@@ -1,7 +1,9 @@
 #define _GNU_SOURCE
 
-#include <stdlib.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -10,6 +12,8 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+
+
 
 int connsock(int port){
   struct sockaddr_in servaddr;
@@ -45,14 +49,18 @@ int connsock(int port){
   return fd;
 }
 
-int sendSuccess(int connfd, FILE * fd, char * ctype){
-  char stdresp[] = "HTTP/1.1 200 OK\r\nContent-Type: \0";
-  char * resp = malloc((strlen(stdresp)+strlen(ctype+1))*sizeof(char));
+int sendSuccess(int connfd, FILE * fd, char * ctype, int * size){
+  char stdresp[] = "HTTP/1.1 200 OK\r\nContent-Type: \r\nContent-Length: \r\n\r\n\0";
+  char * resp = malloc((strlen(stdresp)+strlen(ctype)+20)*sizeof(char));
   size_t count;
+  int resplen;
+  memset(resp,'\0',(strlen(stdresp)+strlen(ctype)+20)*sizeof(char));
+  resplen = sprintf(resp,"HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %d\r\n\r\n",ctype,*size);
+  fprintf(stderr,"RESPONSE HEADER: %s\n",resp);/*
   *resp='\0';
   resp=strcat(resp,stdresp);
-  resp=strcat(resp,ctype);
-  if((write(connfd,resp,strlen(resp)))==-1){
+  resp=strcat(resp,ctype);*/
+  if((write(connfd,resp,resplen))==-1){
     fprintf(stderr,"No Write\n");
     return 0;
   }
@@ -66,6 +74,7 @@ int sendSuccess(int connfd, FILE * fd, char * ctype){
     }
   }
   fprintf(stderr,"Printed!\n");
+  free(resp);
   return 1;
 }
 
@@ -98,10 +107,17 @@ int send500(int connfd){
 
 
 /* NEED TO CHECK HOSTNAME CORRECTLY */
-FILE * getFile(char * host,char * file){
+FILE * getFile(char * host,char * file, int * size){
+  struct stat fs;
+  int fd = open(file,O_RDONLY);
   char hostname[100];
   char * newhost;
   FILE *fp = NULL;
+  if(fstat(fd,&fs) == -1){
+    fprintf(stderr,"Unable to get length of file");
+  }
+  fprintf(stderr,"file size = %d\n",(int) fs.st_size);
+  *(size)=(int)fs.st_size;
   if(gethostname(hostname,99)==-1){
     fprintf(stdout,"%s\n","unable to get hostname");
   }
@@ -144,6 +160,8 @@ int main(int argc, char* argv[]){
   char *file;
   ssize_t rcount;
   char *getp=NULL, *http=NULL, *host=NULL, *eomp=NULL, *ptr;
+  int i = 0;
+  int *filesize=&i;
   FILE *fp=NULL;
   
   if((fd = connsock(8080)) == -1){
@@ -182,12 +200,6 @@ int main(int argc, char* argv[]){
       else if(rcount==0) goto end;
       holder = realloc(holder,(strlen(holder)+257)*sizeof(char));
     }
-    /*
-      if((rcount==0)&&(strlen(holder)>0)){*/
-    /* If the message being sent is not formatted correctly, skip it */
-    if(eomp==NULL){
-      continue;
-    }
       
     getp = strstr(buf,"GET");
     http = strcasestr(buf,"HTTP/1.1");
@@ -219,10 +231,8 @@ int main(int argc, char* argv[]){
 	fprintf(stdout,"%c",*ptr);
       }
       fprintf(stdout,"\n");
-      
-      /* Get the Hostname */
-      
-      fp = getFile(host,file);
+            
+      fp = getFile(host,file,filesize);
       
       if(fp==NULL){
 	if(send404(connfd)==-1){
@@ -232,31 +242,31 @@ int main(int argc, char* argv[]){
 	continue;
       }else{
 	if((ptr=strstr(file,".htm"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"text/html\r\n\r\n\0")){
+	  if(!sendSuccess(connfd,fp,"text/html",filesize)){
 	    fprintf(stderr,"Failed\n");
 	  }
 	  fclose(fp);
 	}
 	else if ((ptr=strstr(file,".txt"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"text/plain\r\n\r\n\0")){
+	  if(!sendSuccess(connfd,fp,"text/plain",filesize)){
 	    fprintf(stderr,"Failed\n");
 	  }
 	  fclose(fp);
 	}
-	else if ((ptr=strstr(file,".jp"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"image/jpeg\r\n\r\n\0")){
+	else if ((ptr=strstr(file,".jpeg"))||(ptr=strstr(file,".jpg"))!=NULL){
+	  if(!sendSuccess(connfd,fp,"image/jpeg",filesize)){
 	    fprintf(stderr,"Failed\n");
 	  }
 	  fclose(fp);
 	}
 	else if ((ptr=strstr(file,".gif"))!=NULL){
-	  if(!sendSuccess(connfd,fp,"image/gif\r\n\r\n\0")){
+	  if(!sendSuccess(connfd,fp,"image/gif",filesize)){
 	    fprintf(stderr,"Failed\n");
 	  }
 	    fclose(fp);
 	}
 	else{
-	  if(!sendSuccess(connfd,fp,"application/octet-stream")){
+	  if(!sendSuccess(connfd,fp,"application/octet-stream",filesize)){
 	    fprintf(stderr,"Failed\n");
 	  }
 	  fclose(fp);
