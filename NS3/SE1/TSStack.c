@@ -4,12 +4,12 @@
 
 typedef struct Element{
   void * content;
-  struct element * next;
-} element;
+  struct Element * next;
+} Element;
 
 typedef struct {
   int count;
-  struct element * head;
+  struct Element * head;
 } Stack;
 
 Stack * createStack(){
@@ -22,7 +22,7 @@ Stack * createStack(){
 }
 
 int add(Stack * S,void * e){
-  element * elem = malloc(sizeof(element));
+  Element * elem = malloc(sizeof(Element));
   if(elem==NULL) return -1;
   elem->content = e;
   elem->next = S->head;
@@ -31,9 +31,20 @@ int add(Stack * S,void * e){
 }
 
 int remove(Stack * S, void * e){
-  if(S->count==0) return -1;
-  struct element * elem = S->head;
+  if(S->count==0){
+    if (e!=NULL) e=NULL;
+    return -1;
+  }
+  Element * elem = S->head;
   e = elem->content;
   S->head=S->head->next;
+  free(elem);
+  S->count--;
   return 1;
+}
+
+int clear(Stack *S){
+  if(S==NULL) return 1;
+  
+  return 0;
 }
