@@ -7,7 +7,7 @@ typedef struct Element{
   struct Element * next;
 } Element;
 
-typedef struct {
+typedef struct Stack {
   int count;
   struct Element * head;
 } Stack;

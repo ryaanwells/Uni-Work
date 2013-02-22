@@ -1,6 +1,6 @@
 CFLAGS = -pthread -W -Wall -g -c
 
-all: Stack.o HTTPServ HTTPClient
+all: Stack.o ThreadPool.o HTTPServ HTTPClient
 
 HTTPServ: HTTPServ.o
 	gcc HTTPServ.o Stack.o -o HTTPServ
@@ -10,6 +10,9 @@ HTTPClient: HTTPClient.o
 
 Stack.o:
 	gcc $(CFLAGS) Stack.c
+
+ThreadPool.o:
+	gcc $(CFLAGS) ThreadPool.c
 
 HTTPServ.o:
 	gcc $(CFLAGS) HTTPServ.c
