@@ -24,7 +24,8 @@ Stack * createStack(){
 int add(Stack * S,void * e){
   Element * elem = malloc(sizeof(Element));
   if(elem==NULL) return -1;
-  elem->content = e;
+  void * cont = malloc(sizeof(*e));
+  elem->content = cont;
   elem->next = S->head;
   S->count++;
   return 1;
@@ -44,7 +45,14 @@ int remove(Stack * S, void * e){
 }
 
 int clear(Stack *S){
+  Element * elem = NULL;
   if(S==NULL) return 1;
-  
-  return 0;
+  while(S->head != NULL){
+    elem = S->head;
+    S->head=S->head->next;
+    free(elem->content);
+    free(elem);
+  }
+  S->count = 0;
+  return 1;
 }
