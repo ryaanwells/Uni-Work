@@ -15,13 +15,13 @@ import java.sql.*;
 public class ExamplePP {
 
 	public static void main(String args[]) {
-		ConnectionManager cm = null;
+		ConnManager cm = null;
 		if (args.length < 1) {
 			System.out.println("Usage: java ExamplePP outputFileName.ppt");
 			System.exit(1);
 		} else {
 			try{
-				cm = new ConnectionManager();
+				cm = new ConnManager();
 				try{
 					Statement s = cm.getStatement();
 					ResultSet slideOne = QueryOne.execute(s);

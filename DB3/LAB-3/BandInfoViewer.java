@@ -30,7 +30,7 @@ class BandInfoViewer {
 	}
 
 	public static void main(String args[]) {
-		ConnectionManager cm = null;
+		ConnManager cm = null;
 		JFrame f;
 		JPanel bandInfoPanel = null;
 		JComponent memberInfo = null, discoInfo = null;
@@ -44,7 +44,7 @@ class BandInfoViewer {
 
 		try {
 			// attempt to establish a connection
-			cm = new ConnectionManager();
+			cm = new ConnManager();
 
 			try {
 				Statement s = cm.getStatement();

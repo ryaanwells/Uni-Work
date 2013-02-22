@@ -56,9 +56,9 @@ class ReleaseStats {
     }
 
     public static void main(String args[]) {
-	ConnectionManager con;
+	ConnManager con;
 	try {
-	    con = new ConnectionManager();
+	    con = new ConnManager();
 
 	    try {
 		Statement s = con.getStatement();

@@ -1,12 +1,12 @@
-import java.sql.*;
+	import java.sql.*;
 
-class ConnectionManager {
+class ConnManager {
     private Connection conn;
     
     private static final String connectionString
 	= "jdbc:oracle:thin:L3_12_1002253W/1002253@crooked.dcs.gla.ac.uk:1521:L3";
 
-    public ConnectionManager() throws SQLException, ClassNotFoundException {
+    public ConnManager() throws SQLException, ClassNotFoundException {
 	Class.forName("oracle.jdbc.driver.OracleDriver");
 	
 	initiateConnection();
