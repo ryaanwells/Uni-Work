@@ -13,7 +13,85 @@
 #include <errno.h>
 #include <string.h>
 #include "Stack.h"
+#include <pthread.h>
 
+/* ========== THREAD POOL =========== */
+
+void * process(void * arg);
+
+typedef struct ThreadPool{
+  int freeThreads;
+  int totalThreads;
+  pthread_t * threads;
+  Stack * stack;
+  pthread_mutex_t mut;
+  pthread_cond_t empty;
+} ThreadPool;
+
+ThreadPool * init(int threads){
+  ThreadPool * tp = malloc(sizeof(ThreadPool));
+  if(tp!=NULL){
+    Stack * s = createStack();
+    if(s==NULL){
+      free(tp);
+      return NULL;
+    }
+    pthread_t * pt = malloc(threads*sizeof(pthread_t));
+    if(pt==NULL){
+      free(s);
+      free(tp);
+      return NULL;
+    }
+    int i;
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+    tp->mut = mutex;
+    tp->empty = cond;
+    tp->stack = s;
+    tp->freeThreads = threads;
+    tp->totalThreads = threads;
+    tp->threads = pt;
+    for (i=0;i<threads;i++){
+      pthread_create(&pt[i],NULL,process,tp);
+    }
+  }
+  return tp;
+}
+
+int addWaiting(ThreadPool * TP,int conn){
+  pthread_mutex_lock(&TP->mut);
+  int i = stackAdd((TP->stack),conn);
+  pthread_cond_signal(&TP->empty);
+  pthread_mutex_unlock(&TP->mut);
+  return i;
+}
+
+int removeWaiting(ThreadPool * TP){
+  pthread_mutex_lock(&TP->mut);
+  int conn;
+  while((conn=stackRemove(TP->stack))<0){
+    pthread_cond_wait(&TP->empty,&TP->mut);
+  }
+  if (conn==0){
+    stackAdd(TP->stack,0);
+  }
+  pthread_mutex_unlock(&TP->mut);
+  return conn;
+}
+
+void destroyTP(ThreadPool * TP){
+  int i;
+  for(i=0;i<TP->totalThreads;i++){
+    pthread_join(TP->threads[i],NULL);
+  }
+  free(TP->threads);
+  pthread_mutex_destroy(&TP->mut);
+  pthread_cond_destroy(&TP->empty);
+  destroyStack(TP->stack);
+  free(TP);
+}
+
+/* ========== Processing ========== */
 
 int connsock(int port){
   struct sockaddr_in servaddr;
@@ -145,9 +223,11 @@ FILE * getFile(char * host,char * file, int * size){
   return fp;
 }
 
-void *process(void * conn){
-  int connfd = *(int *)conn;
-  char *buf,*holder;
+
+
+
+void *processConn(int connfd){
+  char *buf=NULL,*holder;
   int offset = 0;
   char *file;
   ssize_t rcount;
@@ -179,7 +259,7 @@ void *process(void * conn){
     else if(rcount==0) goto end;
     holder = realloc(holder,(strlen(holder)+513)*sizeof(char));
   }
-  
+  if(buf==NULL) goto end;
   getp = strstr(buf,"GET");
   http = strcasestr(buf,"HTTP/1.1");
   host = strcasestr(buf,"Host:");
@@ -253,6 +333,19 @@ void *process(void * conn){
   return NULL;
 }
 
+void *process(void * arg){
+  ThreadPool * tp = (ThreadPool*)arg; 
+  int running = 2;
+  int connfd;
+  while(running){
+    connfd = removeWaiting(tp);
+    fprintf(stderr,"CONNFD: %d\n",connfd);
+    if (connfd<0) running = 0;
+    processConn(connfd);
+  }
+  return NULL;
+}
+
 int main(int argc, char* argv[]){
   if(argc==-2){
     fprintf(stdout,"Usage %s port\n",argv[1]);
@@ -266,14 +359,18 @@ int main(int argc, char* argv[]){
     fprintf(stderr,"%s\n%i\n","setup failed.",errno);
     return -1;
   }
+  ThreadPool * tp = init(64);
   for(;;){
     if((connfd = accept(fd, (struct sockaddr *) &cliaddr, &cliaddrlen)) == -1){
       fprintf(stderr, "%s\n%i\n","accept failed.",errno);
       close(fd);
       return -1;
     }
+    int result;
+    if ((result = addWaiting(tp,connfd)<0)){
+      fprintf(stderr,"couldn't add fd \n");
+    }
     fprintf(stderr,"Accepted new client\n\n");
-    process((void*)&connfd);
   }
   return 1;
 }

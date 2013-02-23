@@ -4,8 +4,9 @@
 typedef struct Stack Stack;
 
 Stack * createStack();
-int addElem(Stack * S, void * e);
-int removeElem(Stack * S, void * e);
-int clearAll(Stack * S);
+int stackAdd(Stack * S, int e);
+int stackRemove(Stack * S);
+int stackClear(Stack * S);
+void destroyStack(Stack *S);
 
 #endif

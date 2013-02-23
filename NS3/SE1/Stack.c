@@ -3,7 +3,7 @@
 #include <errno.h>
 
 typedef struct Element{
-  void * content;
+  int content;
   struct Element * next;
 } Element;
 
@@ -21,38 +21,40 @@ Stack * createStack(){
   return S;
 }
 
-int add(Stack * S,void * e){
+int stackAdd(Stack * S,int e){
   Element * elem = malloc(sizeof(Element));
   if(elem==NULL) return -1;
-  void * cont = malloc(sizeof(*e));
-  elem->content = cont;
+  elem->content = e;
   elem->next = S->head;
+  S->head = elem;
   S->count++;
   return 1;
 }
 
-int remove(Stack * S, void * e){
+int stackRemove(Stack * S){
   if(S->count==0){
-    if (e!=NULL) e=NULL;
     return -1;
   }
   Element * elem = S->head;
-  e = elem->content;
+  int cont = elem->content;
   S->head=S->head->next;
-  free(elem);
   S->count--;
-  return 1;
+  return cont;
 }
 
-int clear(Stack *S){
+int stackClear(Stack *S){
   Element * elem = NULL;
   if(S==NULL) return 1;
   while(S->head != NULL){
     elem = S->head;
     S->head=S->head->next;
-    free(elem->content);
     free(elem);
   }
   S->count = 0;
   return 1;
+}
+
+void destroyStack(Stack *S){
+  stackClear(S);
+  free(S);
 }
