@@ -155,7 +155,7 @@ int sendSuccess(int connfd, FILE * fd, char * ctype, int * size){
 #ifdef SERVER_DEBUG
   fprintf(stderr,"RESPONSE HEADER: %s\n",resp);
 #endif
-  /* Send the headers and keep with the connection kept alive*/
+  /* Send the headers and keep the connection alive*/
   if((write(connfd,resp,resplen))==-1){
     perror("No Write Success");
     return 0;
