@@ -1,24 +1,15 @@
-CFLAGS = -lpthread -W -Wall -g -c
+CFLAGS =  -W -Wall -Wconversion -g -c
 
-all: Stack.o ThreadPool.o HTTPServ HTTPClient
+all: Stack.o web-server
 
-HTTPServ: HTTPServ.o
-	gcc  HTTPServ.o Stack.o -lpthread -o HTTPServ
+web-server: web-server.o Stack.o
+	gcc  web-server.o Stack.o -lpthread -o web-server
 
-HTTPClient: HTTPClient.o
-	gcc HTTPClient.o -o HTTPClient
+web-server.o: web-server.c
+	gcc $(CFLAGS) web-server.c
 
-Stack.o:
+Stack.o: Stack.c
 	gcc $(CFLAGS) Stack.c
-
-ThreadPool.o:
-	gcc $(CFLAGS) ThreadPool.c
-
-HTTPServ.o:
-	gcc $(CFLAGS) HTTPServ.c
-
-HTTPClient.o:
-	gcc $(CFLAGS) HTTPClient.c
 
 clean:
 	rm -f *.o
