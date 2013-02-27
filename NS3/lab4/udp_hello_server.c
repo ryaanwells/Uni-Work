@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 	
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = INADDR_ANY;
-	servaddr.sin_port = htons(5003);
+	servaddr.sin_port = htons(5008);
 	
 	if(bind(fd, (struct sockaddr *)&servaddr, sizeof(servaddr))<0){
 		perror("Bind not made");
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
 		perror("Could not receive a packet");
 		return -1;
 	}
-	fprintf(stdout,"Message:\n%*.*s\n",rlen,rlen,buffer);
+	fprintf(stdout,"Message:\n%-*.*s\n",rlen,rlen,buffer);
 	close(fd);
 	return 1;
 }
