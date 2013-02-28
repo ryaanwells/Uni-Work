@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
 	}
 
 	int fd;
-	char resp[] = "HELLO, WORLD!";
+	char resp[] = "So long! AND THANKS FOR ALL THE FISH.";
 	int resplen = strlen(resp);
 	struct addrinfo *ai, hints;
 	int i;
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = PF_UNSPEC;;
 	hints.ai_socktype = SOCK_DGRAM;
-	if((i = getaddrinfo(argv[1], "5003", &hints, &ai)) !=0){
+	if((i = getaddrinfo(argv[1], "5008", &hints, &ai)) !=0){
 		fprintf(stderr, "Unable to lookup IP: %s\n", gai_strerror(i));
 		exit(1);
 	}
