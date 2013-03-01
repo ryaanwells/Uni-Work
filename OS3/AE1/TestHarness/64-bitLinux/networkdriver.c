@@ -51,7 +51,7 @@ void init_network_driver(NetworkDevice               nd,
 	FPDS = create_fpds();
 	create_free_packet_descriptors(FPDS,mem_start,mem_length);
 	fpds_ptr = &FPDS;
-	sendBuffer = createBB(MAX_PID);
+	sendBuffer = createBB(6);
 	
 }
 /* Called before any other methods, to allow you to initialise */

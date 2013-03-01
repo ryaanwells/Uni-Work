@@ -35,5 +35,7 @@ void addToTSA(TSArray * TSA, int index, PacketDescriptor PD){
 }
 
 PacketDescriptor getFromTSA(TSArray * TSA, int index){
-	return NULL;
+	PacketDescriptor PD = TSA->array[index];
+	TSA->array[index] = NULL;
+	return PD;
 }
