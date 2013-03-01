@@ -1,6 +1,6 @@
 CFLAGS = -W -Wall -Wextra -g -c
 
-all: chirp chirp_listener
+all: chirp_listener chirp
 
 chirp: chirp.o
 	gcc chirp.o -o chirp

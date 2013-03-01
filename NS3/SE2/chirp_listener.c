@@ -51,11 +51,13 @@ int main(int argc, char* argv[]){
 		rlen = recvfrom(fd,buffer,BUF_LEN,0,&addr,&alen);
 		if (rlen<0){
 			perror("Could not receive a packet");
+			continue;
 		}
 		buffer[rlen] = '\0';
 		fprintf(stdout,"Message:\n%-*.*s\n",rlen,rlen,buffer);
 		close(fd);
 		rlen = 0;
+		buffer[rlen]='\0';
 	}
 	return 1;
 }
