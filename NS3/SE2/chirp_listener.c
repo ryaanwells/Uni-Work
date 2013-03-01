@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	struct ip_mreq imr;
 	socklen_t alen=sizeof(addr);
 	int rlen;
-	
+	memset(&servaddr,0,sizeof(servaddr));
 	if(argc!=1){
 		fprintf(stderr,"Usage './chirp_listener'\n");
 		return 1;
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 	}
 	
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servaddr.sin_port = htons(5010);
 	
 	if(bind(fd, (struct sockaddr *)&servaddr, sizeof(servaddr))<0){
@@ -48,16 +48,14 @@ int main(int argc, char* argv[]){
 		return -1;
 	}
 	while(1){
-		rlen = recvfrom(fd,buffer,BUF_LEN,0,&addr,&alen);
+		rlen = recvfrom(fd,buffer,BUF_LEN,0,(struct sockaddr *)&addr,&alen);
 		if (rlen<0){
-			perror("Could not receive a packet");
+			fprintf(stderr,"RLEN<0\n");
 			continue;
 		}
 		buffer[rlen] = '\0';
 		fprintf(stdout,"Message:\n%-*.*s\n",rlen,rlen,buffer);
-		close(fd);
-		rlen = 0;
-		buffer[rlen]='\0';
+		buffer[0]='\0';
 	}
 	return 1;
 }
