@@ -25,8 +25,8 @@ int main(int argc, char* argv[]){
 	int fd;
 	char buffer[BUF_LEN];
 	char * fullmsg = NULL;
-	char * from, * msg;
-	char dformat[] = "%c - %%s - %%s\n";
+	char * from, * msg, *eom;
+	char dformat[] = "%d-%m-%Y %T - %%s - %%s\n";
 	struct sockaddr addr;
 	struct sockaddr_in servaddr;
 	struct ip_mreq imr;
@@ -81,6 +81,9 @@ int main(int argc, char* argv[]){
 			from = from+5;
 			if((msg-from)<=16){
 				*(msg++)='\0';
+		  eom = strchr(msg,'\n');
+		  if(eom==msg) continue;
+		  *(eom)='\0';
 				clean(from);
 				clean(msg);
 				fprintf(stdout,fullmsg,from,msg);
