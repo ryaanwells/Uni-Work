@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 #include <ctype.h>
@@ -23,9 +24,9 @@ int main(int argc, char* argv[]){
 	
 	int fd;
 	char buffer[BUF_LEN];
-	char fullmsg[BUF_LEN+50];
+	char * fullmsg = NULL;
 	char * from, * msg;
-	char dformat[] = "%c - %%s - %%s";
+	char dformat[] = "%c - %%s - %%s\n";
 	struct sockaddr addr;
 	struct sockaddr_in servaddr;
 	struct ip_mreq imr;
@@ -72,24 +73,22 @@ int main(int argc, char* argv[]){
 		buffer[rlen] = '\0';
 		time(&ct);
 		timeinfo = localtime(&ct);
-		strftime(fullmsg,BUF_LEN+50,dformat,timeinfo);
+		fullmsg = (char*) malloc(strlen(buffer)+sizeof(char)*50);
+		strftime(fullmsg,strlen(buffer)+50,dformat,timeinfo);
 		from = strstr(buffer,"FROM");
-		msg = strstr(buffer,"\n");
+		msg = strchr(buffer,'\n');
 		if(from!=NULL&&msg!=NULL){
-			printf("first Inner\n");
 			from = from+5;
 			if((msg-from)<=16){
 				*(msg++)='\0';
 				clean(from);
-				clean(msg+1);
-				buffer[rlen]='\0';
-				printf("second Inner\n");
-				sprintf(fullmsg,fullmsg,from,msg);
-				fprintf(stdout,"%-*.*s\n",rlen+50,rlen+50,fullmsg);
+				clean(msg);
+				fprintf(stdout,fullmsg,from,msg);
 			}
 		}
 		buffer[0]='\0';
-		printf("here\n");
+		free(fullmsg);
+		fullmsg = NULL;
 	}
 	return 1;
 }
