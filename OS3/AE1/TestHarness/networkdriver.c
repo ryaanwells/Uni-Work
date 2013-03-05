@@ -84,7 +84,7 @@ void init_network_driver(NetworkDevice               nd,
   create_free_packet_descriptors(FPDS,mem_start,mem_length);
   *fpds_ptr = FPDS;
   DIAGNOSTICS("INIT: Creating Buffers\n");
-  sendBuffer = createBB(6);
+  sendBuffer = createBB(MAX_PID+1);
   recvArray = (BoundedBuffer*)malloc(sizeof(BoundedBuffer)*(MAX_PID+1));
   for(i=0;i<MAX_PID+1;i++){
     recvArray[i] = createBB(1);
