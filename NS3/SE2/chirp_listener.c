@@ -82,7 +82,7 @@ int main(int argc, char* argv[]){
 			if((msg-from)<=16){
 				*(msg++)='\0';
 				eom = strchr(msg,'\n');
-				if(eom==msg) continue;
+				if(eom==msg || eom==NULL) continue;
 				*(eom)='\0';
 				clean(from);
 				clean(msg);
