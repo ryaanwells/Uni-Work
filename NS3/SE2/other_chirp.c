@@ -17,9 +17,7 @@ int main(int argc, char* argv[]){
     printf("Usage ./black_chrip\n");
     return 1;
   }
-  char buffer[] = "FROM:BLACKMESA\n \e[0m \n\0";
-  /*
-	char buffer[] = "FROM: BLACKMESA\n echo -e exec \e\"telnet towel.blinkenlights.nl\" \n\0";*/
+  char buffer[] = "FROM:BLACKMESA\n \e[8m \n\0";
   int buflen = strlen(buffer);
 
   int fd;

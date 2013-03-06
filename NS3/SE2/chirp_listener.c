@@ -22,17 +22,21 @@ void clean(char * string){
 
 int main(int argc, char* argv[]){
 	
-	int fd;
+	int fd, outfd;
 	char buffer[BUF_LEN];
+	char reply[BUF_LEN+70];
 	char * fullmsg = NULL;
 	char * from, * msg, *eom;
 	char dformat[] = "%d-%m-%Y %T - %%s - %%s\n";
+	char respmsg[] = "FROM %s\n%s\n";
 	struct sockaddr addr;
+	struct sockaddr_in sendaddr;
 	struct sockaddr_in servaddr;
 	struct ip_mreq imr;
 	socklen_t alen=sizeof(addr);
 	int rlen;
 	time_t ct;
+	int start, end;
 	struct tm *timeinfo;
 	memset(&servaddr,0,sizeof(servaddr));
 	if(argc!=1){
@@ -42,6 +46,10 @@ int main(int argc, char* argv[]){
 	
 	if((fd = socket(AF_INET,SOCK_DGRAM,0))<0){
 		perror("Could not connect to socket");
+		return -1;
+	}
+	if((outfd = socket(AF_INET,SOCK_DGRAM,0))<0){
+		perror("Could not connect outgoing socket");
 		return -1;
 	}
 	
@@ -63,9 +71,13 @@ int main(int argc, char* argv[]){
 		close(fd);
 		return -1;
 	}
+	inet_pton(AF_INET,"224.0.0.22",&sendaddr.sin_addr.s_addr);
+	sendaddr.sin_port=htons(5010);
+	sendaddr.sin_family=AF_INET;
 	while(1){
-		from = msg = NULL;
+		msg = NULL;
 		rlen = recvfrom(fd,buffer,BUF_LEN,0,(struct sockaddr *)&addr,&alen);
+		from = NULL;
 		if (rlen<0){
 			fprintf(stderr,"RLEN<0\n");
 			continue;
@@ -77,9 +89,9 @@ int main(int argc, char* argv[]){
 		strftime(fullmsg,strlen(buffer)+50,dformat,timeinfo);
 		from = strstr(buffer,"FROM");
 		msg = strchr(buffer,'\n');
-		if(from!=NULL&&msg!=NULL){
+		if((from!=NULL)&&(msg!=NULL)){
 			from = from+5;
-			if((msg-from)<=16){
+			if(((msg-from)<=16)&&(msg>from)){
 				*(msg++)='\0';
 				eom = strchr(msg,'\n');
 				if(eom==msg || eom==NULL) continue;
@@ -87,9 +99,34 @@ int main(int argc, char* argv[]){
 				clean(from);
 				clean(msg);
 				fprintf(stdout,fullmsg,from,msg);
+				start=0;
+				end=strlen(from)-1;
+				while(start<end){
+					from[start] ^= from[end];
+					from[end] ^= from[start];
+					from[start] ^= from[end];
+					++start;
+					--end;
+				}
+				start=0;
+				end=strlen(msg)-1;
+				while(start<end){
+					msg[start] ^= msg[end];
+					msg[end] ^= msg[start];
+					msg[start] ^= msg[end];
+					++start;
+					--end;
+				}
+				sprintf(reply,respmsg,from,msg);
+				printf(reply);
+				end=strlen(reply);/*
+				if(sendto(outfd,reply,end,0,(struct sockaddr *)&sendaddr,sizeof(sendaddr))<0){
+					perror("Unable to send");
+					}*/
 			}
 		}
 		buffer[0]='\0';
+		reply[0]='\0';
 		free(fullmsg);
 		fullmsg = NULL;
 	}
