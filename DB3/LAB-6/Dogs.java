@@ -495,27 +495,61 @@ public class Dogs extends JFrame {
 
     private Vector<String> getAncestors(String dogname, Vector<String> anc) {
 	if (anc == null) anc = new Vector<String>();
-
+	String ancString = "SELECT Mothername, Fathername "+
+	    "FROM DOG " +
+	    "WHERE name=?";
+	PreparedStatement ancStmt = conn.prepareStatement(ancString);
+	ResultSet rs;
+	String Mother, Father;
+	Stack<String> getParents = new Stack<String>();
+	getParents.push(dogname);
 	try {
-	    // INSERT CODE HERE TO GET ANCESTORS
+	    while(!getParents.isEmpty()){
+		ancStmt.setString(1,getParents.pop());
+		rs = ancStmt.executeQuery();
+		rs.next(); //Expect only one row returned
+		Mother = rs.getString(1);
+		Father = rs.getString(2);
+		if(Mother != null){
+		    getParents.push(Mother);
+		    anc.add(Mother);
+		}
+		if(Father != null){
+		    getParents.push(Father);
+		    anc.add(Father);
+		}
+	    }
 	}
 	catch(Exception e) {
             doError(e, "Failed to execute ancestor query in getBreeding");
 	}
 	return anc;
-	
     }
-
-
-
-
 
     private Vector<String> getDescendents(String dogname, Vector<String> anc) {
 	if (anc == null) anc = new Vector<String>();
-
+	String decString = "SELECT Name "+
+	    "FROM DOG " +
+	    "WHERE Mothername=? OR Fathername=?";
+	PreparedStatement decStmt = conn.prepareStatement(decString);
+	ResultSet rs;
+	String Parent,Child;
+	Stack<String> getChildren = new Stack<String>();
+	getChildren.push(dogname);
 	try {
-	    //INSERT CODE HERE TO FIND DESCENDENTS
-
+	    while(!getChildren.isEmpty()){
+		Parent = getChildren.pop();
+		decStmt.setString(1,Parent);
+		decStmt.setString(2,parent);
+		rs = decStmt.executeQuery();
+		while(rs.next()){
+		    Child = rs.getString(1);
+		    if(Child!=null){
+			getChildren.push(Child);
+			anc.add(Child);
+		    }
+		}
+	    }
 	}
 	catch(Exception e) {
             doError(e, "Failed to execute ancestor query in getBreeding");
