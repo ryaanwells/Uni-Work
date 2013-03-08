@@ -380,11 +380,16 @@ public class Dogs extends JFrame {
 					break;
 				}
 		// output pedigree info
-		pedInfo.setText("<html>" + dogName + "'s siblings: " + siblings
-				+ "<br>" + dogName + "'s Ancestors: "
-				+ (ancestors.size()>0 ? ancestors.toString() : "No ancestors")
+		pedInfo.setText("<html>"
+				+ dogName
+				+ "'s siblings: "
+				+ siblings
+				+ "<br>"
+				+ dogName
+				+ "'s Ancestors: "
+				+ (ancestors.size() > 0 ? ancestors.toString() : "No ancestors")
 				+ "<br>" + dogName + "'s Descendents: "
-				+ (des.size()>0 ? des.toString() : "No Descendents")
+				+ (des.size() > 0 ? des.toString() : "No Descendents") + "<br>"
 				+ (isPureBred ? "Purebred<br>" : "Not purebred<br>")
 				+ "Breeding: " + breedingString + "</html>");
 		if (mother != null)
@@ -491,16 +496,17 @@ public class Dogs extends JFrame {
 			ancStmt = conn.prepareStatement(ancString);
 			ancStmt.setString(1, dogname);
 			rs = ancStmt.executeQuery();
-			rs.next(); // Expect only one row returned
-			Mother = rs.getString(1);
-			Father = rs.getString(2);
-			if (Mother != null) {
-				anc.add(Mother);
-				anc = getAncestors(Mother,anc);
-			}
-			if (Father != null) {
-				anc.add(Father);
-				anc = getAncestors(Father,anc);
+			if (rs.next()) { // Expect only one row returned
+				Mother = rs.getString(1);
+				Father = rs.getString(2);
+				if (Mother != null) {
+					anc.add(Mother);
+					anc = getAncestors(Mother, anc);
+				}
+				if (Father != null) {
+					anc.add(Father);
+					anc = getAncestors(Father, anc);
+				}
 			}
 		} catch (SQLException e) {
 			doError(e, "Failed to execute ancestor query in getBreeding");
@@ -522,24 +528,25 @@ public class Dogs extends JFrame {
 			decStmt.setString(2, dogname);
 			rs = decStmt.executeQuery();
 			while (rs.next()) {
+				if (rs.isAfterLast())
+					break;
 				Child = rs.getString(1);
 				if (Child == null) {
 					continue;
 				}
 				anc.add(Child);
-				anc = getDescendents(Child,anc);
+				anc = getDescendents(Child, anc);
 			}
 		} catch (SQLException e) {
 			doError(e, "Failed to execute ancestor query in getBreeding");
 		}
 		return anc;
 	}
-	
+
 	private Vector<String> getOwnersDogs(String ownername) {
 		Vector<String> dogs = new Vector<String>();
 		String decString = "SELECT Dog.Name " + "FROM Dog, Owner"
-				+ "WHERE Dog.ownerid=Owner.ownerid AND "
-				+ "Owner.ownerid=?";
+				+ "WHERE Dog.ownerid=Owner.ownerid AND " + "Owner.ownerid=?";
 		PreparedStatement decStmt;
 		ResultSet rs;
 		String Dog;
