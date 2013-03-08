@@ -364,7 +364,6 @@ public class Dogs extends JFrame {
 												// code
 
 		Object[] breedStrings = breeds.toArray();
-		System.out.println(breeds.toString());
 		Arrays.sort(breedStrings);
 		boolean isPureBred = breedStrings[0].equals(breedStrings[1])
 				&& breedStrings[1].equals(breedStrings[2])
