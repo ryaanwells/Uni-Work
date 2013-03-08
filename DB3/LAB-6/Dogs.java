@@ -335,6 +335,12 @@ public class Dogs extends JFrame {
 
 		Vector<String> ancestors = getAncestors(dogName, null);
 		Vector<String> des = getDescendents(dogName, null);
+		Vector<String> ownerdogs = getOwnersDogs(owner);
+		String dogs = formatToLine(ownerdogs,6);
+		String ancForm = formatToLine(ancestors,6);
+		String desForm = formatToLine(des,6);
+		String showInfo = getShowsForDog(dogName);
+
 
 		if (kennAddr == null)
 			kennAddr = "Unknown";
@@ -343,7 +349,10 @@ public class Dogs extends JFrame {
 		dogInfo.setText("<html>Name: " + dogName + "<br>" + "Breed: " + breed
 				+ "<br>" + "Kennel: " + kennel + "<br>" + "Address: "
 				+ kennAddr + "<br>" + dogName + "'s owner: " + owner
-				+ " (owns " + ownerDogs + " dogs)" + "</html>");
+				+ " (owns " + ownerDogs + " dogs)" + "<br>"
+				+ dogs + "<br>"
+				+ showInfo
+				+"</html>");
 		// put together a message about how many parents are not named in the DB
 		String parentMissingInfo = ""; // nothing by default
 		if (father == null && mother == null)
@@ -386,9 +395,9 @@ public class Dogs extends JFrame {
 				+ "<br>"
 				+ dogName
 				+ "'s Ancestors: "
-				+ (ancestors.size() > 0 ? ancestors.toString() : "No ancestors")
+				+ ancForm
 				+ "<br>" + dogName + "'s Descendents: "
-				+ (des.size() > 0 ? des.toString() : "No Descendents") + "<br>"
+				+ desForm + "<br>"
 				+ (isPureBred ? "Purebred<br>" : "Not purebred<br>")
 				+ "Breeding: " + breedingString + "</html>");
 		if (mother != null)
@@ -544,8 +553,8 @@ public class Dogs extends JFrame {
 
 	private Vector<String> getOwnersDogs(String ownername) {
 		Vector<String> dogs = new Vector<String>();
-		String decString = "SELECT Dog.Name " + "FROM Dog, Owner"
-				+ "WHERE Dog.ownerid=Owner.ownerid AND " + "Owner.ownerid=?";
+		String decString = "SELECT Dog.Name FROM Dog, Owner "
+				+ "WHERE Dog.ownerid=Owner.ownerid AND Owner.name=?";
 		PreparedStatement decStmt;
 		ResultSet rs;
 		String Dog;
@@ -555,14 +564,67 @@ public class Dogs extends JFrame {
 			rs = decStmt.executeQuery();
 			while (rs.next()) {
 				Dog = rs.getString(1);
-				if (Dog == null) {
-					continue;
-				}
+				if (Dog == null) break;
 				dogs.add(Dog);
 			}
 		} catch (SQLException e) {
-			doError(e, "Failed to execute ancestor query in getBreeding");
+			doError(e, "Failed to execute OwnersDogs query");
 		}
 		return dogs;
+	}
+	
+	private String getShowsForDog(String dogName){
+		String showString = "Select Attendance.opendate, Attendance.showname "+
+				"From Dog, ATTENDANCE " +
+				"Where Dog.DOGID=Attendance.dogid AND dog.Name=?";
+		String date, maxDate = null;
+		String showName = null;
+		try{
+			PreparedStatement showStmt = conn.prepareStatement(showString);
+			showStmt.setString(1, dogName);
+			ResultSet rs = showStmt.executeQuery();
+			while(rs.next()){
+				date = rs.getString(1);
+				if(date == null) break;
+				if(maxDate(maxDate,date)){
+					maxDate=date;
+					showName=rs.getString(2);
+				}
+			}
+		}catch (SQLException e){
+			doError(e,"Failed to execute ShowsForDog query");
+		}
+		if(maxDate==null) return dogName +" has not attended any show";
+		return "The last show " + dogName + " has attended was " + showName
+				+ " on " + maxDate;
+	}
+	
+	
+	private String formatToLine(Vector<String> input, int lineLenght){
+		StringBuilder output = new StringBuilder();
+		int lineCount=0;
+		output.append("[");
+		while (!input.isEmpty()){
+			output.append(input.remove(0));
+			if(input.isEmpty()) break;
+			output.append(", ");
+			lineCount++;
+			if (lineCount%6==0) output.append("<br>");
+		}
+		output.append("]");
+		return output.toString();
+	}
+	
+	private boolean maxDate(String currentMax, String check){
+		if (currentMax == null) return true;
+		if (check == null) return false;
+		String[] cur = currentMax.split("-");
+		String[] chk = check.split("-");
+		if(Integer.parseInt(chk[2]) >= Integer.parseInt(cur[2])){
+			if(Integer.parseInt(chk[1]) >= Integer.parseInt(cur[1])){
+				return (Integer.parseInt(chk[0])>=Integer.parseInt(cur[0]))? true: false;
+			}
+		}
+		return false;
 	}
 }
