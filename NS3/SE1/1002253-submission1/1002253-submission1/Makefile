@@ -1,4 +1,4 @@
-CFLAGS = -lpthread -W -Wall -g -c
+CFLAGS =  -W -Wall -g -c
 
 all: Stack.o web-server
 

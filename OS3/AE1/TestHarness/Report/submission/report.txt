@@ -1,0 +1,6 @@
+Ryan Wells - 1002253 - OS3 Assessed Exercise
+
+To the best of my knowledge, based upon testing and debugging of the
+system, this system is fully functional and meets the specifications
+provided in the handout. The buffers included belong in whole to the
+University of Glasgow and are not my own work.

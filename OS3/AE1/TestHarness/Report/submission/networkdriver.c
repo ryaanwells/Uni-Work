@@ -1,3 +1,10 @@
+/*
+ * This is the sole work of Ryan Wells - 1002253 for OS3 Assessed Exercise.
+ *
+ * This is entirely my own work with the exception of the BoundedBuffer provided
+ * by the University of Glasgow.
+ */
+
 #include "packetdescriptor.h"
 #include "packetdescriptorcreator.h"
 #include "destination.h"
@@ -6,7 +13,6 @@
 #include "freepacketdescriptorstore__full.h"
 #include "BoundedBuffer.h"
 #include "diagnostics.h"
-#include "TSArray.h"
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>

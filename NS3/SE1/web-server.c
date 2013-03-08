@@ -30,6 +30,7 @@ typedef struct ThreadPool{
 } ThreadPool;
 
 ThreadPool * init(int threads){
+  if (threads<1) threads = 1;
   ThreadPool * tp = malloc(sizeof(ThreadPool));
   if(tp!=NULL){
     Stack * s = createStack();
@@ -407,7 +408,9 @@ void *processConn(int connfd){
   if(strlen(holder)!=0) goto read;
  end:
   close(connfd);
+#ifdef SERVER_DEBUG
   printf("Connection Closed\n");
+#endif
   return NULL;
 }
 
@@ -418,17 +421,16 @@ void *process(void * arg){
   while(1){
     /* Blocks here until a connection is available */
     connfd = removeWaiting(tp);
-#ifdef SERVER_DEBUG
-    fprintf(stdout,"CONNFD: %d\n",connfd);
-#endif
     /* "Poison Pill is found */
     if (connfd<0) break;
+    printf("THREAD: Working new connection %d\n",connfd);
     processConn(connfd);
+    printf("THREAD: Finished working connection %d\n",connfd);
   }
   return NULL;
 }
 
-int main(int argc, char* argv[]){
+int main(){
   int fd, connfd;
   struct sockaddr_in cliaddr;
   socklen_t cliaddrlen = sizeof(cliaddr);
@@ -438,9 +440,16 @@ int main(int argc, char* argv[]){
     perror("Connection to socket failed\n");
     return -1;
   }
-
+  
   /*Create thread pool with 64 threads */
-  ThreadPool * tp = init(64);
+  ThreadPool * tp = init(1);
+  if (tp == NULL){
+#ifdef SERVER_DEBUG
+    perror("Could not create ThreadPool");
+#endif
+    return -1;
+  }
+  
   for(;;){
     /* Try to accept a connection */
     if((connfd = accept(fd, (struct sockaddr *) &cliaddr, &cliaddrlen)) == -1){
@@ -453,7 +462,7 @@ int main(int argc, char* argv[]){
       perror("Could not add connection to stack");
     }
 #ifdef SERVER_DEBUG
-    fprintf(stdout,"Accepted new client\n\n");
+    printf("MAIN: New client added to work queue\n\n");
 #endif
   }
   return 1;
