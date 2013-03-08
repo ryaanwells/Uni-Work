@@ -381,14 +381,10 @@ public class Dogs extends JFrame {
 				}
 		// output pedigree info
 		pedInfo.setText("<html>" + dogName + "'s siblings: " + siblings
-				+ "<br>" + dogName + "'s Parents: "
-				+ (father != null ? father : "")
-				+ (father != null && mother != null ? ", " : "")
-				+ (mother != null ? mother : "") + " " + parentMissingInfo
-				+ "<br>" + dogName + "'s Grandparents: " + grandparents + " "
-				+ grandparentMissingInfo + "<br>" + dogName + "'s Children: "
-				+ children + "<br>" + dogName + "'s Grandchildren: "
-				+ grandchildren + "<br><br>"
+				+ "<br>" + dogName + "'s Ancestors: "
+				+ (ancestors.size()>0 ? ancestors.toString() : "No ancestors")
+				+ "<br>" + dogName + "'s Descendents: "
+				+ (des.size()>0 ? des.toString() : "No Descendents")
 				+ (isPureBred ? "Purebred<br>" : "Not purebred<br>")
 				+ "Breeding: " + breedingString + "</html>");
 		if (mother != null)
@@ -528,7 +524,7 @@ public class Dogs extends JFrame {
 			while (rs.next()) {
 				Child = rs.getString(1);
 				if (Child == null) {
-										
+					continue;
 				}
 				anc.add(Child);
 				anc = getDescendents(Child,anc);
@@ -537,5 +533,30 @@ public class Dogs extends JFrame {
 			doError(e, "Failed to execute ancestor query in getBreeding");
 		}
 		return anc;
+	}
+	
+	private Vector<String> getOwnersDogs(String ownername) {
+		Vector<String> dogs = new Vector<String>();
+		String decString = "SELECT Dog.Name " + "FROM Dog, Owner"
+				+ "WHERE Dog.ownerid=Owner.ownerid AND "
+				+ "Owner.ownerid=?";
+		PreparedStatement decStmt;
+		ResultSet rs;
+		String Dog;
+		try {
+			decStmt = conn.prepareStatement(decString);
+			decStmt.setString(1, ownername);
+			rs = decStmt.executeQuery();
+			while (rs.next()) {
+				Dog = rs.getString(1);
+				if (Dog == null) {
+					continue;
+				}
+				dogs.add(Dog);
+			}
+		} catch (SQLException e) {
+			doError(e, "Failed to execute ancestor query in getBreeding");
+		}
+		return dogs;
 	}
 }
