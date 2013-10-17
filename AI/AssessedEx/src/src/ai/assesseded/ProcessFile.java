@@ -66,6 +66,24 @@ public class ProcessFile {
 		return E;
 	}
 	
+	public double[] getMagnitude(int windowSamples){
+		int k, n; 
+		double energyValue = 0.0;
+		double[] E = new double[this.getSampleCount()];
+		for (n = 0; n < this.getSampleCount(); n++){
+			for (k = n; k >= n - windowSamples && k >= 0; k--){
+				energyValue += values.get(k) >= 0 ? values.get(k) : - values.get(k);
+			}
+			System.out.print(n + " ");
+			System.out.println(energyValue * 1000);
+						
+			E[n] = energyValue;
+			energyValue = 0.0;
+		}
+		System.out.println("windowSamples: " + windowSamples);
+		return E;
+	}
+	
 	public static void main(String args[]){
 		String filename = System.getProperty("user.dir") + "/laboratory.dat";
 		final double scaleFactor = 0.001;
