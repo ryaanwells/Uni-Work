@@ -1,0 +1,11 @@
+set terminal png size 1000, 700
+set output 'allGraphs.png'
+set xrange[0:2400]
+set yrange[-1.5:1.5]
+set xlabel 'Time (ms)'
+set ylabel 'Normalised Signal'
+set title 'Normalised Signals - 1002253w'
+plot './energyData.txt' using 1 title 'Signal' with lines, \
+'./energyData.txt' using 2 title 'Energy' with lines,\
+'./energyData.txt' using 3 title 'Magnitude' with lines,\
+'./energyData.txt' using 4 title'Zero Crossing' with lines

@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.omg.CORBA.DoubleSeqHelper;
+
 
 
 public class ProcessFile {
@@ -68,20 +70,48 @@ public class ProcessFile {
 	
 	public double[] getMagnitude(int windowSamples){
 		int k, n; 
-		double energyValue = 0.0;
+		double magnitude = 0.0;
 		double[] E = new double[this.getSampleCount()];
 		for (n = 0; n < this.getSampleCount(); n++){
 			for (k = n; k >= n - windowSamples && k >= 0; k--){
-				energyValue += values.get(k) >= 0 ? values.get(k) : - values.get(k);
+				magnitude += values.get(k) >= 0 ? values.get(k) : - values.get(k);
 			}
-			System.out.print(n + " ");
-			System.out.println(energyValue * 1000);
-						
-			E[n] = energyValue;
-			energyValue = 0.0;
+			E[n] = magnitude;
+			magnitude = 0.0;
 		}
-		System.out.println("windowSamples: " + windowSamples);
 		return E;
+	}
+	
+	public double[] getZeroCrossingRate(int windowSamples){
+		int k, n;
+		double signCurrent, signPrevious;
+		double sign = 0.0;
+		double[] Z = new double[this.getSampleCount()];
+		for (n = 0; n < this.getSampleCount(); n++){
+			for(k = n; k >= n - windowSamples && k >= 0; k--){
+				signCurrent = values.get(k) >= 0 ? 1 : -1;
+				signPrevious = (k-1) >= 0 ? (values.get(k-1) >= 0 ? 1 : -1) : 0;
+				sign += Math.abs(signCurrent - signPrevious);
+			}
+			Z[n] = sign/(2 * windowSamples);
+			System.out.println(sign + " " + Z[n]);
+			sign = 0.0;
+		}
+		return Z;
+	}
+	
+	public double[] normalize(double[] signal){
+		double max = 0.0;
+		int i;
+		for(i = 0; i < signal.length; i++){
+			if (Math.abs(signal[i]) > max){
+				max = Math.abs(signal[i]);
+			}
+		}
+		for (i=0; i < signal.length; i++){
+			signal[i] = signal[i]/max;
+		}
+		return signal;
 	}
 	
 	public static void main(String args[]){
@@ -107,9 +137,17 @@ public class ProcessFile {
 		}
 		
 		try (BufferedWriter writer = Files.newBufferedWriter(energyData, Charset.defaultCharset())){
-			double[] energy = pf.getEnergy((int)pf.getSamplesInWindow(windowSize));
+			double[] signal = new double[pf.values.size()];
+			for (int i = 0; i < pf.values.size(); i++){
+				signal[i] = pf.values.get(i);
+			}
+			signal = pf.normalize(signal);
+			double[] energy = pf.normalize(pf.getEnergy((int)pf.getSamplesInWindow(windowSize)));
+			double[] magnitude = pf.normalize(pf.getMagnitude((int)pf.getSamplesInWindow(windowSize)));
+			double[] zeroCrossing = pf.normalize(pf.getZeroCrossingRate((int)pf.getSamplesInWindow(windowSize)));
 			for (int i = 0; i < energy.length; i++){
-				writer.write(String.format("%.2f", energy[i]));
+				writer.write(String.format("%.2f %.2f %.2f %.2f", 
+											signal[i], energy[i], magnitude[i], zeroCrossing[i]));
 				writer.newLine();
 			}
 			writer.flush();
