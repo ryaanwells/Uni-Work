@@ -20,45 +20,42 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class EchoClient {
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        Socket echoSocket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
-	String x = "0";
+		Socket echoSocket = null;
+		PrintWriter out = null;
+		BufferedReader in = null;
+		String x = "0";
 
-        try {
-            echoSocket = new Socket("localhost", 8765);
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(
-                 new InputStreamReader(echoSocket.getInputStream()));
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: localhost.");
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for "
-                               + "the connection to: localhost.");
-            System.exit(1);
-        }
+		try {
+			echoSocket = new Socket("localhost", 8765);
+			out = new PrintWriter(echoSocket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(
+					echoSocket.getInputStream()));
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host: localhost.");
+			System.exit(1);
+		} catch (IOException e) {
+			System.err.println("Couldn't get I/O for "
+					+ "the connection to: localhost.");
+			System.exit(1);
+		}
 
-	BufferedReader stdIn = new BufferedReader(
-                                   new InputStreamReader(System.in));
-	String userInput;
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(
+				System.in));
+		String userInput;
+		System.out.println("Here");
+		if (args.length != 0)
+			x = args[0];
+		while ((userInput = stdIn.readLine()) != null) {
+			System.out.println(userInput);
+			out.println(userInput);
+			System.out.format("EchoClient%s:%s\n", x, in.readLine());
+		}
 
-	if (args.length != 0)
-	    x = args[0];
-	while ((userInput = stdIn.readLine()) != null) {
-            try {
-                Thread.sleep(1000);		// sleep for one second
-            } catch (InterruptedException e) {}
-	    out.println(userInput);
-	    System.out.format("EchoClient%s:%s\n", x, in.readLine());
+		out.close();
+		in.close();
+		stdIn.close();
+		echoSocket.close();
 	}
-
-	out.close();
-	in.close();
-	stdIn.close();
-	echoSocket.close();
-    }
 }
-
