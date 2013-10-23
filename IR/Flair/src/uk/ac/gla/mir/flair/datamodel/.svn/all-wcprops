@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel
+END
+Context.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/Context.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/package.html
+END
+AttributeList.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/AttributeList.java
+END
+IRObjectSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/IRObjectSet.java
+END
+TRECResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/TRECResult.java
+END
+TypeObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/TypeObject.java
+END
+DocFragment.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/DocFragment.java
+END
+IRObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/IRObject.java
+END
+IRResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/IRResult.java
+END
+Address.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/Address.java
+END
+DataType.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/DataType.java
+END
+TypeTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/TypeTable.java
+END
+DataTypeList.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/DataTypeList.java
+END

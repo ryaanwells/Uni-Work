@@ -1,0 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>uk.ac.gla.mir.flair.query.weighting package</title>
+
+</head>
+<body bgcolor="white">
+<p>
+
+Provides weighing model classes for scoring documents. TFIDF, BM25
+
+</p>
+</body>
+</html>

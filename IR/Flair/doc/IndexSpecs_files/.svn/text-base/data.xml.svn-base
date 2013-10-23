@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisioDocument>
+	<DocumentProperties>
+		<Title></Title>
+		<HyperlinkBase href=""></HyperlinkBase>
+	</DocumentProperties>
+	<Pages>
+		<Page ID="0" Name="Static Structure-1" NameU="Static Structure-1">
+			<Shapes>
+				<Shape ID="1" UniqueID="{9D8D43BD-0E0C-453A-8048-A441A456F96D}" Name="Class" NameU="Class" Master="23">
+					<XForm>
+						<PinX Unit="MM">3.364812789758846</PinX>
+						<PinY Unit="MM">6.125323354400341</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="6" UniqueID="{E4420809-4CBB-469E-99FA-F4572A1888C8}" Name="Operations" NameU="Operations">
+					<Text>+getDirectIndexSpecs() : List&lt;DirectIndexSpec&gt;
++getInvertedIndexSpecs() : List&lt;InvertedIndexSpec&gt;
++setDirectIndexSpecs(in directIndexSpecs : List&lt;DirectIndexSpec&gt;)
++setInvertedIndexSpecs(in invertedIndexSpecs : List&lt;InvertedIndexSpec&gt;)
++directSpecIterator() : Iterator
++invertedSpecIterator() : Iterator</Text>
+					<XForm>
+						<PinX Unit="MM">3.364812789758846</PinX>
+						<PinY Unit="MM">5.877682940017019</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="7" UniqueID="{16F09001-58C1-4CF3-A03B-55FC0B505BBF}" Name="Attributes" NameU="Attributes">
+					<Text>-invertedIndexSpecs : List&lt;InvertedIndexSpec&gt;
+-directIndexSpecs : List&lt;DirectIndexSpec&gt;</Text>
+					<XForm>
+						<PinX Unit="MM">3.364812789758846</PinX>
+						<PinY Unit="MM">6.438842016622922</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="8" UniqueID="{9DF47349-F1CB-472F-839B-7EF24BE75D0E}" Name="Name" NameU="Name">
+					<Text>IndexSpec</Text>
+					<XForm>
+						<PinX Unit="MM">3.364812789758846</PinX>
+						<PinY Unit="MM">6.686482431006244</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="10" UniqueID="{6D02FD2D-C9A0-4A8E-AD38-43F201CDCACE}" Name="Watermark Title" NameU="Watermark Title" Master="18">
+					<Text>Static Structure</Text>
+					<XForm>
+						<PinX Unit="MM">5.846456692913386</PinX>
+						<PinY Unit="MM">8.267716535433070</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="11" UniqueID="{6A84418A-A292-47E3-9B4D-30105FEBFF6F}" Name="Class.11" NameU="Class.11" Master="23">
+					<XForm>
+						<PinX Unit="MM">9.538039982030222</PinX>
+						<PinY Unit="MM">2.330051578546426</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="16" UniqueID="{EA4FCD99-39E1-47A3-B61E-C2B9B9FF7819}" Name="Operations" NameU="Operations">
+					<Text>+getDirectIndex()
++setDirectIndex()</Text>
+					<XForm>
+						<PinX Unit="MM">9.538039982030222</PinX>
+						<PinY Unit="MM">2.142059452562174</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="17" UniqueID="{DB6CDB99-A31C-4619-89A6-A7E636C6ED86}" Name="Attributes" NameU="Attributes">
+					<Text>-directIndex</Text>
+					<XForm>
+						<PinX Unit="MM">9.538039982030222</PinX>
+						<PinY Unit="MM">2.376904591354945</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="18" UniqueID="{F753FFB1-E472-422D-AC21-18D9B2C386E7}" Name="Name" NameU="Name">
+					<Text>DirectIndexSpec</Text>
+					<XForm>
+						<PinX Unit="MM">9.538039982030222</PinX>
+						<PinY Unit="MM">2.564896717339197</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="20" UniqueID="{D976AD7A-FAD3-4439-B99D-64966562A83D}" Name="Class.20" NameU="Class.20" Master="23">
+					<XForm>
+						<PinX Unit="MM">6.061934533442996</PinX>
+						<PinY Unit="MM">2.330051578546427</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="25" UniqueID="{27050D42-B794-4AE8-83E0-50845AD5910F}" Name="Operations" NameU="Operations">
+					<Text>+getInvertedIndex()
++setInvertedIndex()</Text>
+					<XForm>
+						<PinX Unit="MM">6.061934533442996</PinX>
+						<PinY Unit="MM">2.142059452562175</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="26" UniqueID="{219791C5-5AC3-44A3-92E3-D8F5AFFE70B1}" Name="Attributes" NameU="Attributes">
+					<Text>-invertedIndex</Text>
+					<XForm>
+						<PinX Unit="MM">6.061934533442996</PinX>
+						<PinY Unit="MM">2.376904591354946</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="27" UniqueID="{E216E553-B2B5-47B5-826D-4F048B65F11B}" Name="Name" NameU="Name">
+					<Text>InvertedIndexSpec</Text>
+					<XForm>
+						<PinX Unit="MM">6.061934533442996</PinX>
+						<PinY Unit="MM">2.564896717339197</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="29" UniqueID="{699A428E-004D-4B4F-A30F-7A9A855614F1}" Name="Class.29" NameU="Class.29" Master="23">
+					<XForm>
+						<PinX Unit="MM">7.786071478093213</PinX>
+						<PinY Unit="MM">5.361547641538551</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="34" UniqueID="{55D06BAD-06F7-4FB9-A3A4-8ED043938E0E}" Name="Operations" NameU="Operations">
+					<Text>+getIndexName() : String
++setIndexName(in indexName : String)
++getStopType() : String
++setStopType(in stopType : String)
++getStemType() : String
++setStemType(in stemType : String)
++getTokenType() : String
++setTokenType(in tokenType : String)
++getTypeTableID() : Integer
++setTypeTableID(in typeTableID : Integer)
++getFilterChain() : FilterChain
++setFilterChain(in filterChain : FilterChain)
++getDataElementIDs() : List&lt;int&gt;
++setDataElementIDs(in dataElementIds : List&lt;int&gt;)</Text>
+					<XForm>
+						<PinX Unit="MM">7.786071478093213</PinX>
+						<PinY Unit="MM">4.780575165387651</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="35" UniqueID="{1494502F-9D3F-454A-9CF5-B825ACFD91FE}" Name="Attributes" NameU="Attributes">
+					<Text>#indexName : String
+#stemType : String
+#stopType : String
+#tokenType : String
+#typeTableID : String
+#filterChain : FilterChain
+#dataElementIDs : List&lt;int&gt;</Text>
+					<XForm>
+						<PinX Unit="MM">7.786071478093213</PinX>
+						<PinY Unit="MM">6.208397602589256</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="36" UniqueID="{4DA39E1F-288E-4AF7-B8F1-680523C0AFBC}" Name="Name" NameU="Name">
+					<Text>Spec</Text>
+					<XForm>
+						<PinX Unit="MM">7.786071478093213</PinX>
+						<PinY Unit="MM">6.789370078740157</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="38" UniqueID="{E2C3115A-6DE0-4975-B30E-A5F699044F48}" Name="Generalization" NameU="Generalization" Master="24">
+					<XForm>
+						<PinX Unit="MM">6.924003005768104</PinX>
+						<PinY Unit="MM">3.249310960838071</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="40" UniqueID="{6F7167DE-108E-4C53-8368-ECB916513E52}" Name="Generalization.40" NameU="Generalization.40" Master="24">
+					<XForm>
+						<PinX Unit="MM">8.662055730061717</PinX>
+						<PinY Unit="MM">3.249310960838071</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="42" UniqueID="{9E8AFCC2-71CF-4B70-8A29-FF4E0627348F}" Name="Composition" NameU="Composition" Master="25">
+					<XForm>
+						<PinX Unit="MM">5.871980486892338</PinX>
+						<PinY Unit="MM">6.125489532466698</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="44" UniqueID="{DC69F17B-3BBD-4782-BD20-13758540B08D}" Name="end1_mp" NameU="end1_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">5.350381711174244</PinX>
+						<PinY Unit="IN">6.054641134541038</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="46" UniqueID="{FAD76A27-AF58-4D61-ACA9-13013E736CC1}" Name="end2_mp" NameU="end2_mp">
+					<Text>*</Text>
+					<XForm>
+						<PinX Unit="IN">6.404037301701274</PinX>
+						<PinY Unit="IN">6.054909638061957</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="47" UniqueID="{8323D6C5-3FFB-4129-A75D-EBBF60DF01DD}" Name="Class.47" NameU="Class.47" Master="23">
+					<XForm>
+						<PinX Unit="MM">3.364947093753361</PinX>
+						<PinY Unit="MM">3.837989506876521</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="52" UniqueID="{060BC62B-EDD0-4C39-8147-D30A93BD7370}" Name="Operations" NameU="Operations">
+					<Text>+loadIndexSpec() : IndexSpec
++loadIndexSpec(in indexSpecFileName : String) : IndexSpec</Text>
+					<XForm>
+						<PinX Unit="MM">3.364947093753361</PinX>
+						<PinY Unit="MM">3.649997380892269</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="54" UniqueID="{AAF05092-9EBB-4F05-9838-2A177EC290DA}" Name="Name" NameU="Name">
+					<Text>IndexSpecBuilder</Text>
+					<XForm>
+						<PinX Unit="MM">3.364947093753361</PinX>
+						<PinY Unit="MM">4.072834645669291</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="56" UniqueID="{0C005D4E-A2B9-4853-AAB6-4835DB46F82A}" Name="Link" NameU="Link" Master="26">
+					<XForm>
+						<PinX Unit="MM">3.364879941756103</PinX>
+						<PinY Unit="MM">4.818499461731864</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="61" UniqueID="{BB8D8CA8-92E7-42D2-8252-0436A7632368}" Name="Link.61" NameU="Link.61" Master="26">
+					<XForm>
+						<PinX Unit="MM">4.933698024517417</PinX>
+						<PinY Unit="MM">5.149442028494874</PinY>
+					</XForm>
+				</Shape>
+			</Shapes>
+		</Page>
+	</Pages>
+</VisioDocument>

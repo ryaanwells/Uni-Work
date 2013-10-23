@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/package.html
+END
+Stopper.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/Stopper.java
+END
+NewTextTokenizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/NewTextTokenizer.java
+END
+TextTokenizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/TextTokenizer.java
+END
+FilterChain.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/FilterChain.java
+END
+Filter.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/Filter.java
+END
+PorterStemmer.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/filter/PorterStemmer.java
+END

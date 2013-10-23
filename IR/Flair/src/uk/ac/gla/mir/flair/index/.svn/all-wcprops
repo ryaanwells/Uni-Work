@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index
+END
+IdentifierDirectIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/IdentifierDirectIndex.java
+END
+TextInvertedIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/TextInvertedIndex.java
+END
+DocumentPositions.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/DocumentPositions.java
+END
+Indexer.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/Indexer.java
+END
+InvertedIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/InvertedIndex.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/package.html
+END
+DirectIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/DirectIndex.java
+END
+PostingListEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/PostingListEntry.java
+END
+CollectionStatistics.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/index/CollectionStatistics.java
+END

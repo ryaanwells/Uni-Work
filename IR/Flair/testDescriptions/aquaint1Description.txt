@@ -1,0 +1,44 @@
+<ATOM type = CHAR_DE cmd_type = Plain name = _DocNo id = 1 tag_name = DOCNO >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _DocType id = 2 tag_name = DOCTYPE >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _DateTime id = 3 tag_name = DATE_TIME >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Header id = 4 tag_name = HEADER >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Trailer id = 6 tag_name = TRAILER >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Slug id = 7 tag_name = SLUG >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Headline id = 8 tag_name = HEADLINE >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Category id = 9 tag_name = CATEGORY >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _SubHead id = 12 tag_name = SUBHEAD >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Annotation id = 13 tag_name = ANNOTATION >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Paragraph id = 11 tag_name = P >
+</ATOM>
+
+<GROUP type = REP_DE  cmd_type = Repeat name = _Text id = 10 tag_name = TEXT >
+11 12 13
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series name = _Body id = 5 tag_name = BODY >
+8 10
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series name = _Doc id = 0 tag_name = DOC >
+1 2 3 5 6
+</GROUP>

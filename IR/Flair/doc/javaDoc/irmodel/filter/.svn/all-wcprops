@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter
+END
+FilterChain.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/FilterChain.html
+END
+Filter.html
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/Filter.html
+END
+package-frame.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/package-frame.html
+END
+package-tree.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/package-tree.html
+END
+PorterStemmer.stem.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/PorterStemmer.stem.html
+END
+PorterStemmer.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/PorterStemmer.html
+END
+package-use.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/package-use.html
+END
+package-summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/package-summary.html
+END
+Stopper.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/Stopper.html
+END
+TextTokenizer.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/irmodel/filter/TextTokenizer.html
+END

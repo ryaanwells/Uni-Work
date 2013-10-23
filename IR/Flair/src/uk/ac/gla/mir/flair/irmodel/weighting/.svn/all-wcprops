@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting
+END
+BM25.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting/BM25.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting/package.html
+END
+RAWTF.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting/RAWTF.java
+END
+Weighting.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting/Weighting.java
+END
+TFIDF.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/irmodel/weighting/TFIDF.java
+END

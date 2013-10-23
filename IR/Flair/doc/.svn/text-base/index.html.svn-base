@@ -1,0 +1,27 @@
+<html>
+
+<head>
+   <title>Flair0.0</title>
+</head>
+<body>
+   <h3>Flair0.0</h3>
+
+<ul>
+   <li> <a href='javaDoc/index.html' >Java Doc</a> </li>
+
+<li>   <a href='SettingsDescription.htm'>Settings Description</a> </li>
+
+<li>   <a href='DataElement.htm'>DataElement Class Diagrams</a></li>
+
+<li>   <a href='IRObject.htm'>IRObject Class Diagram</a></li>
+
+<li>   <a href='IndexSpecs.htm'>Index Specification Class Diagrams</a></li>
+
+<li>   <a href='InvertedIndex.htm'>InvertedIndex Class Diagram</a></li>
+
+<li>   <a href='TextInvertedIndexStructure.htm'>Text Inverted Index Structure Class Diagram</a></li>
+
+<li>   <a href='FilterChain.htm'>FliterChain Class Diagram</a></li>
+</ul>	
+</body>
+</html>

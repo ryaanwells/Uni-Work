@@ -1,0 +1,16 @@
+<ATOM type = CHAR_DE cmd_type = Plain name = _DocNo id = 1 tag_name = DOCNO >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Title id = 2 tag_name = TITLE >
+</ATOM>
+
+<ATOM type = CHAR_DE cmd_type = Plain name = _Paragraph id = 3 tag_name = P >
+</ATOM>
+
+<GROUP type = REP_DE cmd_type = Repeat name = _Body id = 5 tag_name = BODY >
+2 3
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series name = _Doc id = 0 tag_name = DOC >
+1 2 5
+</GROUP>

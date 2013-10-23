@@ -1,0 +1,639 @@
+<PK_OBJECT>
+<TextPart><PID>1 </PID>
+<IMAGE>i001.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>D. Macgregor </PHNAME>
+<PHDATE></PHDATE>
+<CAPT>East walled Garden, viewed from House </CAPT>
+<KW>walled garden summer dun </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex>
+<Box>
+<Origin> (2,0) </Origin>
+<Extent> (507,60) </Extent>
+<Name> trees   </Name>
+<Descr>  in the background    </Descr>
+</Box>
+<Box>
+<Origin> (4,200) </Origin>
+<Extent> (172,80) </Extent>
+<Name> flowerbed   </Name>
+<Descr>  conical in shape    </Descr>
+</Box>
+<Box>
+<Origin> (0,64) </Origin>
+<Extent> (183,85) </Extent>
+<Name> boundary wall   </Name>
+<Descr>  one side of the garden    </Descr>
+</Box>
+<Box>
+<Origin> (127,156) </Origin>
+<Extent> (70,40) </Extent>
+<Name> flowers   </Name>
+<Descr>  purple in colour    </Descr>
+</Box>
+<Box>
+<Origin> (333,163) </Origin>
+<Extent> (71,37) </Extent>
+<Name> flowers: purple in colour    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (334,205) </Origin>
+<Extent> (176,101) </Extent>
+<Name> flowerbed    </Name>
+<Descr>  conical in shape    </Descr>
+</Box>
+<Box>
+<Origin> (9,67) </Origin>
+<Extent> (489,283) </Extent>
+<Name> garden (lawn) </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (381,72) </Origin>
+<Extent> (131,64) </Extent>
+<Name> garden wall </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (3,103) </Origin>
+<Extent> (132,136) </Extent>
+<Name> path </Name>
+<Descr>  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms>
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>2 </PID>
+<IMAGE>i002.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>B. Chapple </PHNAME>
+<PHDATE>01/01/91 </PHDATE>
+<CAPT>View across east walled Garden from corner </CAPT>
+<KW>walled garden summer dun </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex>
+<Box>
+<Origin> (1,2) </Origin>
+<Extent> (206,129) </Extent>
+<Name> trees     </Name>
+<Descr>  outside garden wall     </Descr>
+</Box>
+<Box>
+<Origin> (110,219) </Origin>
+<Extent> (400,136) </Extent>
+<Name> flowers     </Name>
+<Descr>  purple  untrimmed     </Descr>
+</Box>
+<Box>
+<Origin> (10,167) </Origin>
+<Extent> (142,60) </Extent>
+<Name> flowerbed     </Name>
+<Descr>  grown and green in colours     </Descr>
+</Box>
+<Box>
+<Origin> (2,121) </Origin>
+<Extent> (500,60) </Extent>
+<Name> garden wall     </Name>
+<Descr>  seen from one corner     </Descr>
+</Box>
+<Box>
+<Origin> (94,0) </Origin>
+<Extent> (415,70) </Extent>
+<Name> sky     </Name>
+<Descr>  blue and cloudy     </Descr>
+</Box>
+<Box>
+<Origin> (285,46) </Origin>
+<Extent> (226,101) </Extent>
+<Name> trees     </Name>
+<Descr>  outside garden wall     </Descr>
+</Box>
+<Box>
+<Origin> (39,200) </Origin>
+<Extent> (325,84) </Extent>
+<Name> path </Name>
+<Descr>  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms>
+grown and untrimmed plants
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>3 </PID>
+<IMAGE>i003.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>J. Forgie </PHNAME>
+<PHDATE>10/09/89 </PHDATE>
+<CAPT>House of Dun viewed from the corner of the east walled Garden </CAPT>
+<KW>walled garden house dun </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex>
+<Box>
+<Origin> (178,32) </Origin>
+<Extent> (166,144) </Extent>
+<Name> house  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (4,151) </Origin>
+<Extent> (510,205) </Extent>
+<Name> garden  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (6,0) </Origin>
+<Extent> (189,129) </Extent>
+<Name> sky  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (345,28) </Origin>
+<Extent> (164,110) </Extent>
+<Name> trees </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (221,217) </Origin>
+<Extent> (154,135) </Extent>
+<Name> path  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (7,119) </Origin>
+<Extent> (179,60) </Extent>
+<Name> garden wall  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (352,130) </Origin>
+<Extent> (163,59) </Extent>
+<Name> garden wall  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (203,1) </Origin>
+<Extent> (311,59) </Extent>
+<Name> blue sky  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (6,180) </Origin>
+<Extent> (164,165) </Extent>
+<Name> flowers  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (326,182) </Origin>
+<Extent> (178,171) </Extent>
+<Name> lawn </Name>
+<Descr>  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms>
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>4 </PID>
+<IMAGE>i004.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>B. Chapple </PHNAME>
+<PHDATE>01/01/90 </PHDATE>
+<CAPT>House of Dun east side. including Rose Garden wall and trees </CAPT>
+<KW>house dun garden trees roses wall east </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex  >
+<Box>
+<Origin> (-1,54) </Origin>
+<Extent> (249,170) </Extent>
+<Name> house  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (253,178) </Origin>
+<Extent> (202,60) </Extent>
+<Name> garden wall  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (138,240) </Origin>
+<Extent> (80,60) </Extent>
+<Name> rose  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (357,244) </Origin>
+<Extent> (80,60) </Extent>
+<Name> rose   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (284,0) </Origin>
+<Extent> (170,131) </Extent>
+<Name> sky  </Name>
+<Descr>  blue  </Descr>
+</Box>
+<Box>
+<Origin> (380,-1) </Origin>
+<Extent> (129,190) </Extent>
+<Name> tree  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (251,109) </Origin>
+<Extent> (57,94) </Extent>
+<Name> tree  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (0,0) </Origin>
+<Extent> (259,73) </Extent>
+<Name> sky  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (15,222) </Origin>
+<Extent> (488,132) </Extent>
+<Name> garden  </Name>
+<Descr>  rose flowers  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms  >
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>5 </PID>
+<IMAGE>i005.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>D. Macgregor </PHNAME>
+<PHDATE>01/09/89 </PHDATE>
+<CAPT>House of Dun north frontage. including trees, lawn, sheep and background landscape </CAPT>
+<KW>house trees sheep landscape north </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex  >
+<Box>
+<Origin> (49,24) </Origin>
+<Extent> (78,280) </Extent>
+<Name> tree    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (334,47) </Origin>
+<Extent> (94,245) </Extent>
+<Name> tree    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (432,0) </Origin>
+<Extent> (80,277) </Extent>
+<Name> tree    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (134,138) </Origin>
+<Extent> (201,166) </Extent>
+<Name> house of dun  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (10,298) </Origin>
+<Extent> (493,60) </Extent>
+<Name> lawn    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (261,309) </Origin>
+<Extent> (88,32) </Extent>
+<Name> sheep(s)    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (0,164) </Origin>
+<Extent> (334,31) </Extent>
+<Name> river    </Name>
+<Descr>  background    </Descr>
+</Box>
+<Box>
+<Origin> (8,-1) </Origin>
+<Extent> (415,134) </Extent>
+<Name> sky    </Name>
+<Descr>  cloudy    </Descr>
+</Box>
+<Box>
+<Origin> (221,151) </Origin>
+<Extent> (25,60) </Extent>
+<Name> flag    </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (7,109) </Origin>
+<Extent> (326,63) </Extent>
+<Name> landscape    </Name>
+<Descr>  mountain and fields    </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms  >
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>6 </PID>
+<IMAGE>i006.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>B. Chapple </PHNAME>
+<PHDATE>01/01/91 </PHDATE>
+<CAPT>House of Dun south face </CAPT>
+<KW>house terrace wall trees garden south </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex  >
+<Box>
+<Origin> (124,6) </Origin>
+<Extent> (388,194) </Extent>
+<Name> house of dun </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (0,0) </Origin>
+<Extent> (119,60) </Extent>
+<Name> sky  </Name>
+<Descr>  blue cloudy  </Descr>
+</Box>
+<Box>
+<Origin> (2,48) </Origin>
+<Extent> (113,111) </Extent>
+<Name> trees  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (0,178) </Origin>
+<Extent> (507,70) </Extent>
+<Name> garden  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (24,244) </Origin>
+<Extent> (322,108) </Extent>
+<Name> entrance  </Name>
+<Descr>  steps with flower pots  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms  >
+flower pots 
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>7 </PID>
+<IMAGE>i007.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>D. Macgregor </PHNAME>
+<PHDATE>01/01/89 </PHDATE>
+<CAPT>House of Dun south face </CAPT>
+<KW>house trees lawn sky south </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex>
+<Box>
+<Origin> (1,0) </Origin>
+<Extent> (509,190) </Extent>
+<Name> sky </Name>
+<Descr>  blue cloudy </Descr>
+</Box>
+<Box>
+<Origin> (192,204) </Origin>
+<Extent> (110,88) </Extent>
+<Name> house </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (7,170) </Origin>
+<Extent> (160,141) </Extent>
+<Name> trees </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (309,176) </Origin>
+<Extent> (196,114) </Extent>
+<Name> trees </Name>
+<Descr>  </Descr>
+</Box>
+<Box>
+<Origin> (1,298) </Origin>
+<Extent> (508,60) </Extent>
+<Name> field </Name>
+<Descr>  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms>
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>8 </PID>
+<IMAGE>i008.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>H. Wood </PHNAME>
+<PHDATE>01/01/94 </PHDATE>
+<CAPT>House of Dun, main entrance </CAPT>
+<KW>house entrance landscape tree people drive </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex  >
+<Box>
+<Origin> (143,298) </Origin>
+<Extent> (40,56) </Extent>
+<Name> people  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (432,3) </Origin>
+<Extent> (76,290) </Extent>
+<Name> tree  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (0,0) </Origin>
+<Extent> (125,79) </Extent>
+<Name> sky   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (196,136) </Origin>
+<Extent> (80,169) </Extent>
+<Name> entrance  </Name>
+<Descr>  arch shape  </Descr>
+</Box>
+<Box>
+<Origin> (222,23) </Origin>
+<Extent> (34,88) </Extent>
+<Name> flag  </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (10,319) </Origin>
+<Extent> (480,39) </Extent>
+<Name> ground  </Name>
+<Descr>  front of the house  </Descr>
+</Box>
+<Box>
+<Origin> (1,2) </Origin>
+<Extent> (486,320) </Extent>
+<Name> house of dun </Name>
+<Descr>  </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms  >
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+
+
+<PK_OBJECT>
+<TextPart><PID>9 </PID>
+<IMAGE>i009.gif </IMAGE>
+<PRCODE>DUN </PRCODE>
+<PRNAME>House of Dun </PRNAME>
+<PHNAME>H. Wood </PHNAME>
+<PHDATE>01/01/94 </PHDATE>
+<CAPT>House of Dun main entrance. drive and lawn in foreground, Montrose Basin in background. </CAPT>
+<KW>house trees drive lawn people landscape north </KW>
+<PLACE>Angus, Tayside </PLACE>
+<TID>dun.asc </TID>
+</TextPart>
+<ImagePart>
+<Size> (512,358) </Size>
+<ImageIndex  >
+<Box>
+<Origin> (206,200) </Origin>
+<Extent> (80,126) </Extent>
+<Name> entrance   </Name>
+<Descr>  arch shape with steps   </Descr>
+</Box>
+<Box>
+<Origin> (227,122) </Origin>
+<Extent> (28,60) </Extent>
+<Name> flag   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (2,-1) </Origin>
+<Extent> (78,350) </Extent>
+<Name> tree   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (349,0) </Origin>
+<Extent> (159,337) </Extent>
+<Name> tree   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (310,298) </Origin>
+<Extent> (80,36) </Extent>
+<Name> people   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (72,316) </Origin>
+<Extent> (347,42) </Extent>
+<Name> ground   </Name>
+<Descr>  front of the house with part of the field   </Descr>
+</Box>
+<Box>
+<Origin> (68,4) </Origin>
+<Extent> (286,57) </Extent>
+<Name> sky   </Name>
+<Descr>   </Descr>
+</Box>
+<Box>
+<Origin> (5,68) </Origin>
+<Extent> (438,73) </Extent>
+<Name> landscape   </Name>
+<Descr>  hill with spots of trees   </Descr>
+</Box>
+<Box>
+<Origin> (94,113) </Origin>
+<Extent> (294,205) </Extent>
+<Name> house of dun </Name>
+<Descr>   </Descr>
+</Box>
+</ImageIndex>
+<GeneralTerms  >
+
+
+</GeneralTerms>
+</ImagePart>
+</PK_OBJECT>
+

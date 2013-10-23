@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisioDocument>
+	<DocumentProperties>
+		<Title></Title>
+		<HyperlinkBase href=""></HyperlinkBase>
+	</DocumentProperties>
+	<Pages>
+		<Page ID="0" Name="Static Structure-1" NameU="Static Structure-1">
+			<Shapes>
+				<Shape ID="1" UniqueID="{CA1461EF-784A-4CF1-8DAC-032C01AA3575}" Name="Class" NameU="Class" Master="23">
+					<XForm>
+						<PinX Unit="MM">6.841184474532509</PinX>
+						<PinY Unit="MM">5.856002627454008</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="6" UniqueID="{115A0A16-0C9C-4431-BF92-092A0F016A06}" Name="Operations" NameU="Operations">
+					<Text>#doFilter(in de : DataElement) : DataElement
+#getName() : String</Text>
+					<XForm>
+						<PinX Unit="MM">6.841184474532509</PinX>
+						<PinY Unit="MM">5.668010501469756</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="8" UniqueID="{49527875-94C6-4AE5-9C4A-255764A3B8FB}" Name="Name" NameU="Name">
+					<Text>Filter</Text>
+					<XForm>
+						<PinX Unit="MM">6.841184474532509</PinX>
+						<PinY Unit="MM">6.090847766246778</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="10" UniqueID="{6F13FABD-1D69-40BF-9954-A30DA85CFCAD}" Name="Watermark Title" NameU="Watermark Title" Master="18">
+					<Text>Static Structure</Text>
+					<XForm>
+						<PinX Unit="MM">5.846456692913386</PinX>
+						<PinY Unit="MM">8.267716535433070</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="11" UniqueID="{0F74B001-7B84-4CE4-853E-D7AC3795A9D5}" Name="Class.11" NameU="Class.11" Master="23">
+					<XForm>
+						<PinX Unit="MM">3.145050832028427</PinX>
+						<PinY Unit="MM">4.399309714068182</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="16" UniqueID="{84840503-8927-4C29-9BB6-B97AF352CAED}" Name="Operations" NameU="Operations">
+					<Text>+FilterChain(in IndexSpec : Spec) : FilterChain</Text>
+					<XForm>
+						<PinX Unit="MM">3.145050832028427</PinX>
+						<PinY Unit="MM">4.211317588083929</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="17" UniqueID="{82176C07-9DCF-48B2-BC95-5B7BCADA1A6E}" Name="Attributes" NameU="Attributes">
+					<Text>-filterChain : List&lt;FilterChain&gt;</Text>
+					<XForm>
+						<PinX Unit="MM">3.145050832028427</PinX>
+						<PinY Unit="MM">4.386514438477630</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="18" UniqueID="{33F703B6-84DF-4099-832E-A51322ADC8D5}" Name="Name" NameU="Name">
+					<Text>FilterChain</Text>
+					<XForm>
+						<PinX Unit="MM">3.145050832028427</PinX>
+						<PinY Unit="MM">4.574506564461882</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="20" UniqueID="{09F1BE5E-7F09-4141-8AF5-1E61713BE65F}" Name="Class.20" NameU="Class.20" Master="23">
+					<XForm>
+						<PinX Unit="MM">7.326775004905940</PinX>
+						<PinY Unit="MM">4.399309714068182</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="25" UniqueID="{6EF76203-6EB5-4B22-80E7-A029737FF8B3}" Name="Operations" NameU="Operations">
+					<Text>+loadStopwords(in stopwordsFileName : String)</Text>
+					<XForm>
+						<PinX Unit="MM">7.326775004905940</PinX>
+						<PinY Unit="MM">4.211317588083929</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="26" UniqueID="{5F0334BA-2161-4044-A93A-A5B3A9092359}" Name="Attributes" NameU="Attributes">
+					<Text>-stopWords : HashSet&lt;String&gt;</Text>
+					<XForm>
+						<PinX Unit="MM">7.326775004905940</PinX>
+						<PinY Unit="MM">4.386514438477630</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="27" UniqueID="{ECF14449-5592-404A-B538-C76CF6A7D32A}" Name="Name" NameU="Name">
+					<Text>Stopper</Text>
+					<XForm>
+						<PinX Unit="MM">7.326775004905940</PinX>
+						<PinY Unit="MM">4.574506564461882</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="29" UniqueID="{A12E76D9-1336-4FE3-994E-78BEE2DBA690}" Name="Class.29" NameU="Class.29" Master="23">
+					<XForm>
+						<PinX Unit="MM">5.229340067421319</PinX>
+						<PinY Unit="MM">4.399309714068182</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="36" UniqueID="{1BE3E7FA-14A0-4FF7-977E-66175179FFA4}" Name="Name" NameU="Name">
+					<Text>PorterStemmer</Text>
+					<XForm>
+						<PinX Unit="MM">5.229340067421319</PinX>
+						<PinY Unit="MM">4.574506564461882</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="38" UniqueID="{3B2C9957-342A-4DCD-BCB7-98AA851EDCA2}" Name="Class.38" NameU="Class.38" Master="23">
+					<XForm>
+						<PinX Unit="MM">9.400239592642745</PinX>
+						<PinY Unit="MM">4.399309714068182</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="45" UniqueID="{AF778E9A-1500-4D9E-89BF-361DE7104C79}" Name="Name" NameU="Name">
+					<Text>TextTokenizer</Text>
+					<XForm>
+						<PinX Unit="MM">9.400239592642745</PinX>
+						<PinY Unit="MM">4.574506564461882</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="47" UniqueID="{0F51E540-6B25-42D8-AF82-377B9EED56E3}" Name="Generalization" NameU="Generalization" Master="24">
+					<XForm>
+						<PinX Unit="MM">4.993117653280468</PinX>
+						<PinY Unit="MM">5.097832026561560</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="49" UniqueID="{C08FF125-61B4-48AB-9F02-83CC1C3438C3}" Name="Generalization.49" NameU="Generalization.49" Master="24">
+					<XForm>
+						<PinX Unit="MM">6.035262270976913</PinX>
+						<PinY Unit="MM">5.097832026561560</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="51" UniqueID="{DA182E4A-D02F-4DA9-B2DD-D7A3A7EC1BF8}" Name="Generalization.51" NameU="Generalization.51" Master="24">
+					<XForm>
+						<PinX Unit="MM">7.083979739719225</PinX>
+						<PinY Unit="MM">5.097832026561560</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="53" UniqueID="{9917228D-B4FE-4331-9629-FC102A088A39}" Name="Generalization.53" NameU="Generalization.53" Master="24">
+					<XForm>
+						<PinX Unit="MM">8.120712033587626</PinX>
+						<PinY Unit="MM">5.097832026561560</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="55" UniqueID="{308D069B-5DCF-43E6-9D42-D4F2CA61DDEA}" Name="Composition" NameU="Composition" Master="25">
+					<XForm>
+						<PinX Unit="MM">3.830751958776833</PinX>
+						<PinY Unit="MM">5.127656170761095</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="57" UniqueID="{93E0AE71-9E1F-4C32-A090-2F5A33343F40}" Name="end1_mp" NameU="end1_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">1.722210614672671</PinX>
+						<PinY Unit="IN">4.470020392186837</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="59" UniqueID="{FECB07D0-F1DC-4B5A-AD6C-93005ED08B4C}" Name="end2_mp" NameU="end2_mp">
+					<Text>*</Text>
+					<XForm>
+						<PinX Unit="IN">5.456924197972644</PinX>
+						<PinY Unit="IN">5.785291949335353</PinY>
+					</XForm>
+				</Shape>
+			</Shapes>
+		</Page>
+	</Pages>
+</VisioDocument>

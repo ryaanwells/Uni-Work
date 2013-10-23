@@ -1,0 +1,15 @@
+uk.ac.gla.mir.flair.application
+uk.ac.gla.mir.flair.datamodel
+uk.ac.gla.mir.flair.datamodel.dataElement
+uk.ac.gla.mir.flair.engine
+uk.ac.gla.mir.flair.engine.input
+uk.ac.gla.mir.flair.engine.input.spec
+uk.ac.gla.mir.flair.index
+uk.ac.gla.mir.flair.index.spec
+uk.ac.gla.mir.flair.irmodel.filter
+uk.ac.gla.mir.flair.irmodel.weighting
+uk.ac.gla.mir.flair.parser.grammer
+uk.ac.gla.mir.flair.parser.interpreter
+uk.ac.gla.mir.flair.query
+uk.ac.gla.mir.flair.query.spec
+uk.ac.gla.mir.flair.util

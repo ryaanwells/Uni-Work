@@ -1,0 +1,7 @@
+# This is a Comment
+#
+# The Integer at the start of each line represents the Type Identifier
+# In the 'flair.documents.file' ensure the correct type is used for each
+# document.
+0 testDescriptions/medlineDescription.txt
+

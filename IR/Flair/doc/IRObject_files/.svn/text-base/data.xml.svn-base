@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisioDocument>
+	<DocumentProperties>
+		<Title></Title>
+		<HyperlinkBase href=""></HyperlinkBase>
+	</DocumentProperties>
+	<Pages>
+		<Page ID="0" Name="Static Structure-1" NameU="Static Structure-1">
+			<Shapes>
+				<Shape ID="1" UniqueID="{6E44AEA7-7BAD-42BD-BF05-2FF7AAD2E756}" Name="Class" NameU="Class" Master="23">
+					<XForm>
+						<PinX Unit="MM">6.789447171860564</PinX>
+						<PinY Unit="MM">3.858267716535433</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="6" UniqueID="{9CF5C78B-72CC-4B49-988A-A64723DE66EF}" Name="Operations" NameU="Operations">
+					<Text>+getID() : Long
++setID(in ID : Long)
++getDataElement(in id : Integer) : DataElement
++getDataElements(in id : Integer) : DataElement[]
++initialize(in typeTable : TypeTable)
++getTypeTable() : TypeTable
++setTypeTable(in typeTable : TypeTable)</Text>
+					<XForm>
+						<PinX Unit="MM">6.789447171860564</PinX>
+						<PinY Unit="MM">3.543960889798596</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="7" UniqueID="{1D90BD60-23F2-491D-9DF7-D5415665926F}" Name="Attributes" NameU="Attributes">
+					<Text>-ID : Long
+-PickData : DataElement
+-TypeTable : TypeTable</Text>
+					<XForm>
+						<PinX Unit="MM">6.789447171860564</PinX>
+						<PinY Unit="MM">4.238452791111531</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="8" UniqueID="{BCF52462-E113-4456-9F6D-A4C6BC5E71DF}" Name="Name" NameU="Name">
+					<Text>IRObject</Text>
+					<XForm>
+						<PinX Unit="MM">6.789447171860564</PinX>
+						<PinY Unit="MM">4.552759617848368</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="10" UniqueID="{5E81D95B-580E-4430-A117-D8588442A7C7}" Name="Watermark Title" NameU="Watermark Title" Master="18">
+					<Text>Static Structure</Text>
+					<XForm>
+						<PinX Unit="MM">5.846456692913386</PinX>
+						<PinY Unit="MM">8.267716535433070</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="11" UniqueID="{11CEFD5B-5FB8-4966-BDAA-D5F62EF6F576}" Name="Class.11" NameU="Class.11" Master="23">
+					<XForm>
+						<PinX Unit="MM">3.426124917701094</PinX>
+						<PinY Unit="MM">3.346456692913385</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="16" UniqueID="{620B3740-1BDF-4BB0-BE6C-98BDA96D3A3E}" Name="Operations" NameU="Operations">
+					<Text>+getTypeTableID() : Integer
++setTypeTableID(in ID : Integer)
++size() : Integer
++clear()
++getTypeObject(in fieldId : Integer) : TypeObject
++add(in type : TypeObject, in idx : Integer)
++add(in type : TypeObject)
++getAddress(in id : Integer) : Address</Text>
+					<XForm>
+						<PinX Unit="MM">3.426124917701094</PinX>
+						<PinY Unit="MM">3.098816278530064</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="17" UniqueID="{03C8193E-C44B-4D74-8416-E3519F38D3E3}" Name="Attributes" NameU="Attributes">
+					<Text>-typeTable : List&lt;TypeObject&gt;
+-typeTableID : Integer</Text>
+					<XForm>
+						<PinX Unit="MM">3.426124917701094</PinX>
+						<PinY Unit="MM">3.793308179842998</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="18" UniqueID="{FAF108A7-0F1E-4370-A7C7-A13F3E97B555}" Name="Name" NameU="Name">
+					<Text>TypeTable</Text>
+					<XForm>
+						<PinX Unit="MM">3.426124917701094</PinX>
+						<PinY Unit="MM">4.040948594226320</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="29" UniqueID="{C269C639-E221-49DE-8237-DC5A22C245EA}" Name="Binary Association" NameU="Binary Association" Master="24">
+					<XForm>
+						<PinX Unit="MM">8.054983932301415</PinX>
+						<PinY Unit="MM">5.238451697882704</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="30" UniqueID="{784AC83D-D7E1-4A69-B9E6-45BB1C0592FA}" Name="end1_name" NameU="end1_name">
+					<Text>- </Text>
+					<XForm>
+						<PinX Unit="IN">8.189341137238014</PinX>
+						<PinY Unit="IN">4.326421195704256</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="31" UniqueID="{3CB6557B-186D-4BEE-A42F-9CA3149D4919}" Name="end1_mp" NameU="end1_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">8.189341137238014</PinX>
+						<PinY Unit="IN">4.184999839466947</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="32" UniqueID="{0B89592C-242A-41B0-887F-53F938DAF6C4}" Name="end2_name" NameU="end2_name">
+					<Text>- </Text>
+					<XForm>
+						<PinX Unit="IN">8.226312617867295</PinX>
+						<PinY Unit="IN">6.150482200061155</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="33" UniqueID="{15FEDF79-EE08-4702-922D-74CB6B9E1664}" Name="end2_mp" NameU="end2_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">8.226312617867293</PinX>
+						<PinY Unit="IN">6.291903556298465</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="34" UniqueID="{FA65112D-C5B5-49A4-9697-1E8759A4CE4E}" Name="Binary Association.34" NameU="Binary Association.34" Master="24">
+					<XForm>
+						<PinX Unit="MM">4.482958769275838</PinX>
+						<PinY Unit="MM">4.198526406299662</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="35" UniqueID="{33305686-4083-4DD9-801E-71F8219B242E}" Name="end1_name" NameU="end1_name">
+					<Text>- </Text>
+					<XForm>
+						<PinX Unit="IN">5.402084653107278</PinX>
+						<PinY Unit="IN">4.184999839466948</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="36" UniqueID="{81F90F7A-FAB4-4C4C-891E-4258B6973EDD}" Name="end1_mp" NameU="end1_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">5.402084653107278</PinX>
+						<PinY Unit="IN">4.326421195704257</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="37" UniqueID="{527DD05A-0EB1-4ECF-9075-5B6DDC34AA6A}" Name="end2_name" NameU="end2_name">
+					<Text>-  </Text>
+					<XForm>
+						<PinX Unit="IN">3.485936789012806</PinX>
+						<PinY Unit="IN">4.284316807154293</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="38" UniqueID="{E5A45D1D-D7C1-490D-9091-5307284284CA}" Name="end2_mp" NameU="end2_mp">
+					<Text>1</Text>
+					<XForm>
+						<PinX Unit="IN">3.344940633417616</PinX>
+						<PinY Unit="IN">4.273358517717686</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="20" UniqueID="{D76EA2E9-1B9D-499F-A1C2-B58376B6683F}" Name="Class.20" NameU="Class.20" Master="23">
+					<XForm>
+						<PinX Unit="MM">6.798090392490183</PinX>
+						<PinY Unit="MM">6.221192878179807</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="25" UniqueID="{4CDA94D8-5DA4-4303-9CF5-6824FE93125C}" Name="Operations" NameU="Operations">
+					<Text>+getID() : Integer
++setID(in id : Integer)
++getTag() : Integer
++getElementAt() : DataElement
++setvalue(in value : String)
++getCharValue()
++printDataElement(in tab : Integer, in typeTable)</Text>
+					<XForm>
+						<PinX Unit="MM">6.798090392490183</PinX>
+						<PinY Unit="MM">6.033200752195556</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="26" UniqueID="{DD4BE641-B99B-4966-BCA3-52154B8406E7}" Name="Attributes" NameU="Attributes">
+					<Text>-ID : Integer</Text>
+					<XForm>
+						<PinX Unit="MM">6.798090392490183</PinX>
+						<PinY Unit="MM">6.601377952755905</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="27" UniqueID="{5FFEA98C-381F-45AB-B203-1949E866E6B0}" Name="Name" NameU="Name">
+					<Text>DataElement</Text>
+					<XForm>
+						<PinX Unit="MM">6.798090392490183</PinX>
+						<PinY Unit="MM">6.789370078740157</PinY>
+					</XForm>
+				</Shape>
+				<Shape ID="39" UniqueID="{3297C63B-008D-44F8-93A3-B2D4A5CAE4E4}" Name="Generalization" NameU="Generalization" Master="25">
+					<XForm>
+						<PinX Unit="MM">6.793768782175373</PinX>
+						<PinY Unit="MM">5.102887647733914</PinY>
+					</XForm>
+				</Shape>
+			</Shapes>
+		</Page>
+	</Pages>
+</VisioDocument>

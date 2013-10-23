@@ -1,0 +1,6 @@
+<indexing>
+
+<INDEX dirname = IdentifiersDCS3 tokentype = IDENTIFIER_TOKEN posttype = 0><id>1</id></INDEX>
+<INDEX invname = TextIndexDCS3 tokentype = TEXT_TOKEN posttype = 0><id>2</id></INDEX>
+
+</indexing>

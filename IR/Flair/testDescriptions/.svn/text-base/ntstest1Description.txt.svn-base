@@ -1,0 +1,67 @@
+<ATOM type = INT_DE cmd_type = Plain name = _Pid  id = 3 tag_name = PID >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _ImageFileName id = 4 tag_name = IMAGE >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _PropertyCode  id = 5 tag_name = PRCODE >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _PropName id = 6 tag_name = PRNAME >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _PhotographerName  id = 7 tag_name = PHNAME >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _PhotographerDate  id = 8  tag_name = PHDATE >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _Caption id = 9 tag_name = CAPT >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _KeyWords  id = 10 tag_name = KW >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _Place  id = 11 tag_name = PLACE >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name = _TextFileName  id = 12  tag_name = TID >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name =  _Size id = 13 tag_name = Size >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name =  _GeneralTerms id = 15 tag_name = GeneralTerms >
+</ATOM>
+
+<ATOM type = PNT_DE  cmd_type = Plain name =  _Origin id = 17 tag_name = Origin >
+</ATOM>
+
+<ATOM type = PNT_DE  cmd_type = Plain name =  _Extent id = 18 tag_name = Extent >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name =  _Name id = 19 tag_name = Name >
+</ATOM>
+
+<ATOM type = CHAR_DE  cmd_type = Plain name =  _Descr id = 20 tag_name = Descr >
+</ATOM>
+
+<GROUP type = SEQ_DE cmd_type = Series  name =  _TextPart id = 1 tag_name = TextPart >
+3 4 5 6 7 8 9 10 11 12
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series name =  _Box id = 16 tag_name = Box >
+17 18 19 20
+</GROUP>
+
+<GROUP type = REP_DE  cmd_type = Repeat name =  _ImageIndex id = 14 tag_name = ImageIndex >
+16
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series name =  _ImagePart id = 2 tag_name = ImagePart >
+13 14 15
+</GROUP>
+
+<GROUP type = SEQ_DE  cmd_type = Series  name = _PickObject id = 0 tag_name=PK_OBJECT >
+1 2 
+</GROUP>

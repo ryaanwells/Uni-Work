@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement
+END
+Constants.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/Constants.java
+END
+IntegerDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/IntegerDE.java
+END
+Rectangle.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/Rectangle.java
+END
+ConstraintDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/ConstraintDE.java
+END
+RepeatDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/RepeatDE.java
+END
+DocumentIDDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/DocumentIDDE.java
+END
+DataElement.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/DataElement.java
+END
+DoubleDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/DoubleDE.java
+END
+SequenceDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/SequenceDE.java
+END
+StringDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/StringDE.java
+END
+PointDE.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/datamodel/dataElement/PointDE.java
+END

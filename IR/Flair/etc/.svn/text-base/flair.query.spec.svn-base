@@ -1,0 +1,8 @@
+<querying>
+<query type = TREC topicID = 1 weighting = TFIDF posttype = 0>
+<terms> Level
+</terms>
+<id>2</id>
+</query>
+
+</querying>

@@ -1,0 +1,54 @@
+<DOC>
+<DOCNO>DCS-0</DOCNO>
+<CONTENT>
+ 
+Welcome to Level 1
+There are two 20-credit courses, known as CS1P and CS1Q, at Level 1. Each course runs throughout the year.
+The CS1P (Programming) course is a co-requisite for CS1Q, but may also be taken as a stand-alone course. 
+
+The Level 1 Team 
+The administrative team
+            
+Simon Gay
+Class Head  
+
+Mrs Teresa Bonner 
+Teaching Administrator
+              
+Gail Reat
+Class Secretary
+              
+The course teams
+Quintin Cutts(co-ordinator)
+
+</CONTENT>
+</DOC>
+
+<DOC>
+<DOCNO>DCS-1</DOCNO>
+<CONTENT>
+        
+Welcome to Level 5
+The Level 5 Team 
+Philip Gray, Programme Director
+Professor David Watt, Projects Co-ordinator 
+          
+Mr Stewart Macneill, Systems Support 
+          
+Miss Teresa Currie, Teaching Administrator 
+          
+Course information for Level 5 students can now be found on <a href="https://fims.moodle.gla.ac.uk/login/index.php">Moodle&gt;&gt;</a></p>
+
+</CONTENT>
+</DOC>
+
+<DOC>
+<DOCNO>DCS-2</DOCNO>
+<CONTENT>
+        <h1>Java Programming 2 - KXDV</h1>
+        <p><br />
+          <strong>Aims: </strong>To further develop the students' experience in programming using a strongly typed language (Java) and strengthen their problem solving skills; to introduce the ideas that underpin object-oriented programming and ensure students gain the ability to appropriately utilise these concepts in developing small and medium sized software systems; to begin to develop the ability to select and re-use existing software components and libraries from a limited subset of standard libraries; and to provide an introduction to elementary graphical user-interface (GUI) development.<br />
+
+</CONTENT>
+</DOC>
+

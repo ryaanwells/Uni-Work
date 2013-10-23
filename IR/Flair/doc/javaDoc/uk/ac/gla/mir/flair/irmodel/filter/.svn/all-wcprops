@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter
+END
+FilterChain.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/FilterChain.html
+END
+Filter.html
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/Filter.html
+END
+package-frame.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/package-frame.html
+END
+package-tree.html
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/package-tree.html
+END
+PorterStemmer.stem.html
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/PorterStemmer.stem.html
+END
+PorterStemmer.charvec.html
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/PorterStemmer.charvec.html
+END
+PorterStemmer.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/PorterStemmer.html
+END
+package-use.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/package-use.html
+END
+package-summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/package-summary.html
+END
+Stopper.html
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/Stopper.html
+END
+NewTextTokenizer.html
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/NewTextTokenizer.html
+END
+TextTokenizer.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/MIR/!svn/ver/3392/Flair/doc/javaDoc/uk/ac/gla/mir/flair/irmodel/filter/TextTokenizer.html
+END

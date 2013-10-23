@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/filterbuilder.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/Flair.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/htmllexer.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/htmlparser.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/sax2.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/thumbelina.jar"/>
+	<classpathentry kind="lib" path="/users/ks.davidh/programs/Flair/lib/trove-2.0rc1.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

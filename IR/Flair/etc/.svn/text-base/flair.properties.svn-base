@@ -1,0 +1,69 @@
+# Most file names specified here can be full pathnames or relative to 'flair.home'
+#
+# The following two properties specified by the 'bin/flair.sh' script to allow
+# Java to find this settings file.
+# 
+# flair.home=.
+# flair.etc=etc/
+
+
+# This property should specify the location of the descriptions file.
+# The descriptions file specifies the type identifier and the 
+# filenames for the descriptions.
+# e.g.
+#
+# 0 testDescriptions/aquaint1Description.txt
+# 1 testDescriptions/medlineDescription.txt
+flair.descriptions.file=etc/flair.descriptions
+
+# This property should specify the location of the documents file.
+# The documents file specifies the type identifier and the filenames 
+# to be indexed.
+# e.g.
+#
+# 0 testCollection/aquaint1.txt
+# 1 testCollection/MED.ALL
+flair.documents.file=etc/flair.documents
+
+# This property specifies the path to where the index files are stored.
+#
+flair.index.path=index
+
+
+# This property specifies the filename of the index specification file.
+#
+flair.index.spec=etc/flair.index.spec
+
+
+# This property specifies the filename of the query specification file.
+#
+flair.query.spec=etc/flair.query.spec
+
+
+# This property specifies the path name which flair can use for temp storage.
+#
+flair.temp.dir=tmp
+
+
+# This property specifies the file name of the stop words file
+#
+flair.stopword.file=etc/stopfile.txt
+
+# The following properties specify the classes used for various tags
+# used in the index specification file.
+#
+flair.TEXT_TOKEN=uk.ac.gla.mir.flair.irmodel.filter.TextTokenizer
+flair.PORTER=uk.ac.gla.mir.flair.irmodel.filter.PorterStemmer
+flair.STOP=uk.ac.gla.mir.flair.irmodel.filter.Stopper
+
+# You can always add your own filter classes to be used during indexing.
+# e.g.
+# Specify NEW_TEXT_TOKEN instead of TEXT_TOKEN in the index specification
+# and you can use a different tokenizer
+flair.NEW_TEXT_TOKEN=uk.ac.gla.mir.flair.irmodel.filter.NewTextTokenizer
+
+# You can also create your own weighting models
+# Similar to these;
+flair.RAWTF=uk.ac.gla.mir.flair.irmodel.weighting.RAWTF
+flair.TFIDF=uk.ac.gla.mir.flair.irmodel.weighting.TFIDF
+flair.BM25=uk.ac.gla.mir.flair.irmodel.weighting.BM25

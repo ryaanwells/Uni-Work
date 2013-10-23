@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/query
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/query/package.html
+END
+TRECQuery.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/query/TRECQuery.java
+END
+TextQuery.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/query/TextQuery.java
+END
+Query.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/MIR/!svn/ver/3392/Flair/src/uk/ac/gla/mir/flair/query/Query.java
+END
