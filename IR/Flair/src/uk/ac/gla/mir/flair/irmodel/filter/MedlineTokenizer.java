@@ -1,0 +1,99 @@
+package uk.ac.gla.mir.flair.irmodel.filter;
+
+import uk.ac.gla.mir.flair.datamodel.dataElement.*;
+import uk.ac.gla.mir.flair.util.Assert;
+
+/**
+ * Title:        TextTokenize <br/>
+ * Description:  A Filter Which Tokenizes a StringDE into a Sequence of StringDE<br/>
+ * Company:      Department of Computing Science, University of Glasgow<br/>
+ * @author Ryan Wells
+ * @version 1.0
+ */
+public class MedlineTokenizer extends Filter{
+
+	/**
+	 * @param de The DataElement to Tokenize
+	 * @return Returns a new Sequence Data Element a Strings
+	 */
+	public DataElement doFilter(DataElement de){
+		SequenceDE returnDE = new SequenceDE();
+		String s;
+		StringDE theDe = null;
+
+		try{
+			theDe = (StringDE)de;
+		}
+		catch(ClassCastException e){
+		    Assert.fatal(true, "TextTokenizer : DataElement is not of type StringDE");
+		}
+		
+		s = theDe.getValue();
+		s.trim();
+		char[] ca = s.toCharArray();
+		
+		for (int i=0; i < ca.length; i++){	
+			switch (ca[i]){
+			case '!': case '"': case '#': case '$': case '%':
+			case '&': case '*': case '<': case '=': case '>':
+			case '?': case '@': case '\\':case '|': case '~':
+				ca[i] = ' ';
+				continue;
+			case '.': case ':': case ';': case ',':
+				if ((i+1 < ca.length && ca[i+1] == ' ') ||
+						(i+1 == ca.length)){
+					ca[i] = ' ';
+				}
+				continue;
+			case '\'':
+				if ((i-1 >= 0 && ca[i-1] == ' ') || 
+						(i+1 < ca.length && ca[i+1] == ' ') ||
+						i-1 < 0 || i+1 == ca.length){
+					ca[i] = ' ';
+					continue;
+				}
+				if (i+1 < ca.length && (ca[i+1] == 't' || ca[i+1] == 's')){
+					ca[i] = ' ';
+					continue;
+				}
+			case '/':
+				if (i+1 < ca.length && ca[i+1] == ' '){
+					ca[i] = ' ';
+					continue;
+				}
+			}
+			if (s.charAt(i) == 'a'){
+				
+			}
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0; i < s.length(); i++) {
+		    char ch = s.charAt(i);
+		    if(Character.isLetterOrDigit(ch))
+		    	sb.append(ch);
+		    else { // Finalize StringBuffer on whitespace
+		    	String tok = sb.toString().trim();
+		    	if(tok.length() > 0) {
+		    		final DataElement token = new StringDE(tok.toLowerCase());
+		    		returnDE.add(token);
+		    		sb = new StringBuffer();
+		    	}
+		    }
+		}
+
+		// Need to finalize last StringBuffer
+		String tok = sb.toString().trim();
+		if(tok.length() > 0) {
+			final DataElement token = new StringDE(tok.toLowerCase());
+    		returnDE.add(token);
+    		sb = new StringBuffer();
+		}
+
+		return returnDE;
+	 }	
+	
+	public String getName(){
+		return "irmodel.filter.TextTokenizer";
+	}
+}
