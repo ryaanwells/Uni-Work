@@ -31,75 +31,93 @@ public class MedlineTokenizer extends Filter{
 		}
 		
 		s = theDe.getValue();
+		// Remove all simple replace characters (ones that are a straight match-and-drop)
+		s = s.replaceAll("[!\"#$%&*<=>?@\\\\|~]", "");
+		// Trim to reduce char array, may be a minor reduction.
 		s.trim();
+		
 		char[] ca = s.toCharArray();
+		
+		// Remove all special delim characters that may infringe on other steps.
+		for (int i=0; i < ca.length; i++){
+			if ( (ca[i] == '.' || ca[i] == ':' ||
+					ca[i] == ';' || ca[i] == ',') && 
+					(i + 1 == ca.length || 
+					(i + 1 < ca.length && ca[i+1] == ' ') ) ){
+				ca[i] = ' ';
+			}
+		}
 		
 		for (int i=0; i < ca.length; i++){	
 			switch (ca[i]){
-			case '!': case '"': case '#': case '$': case '%':
-			case '&': case '*': case '<': case '=': case '>':
-			case '?': case '@': case '\\':case '|': case '~':
-				ca[i] = ' ';
-				continue;
-			case '.': case ':': case ';': case ',':
-				if ((i+1 < ca.length && ca[i+1] == ' ') ||
-						(i+1 == ca.length)){
-					ca[i] = ' ';
-				}
-				continue;
 			case '\'':
+				// Remove ' if it is followed by a space
 				if ((i-1 >= 0 && ca[i-1] == ' ') || 
 						(i+1 < ca.length && ca[i+1] == ' ') ||
 						i-1 < 0 || i+1 == ca.length){
+					System.out.println("REMOVED");
 					ca[i] = ' ';
 					continue;
 				}
-				if (i+1 < ca.length && (ca[i+1] == 't' || ca[i+1] == 's')){
+				// Remove 's and 't if they are followed by a space
+				if (i+1 < ca.length && (ca[i+1] == 't' || ca[i+1] == 's') && 
+						((i+2 < ca.length && ca[i+2] == ' ') || i+2 == ca.length ) ){
 					ca[i] = ' ';
+					ca[i+1] = ' ';
 					continue;
 				}
 			case '/':
+				// Remove / if it is followed by a space
 				if (i+1 < ca.length && ca[i+1] == ' '){
 					ca[i] = ' ';
 					continue;
 				}
 			case '[': case '(':
+				// Find and remove all parenthesis brackets if the have a matching close and 
+				// whitespace on the outside.
 				if (i == 0 || (i-1 >=0 && ca[i-1] == ' ') ){
-					Stack<Character> stack = new Stack<Character>();
+					// We don't care for correct ordering of brackets - [ ( ] ) is valid for 
+					// all intents and purposes in this process.
+					// Count all opening brackets of the same kind as me.
+					int bracketCount = 1;
 					for (int j=i+1; j < ca.length; j++){
-						if (ca[j] == '[' || ca[j] == '('){
-							stack.push(ca[j]);
+						if ( (ca[i] == '[' && ca[j] == '[' ) || 
+								(ca[i] == '(' && ca[j] == '(' ) ){
+							// Open bracket found matches me, count it.
+							bracketCount++;
 						}
-						else if (ca[j] == ']' || ca[j] == ')'){
-							if (stack.peek() == ca[j]){
-								stack.pop();
-								if (stack.isEmpty() && ca[i] == ca[j] && (
-										(j + 1 < ca.length && ca[j+1] == ' ')) || 
-										(j +1 == ca.length)){
-									ca[i] = ' ';
-									ca[j] = ' ';
-									continue;
-								}
-							}
-							else { // mismatch in bracket ordering, ignore this bracket
+						else if ( (ca[i] == '[' && ca[j] == ']') ||
+								(ca[i] == '(' && ca[j] == ')' ) ){
+							// Closing bracket matches me, update count. 
+							bracketCount--;
+							// If we've found or partner
+							if (bracketCount == 0 && (
+									(j + 1 < ca.length && ca[j+1] == ' ')) || 
+									(j + 1 == ca.length)){
+								// Remove me and my partner
+								ca[i] = ' ';
+								ca[j] = ' ';
 								continue;
 							}
 						}
 					}
-					// no matching bracket found, remove this bracket
-					ca[i] = ' ';
-					continue;
+					// If reached here then:
+					// No match found, treat as a normal character
 				}
+				continue;
 			}
 		}
 		
-		String[] result = new String(ca).split("\\s");
+		// Remove all extraneous whitespace and split down all whitespace.
+		// We use trim so we don't have whitespace in our result from the beginning or
+		// end of the character array.
+		String[] result = new String(ca).trim().split("\\s+");
 		
 		for (String res: result){
 			returnDE.add(new StringDE(res.toLowerCase()));
 		}
 		
-		return returnDE;
+		return returnDE;		
 		
 	 }	
 	
