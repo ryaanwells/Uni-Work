@@ -1,5 +1,7 @@
 package uk.ac.gla.mir.flair.irmodel.filter;
 
+import java.util.Stack;
+
 import uk.ac.gla.mir.flair.datamodel.dataElement.*;
 import uk.ac.gla.mir.flair.util.Assert;
 
@@ -61,37 +63,47 @@ public class MedlineTokenizer extends Filter{
 					ca[i] = ' ';
 					continue;
 				}
+			case '[': case '(':
+				if (i == 0 || (i-1 >=0 && ca[i-1] == ' ') ){
+					Stack<Character> stack = new Stack<Character>();
+					for (int j=i+1; j < ca.length; j++){
+						if (ca[j] == '[' || ca[j] == '('){
+							stack.push(ca[j]);
+						}
+						else if (ca[j] == ']' || ca[j] == ')'){
+							if (stack.peek() == ca[j]){
+								stack.pop();
+								if (stack.isEmpty() && ca[i] == ca[j] && (
+										(j + 1 < ca.length && ca[j+1] == ' ')) || 
+										(j +1 == ca.length)){
+									ca[i] = ' ';
+									ca[j] = ' ';
+									continue;
+								}
+							}
+							else { // mismatch in bracket ordering, ignore this bracket
+								continue;
+							}
+						}
+					}
+					// no matching bracket found, remove this bracket
+					ca[i] = ' ';
+					continue;
+				}
 			}
-			
 		}
 		
-		StringBuffer sb = new StringBuffer();
-		for(int i = 0; i < s.length(); i++) {
-		    char ch = s.charAt(i);
-		    if(Character.isLetterOrDigit(ch))
-		    	sb.append(ch);
-		    else { // Finalize StringBuffer on whitespace
-		    	String tok = sb.toString().trim();
-		    	if(tok.length() > 0) {
-		    		final DataElement token = new StringDE(tok.toLowerCase());
-		    		returnDE.add(token);
-		    		sb = new StringBuffer();
-		    	}
-		    }
+		String[] result = new String(ca).split("\\s");
+		
+		for (String res: result){
+			returnDE.add(new StringDE(res.toLowerCase()));
 		}
-
-		// Need to finalize last StringBuffer
-		String tok = sb.toString().trim();
-		if(tok.length() > 0) {
-			final DataElement token = new StringDE(tok.toLowerCase());
-    		returnDE.add(token);
-    		sb = new StringBuffer();
-		}
-
+		
 		return returnDE;
+		
 	 }	
 	
 	public String getName(){
-		return "irmodel.filter.TextTokenizer";
+		return "irmodel.filter.MedlineTokenizer";
 	}
 }
