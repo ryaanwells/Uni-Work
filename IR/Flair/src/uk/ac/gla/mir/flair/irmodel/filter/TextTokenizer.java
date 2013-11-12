@@ -38,6 +38,7 @@ public class TextTokenizer extends Filter{
 		    else { // Finalize StringBuffer on whitespace
 		    	String tok = sb.toString().trim();
 		    	if(tok.length() > 0) {
+		    		System.out.println(tok);
 		    		final DataElement token = new StringDE(tok.toLowerCase());
 		    		returnDE.add(token);
 		    		sb = new StringBuffer();
@@ -48,6 +49,7 @@ public class TextTokenizer extends Filter{
 		// Need to finalize last StringBuffer
 		String tok = sb.toString().trim();
 		if(tok.length() > 0) {
+			System.out.println(tok);
 			final DataElement token = new StringDE(tok.toLowerCase());
     		returnDE.add(token);
     		sb = new StringBuffer();

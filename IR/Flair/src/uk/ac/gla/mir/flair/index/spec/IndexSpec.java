@@ -94,6 +94,7 @@ public class IndexSpec {
 			System.out.println("Loading Inverted Index : "+invertedIndexSpec);
 			final String path = Settings.getIndexPath();
 			final String name = path + Settings.fileSep + invertedIndexSpec.getIndexName();
+			System.out.println(name);
 			final TextInvertedIndex textInvertedIndex = 
 				TextInvertedIndex.readTextInvertedIndex( name+"_index", name+"_data");
 			invertedIndexSpec.setInvertedIndex(textInvertedIndex);

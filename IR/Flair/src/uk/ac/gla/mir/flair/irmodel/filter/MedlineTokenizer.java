@@ -1,6 +1,6 @@
 package uk.ac.gla.mir.flair.irmodel.filter;
 
-import java.util.Stack;
+
 
 import uk.ac.gla.mir.flair.datamodel.dataElement.*;
 import uk.ac.gla.mir.flair.util.Assert;
@@ -55,7 +55,6 @@ public class MedlineTokenizer extends Filter{
 				if ((i-1 >= 0 && ca[i-1] == ' ') || 
 						(i+1 < ca.length && ca[i+1] == ' ') ||
 						i-1 < 0 || i+1 == ca.length){
-					System.out.println("REMOVED");
 					ca[i] = ' ';
 					continue;
 				}
@@ -114,9 +113,9 @@ public class MedlineTokenizer extends Filter{
 		String[] result = new String(ca).trim().split("\\s+");
 		
 		for (String res: result){
-			returnDE.add(new StringDE(res.toLowerCase()));
+			final DataElement token = new StringDE(res.toLowerCase());
+			returnDE.add(token);
 		}
-		
 		return returnDE;		
 		
 	 }	

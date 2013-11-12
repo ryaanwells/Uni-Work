@@ -1,0 +1,32 @@
+***** Starting Flair *****
+Setting JAVA_HOME to /usr
+Setting FLAIR_HOME to /home/ryan/src/Uni-Work/IR/Flair
+Setting FLAIR_ETC to /home/ryan/src/Uni-Work/IR/Flair/etc
+/usr/bin/java -Xmx512M -Dflair.etc=/home/ryan/src/Uni-Work/IR/Flair/etc -Dflair.home=/home/ryan/src/Uni-Work/IR/Flair -cp ./lib/filterbuilder.jar:./lib/Flair.jar:./lib/htmllexer.jar:./lib/htmlparser.jar:./lib/junit.jar:./lib/nekohtml.jar:./lib/sax2.jar:./lib/thumbelina.jar:./lib/trove-2.0rc1.jar:./lib/xercesImpl.jar:./lib/*.zip:src/ --print-stat 0
+**********
+* Assertion Info: 
+* Properties Loaded OK
+**********
+**********
+* Assertion Info: 
+* Flair Home = /home/ryan/src/Uni-Work/IR/Flair
+* Flair ETC = /home/ryan/src/Uni-Work/IR/Flair/etc
+* Flair Descriptions File = etc/flair.descriptions
+* Flair Input File = etc/flair.documents
+* Flair Stopwords File = etc/stopfile.txt
+* Flair Index Path = index
+**********
+**********
+* Assertion Info: 
+* Flair Index Spec File = etc/flair.index.spec
+**********
+Loading Inverted Index : "TextIndexMEDLINE" : PORTER : TEXT_TOKEN : 0 : {2}
+Using :irmodel.filter.TextTokenizer
+Using :irmodel.filter.Stopper
+Using :irmodel.filter.PorterStemmer
+Loading Direct Index : "IdentifiersMEDLINE" : PORTER : IDENTIFIER_TOKEN : 0 : {1}
+Direct Index for 0 : IdentifiersMEDLINE
+Inverted Index for 0 : TextIndexMEDLINE
+Total Number of Documents = 1033
+Average Document Length = 83.58470474346564
+Total Number of Uniq Terms = 8758
