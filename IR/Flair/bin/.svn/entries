@@ -2,7 +2,7 @@
 
 dir
 3392
-https://krk.dcs.gla.ac.uk/repos/MIR/Flair/bin
+https://krk.dcs.gla.ac.uk/repos/MIR/Flair/src
 https://krk.dcs.gla.ac.uk/repos/MIR
 
 
@@ -33,18 +33,17 @@ svn:special svn:externals svn:needs-lock
 
 0
 
-Compile.sh
+.classpath
 file
 
 
 
 
-2009-09-15T13:47:42.000000Z
-127e40fdc562db0f83c06222351b2b9a
+2009-09-10T13:52:09.000000Z
+5625229b1b9968409dce0c80daab9c46
 2010-08-17T15:16:14.949549Z
 3392
 davidh
-has-props
 
 
 
@@ -65,20 +64,20 @@ has-props
 
 
 
-2220
+
+912
 
-anyclass.bat
+.project
 file
 
 
 
 
-2010-02-02T12:21:10.000000Z
-9e43339545be80f663afed435d31c104
+2009-09-10T13:52:09.000000Z
+1653f36805d68c5fc03dee4f59cf9048
 2010-08-17T15:16:14.949549Z
 3392
 davidh
-has-props
 
 
 
@@ -99,243 +98,9 @@ has-props
 
 
 
-2187
+
+364
 
-anyclass.sh
-file
-
-
-
-
-2010-08-02T16:29:02.000000Z
-7a7949e85f4b2af6249e5f3f0e47d0d0
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2496
-
-createQuerySpec.bat
-file
-
-
-
-
-2010-02-02T13:32:40.000000Z
-e4054ea6c57fd86ba0e4d722ee2f93cb
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2235
-
-createQuerySpec.sh
-file
-
-
-
-
-2010-02-03T14:14:56.000000Z
-196939c50a4776c71d14f4129daa3cd4
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2465
-
-flair.bat
-file
-
-
-
-
-2010-02-02T12:21:48.000000Z
-a7387a20ede9192e96a20ecf2237537f
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2231
-
-flair.sh
-file
-
-
-
-
-2010-08-02T16:29:23.000000Z
-3f37d675eee5ba7fa21bd3bef0459207
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2417
-
-fq.bat
-file
-
-
-
-
-2008-03-19T13:48:06.000000Z
-f2bef54e481449fa8838deb6f01d0e5c
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-986
-
-lcp.bat
-file
-
-
-
-
-2008-03-19T13:48:06.000000Z
-1e0cbc7f4e9043e5211c0698c7ffc658
-2010-08-17T15:16:14.949549Z
-3392
-davidh
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1052
+uk
+dir
 

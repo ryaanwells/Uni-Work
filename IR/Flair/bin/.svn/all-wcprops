@@ -1,59 +1,17 @@
 K 25
 svn:wc:ra_dav:version-url
 V 34
-/repos/MIR/!svn/ver/3392/Flair/bin
+/repos/MIR/!svn/ver/3392/Flair/src
 END
-Compile.sh
-K 25
-svn:wc:ra_dav:version-url
-V 45
-/repos/MIR/!svn/ver/3392/Flair/bin/Compile.sh
-END
-lcp.bat
-K 25
-svn:wc:ra_dav:version-url
-V 42
-/repos/MIR/!svn/ver/3392/Flair/bin/lcp.bat
-END
-fq.bat
-K 25
-svn:wc:ra_dav:version-url
-V 41
-/repos/MIR/!svn/ver/3392/Flair/bin/fq.bat
-END
-anyclass.bat
-K 25
-svn:wc:ra_dav:version-url
-V 47
-/repos/MIR/!svn/ver/3392/Flair/bin/anyclass.bat
-END
-anyclass.sh
-K 25
-svn:wc:ra_dav:version-url
-V 46
-/repos/MIR/!svn/ver/3392/Flair/bin/anyclass.sh
-END
-flair.bat
-K 25
-svn:wc:ra_dav:version-url
-V 44
-/repos/MIR/!svn/ver/3392/Flair/bin/flair.bat
-END
-createQuerySpec.sh
-K 25
-svn:wc:ra_dav:version-url
-V 53
-/repos/MIR/!svn/ver/3392/Flair/bin/createQuerySpec.sh
-END
-createQuerySpec.bat
-K 25
-svn:wc:ra_dav:version-url
-V 54
-/repos/MIR/!svn/ver/3392/Flair/bin/createQuerySpec.bat
-END
-flair.sh
+.project
 K 25
 svn:wc:ra_dav:version-url
 V 43
-/repos/MIR/!svn/ver/3392/Flair/bin/flair.sh
+/repos/MIR/!svn/ver/3392/Flair/src/.project
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/repos/MIR/!svn/ver/3392/Flair/src/.classpath
 END

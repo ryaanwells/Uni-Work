@@ -62,9 +62,7 @@ public class MedlineTokenizer extends Filter{
 					continue;
 				}
 			}
-			if (s.charAt(i) == 'a'){
-				
-			}
+			
 		}
 		
 		StringBuffer sb = new StringBuffer();
