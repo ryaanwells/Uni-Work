@@ -3,31 +3,41 @@ package server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import client.ClientInterface;
+
 @SuppressWarnings("serial")
 public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 
 	private AuctionManager AM;
+	private int nextID;
 	
 	public ServerImpl() throws RemoteException {
 		super();
-		AM = new AuctionManager();
+		this.AM = new AuctionManager();
+		this.nextID = -1;
 	}
 
 	@Override
-	public int createAuction(String name, int minValue) throws RemoteException {
-		// TODO Auto-generated method stub
-		AuctionItem a = AM.add(name, minValue);
+	public int getNextID(){
+		nextID++;
+		return nextID;
+	}
+	
+	@Override
+	public int createAuction(String name, int minValue, ClientInterface c) throws RemoteException {
+		AuctionItem a = this.AM.add(name, minValue, c);
+		System.out.println("Auction created: " + name + ", " + minValue);
 		return a.getUUID();
 	}
 
 	@Override
-	public boolean bidOnItem(int itemID, int maxBid) throws RemoteException {
-		return AM.bidOn(itemID, maxBid);
+	public boolean bidOnItem(int itemID, int maxBid, ClientInterface c) throws RemoteException {
+		return this.AM.bidOn(itemID, maxBid, c);
 	}
 
 	@Override
-	public AuctionItem[] listAuctions(boolean active) throws RemoteException {
-		return AM.list(active);
+	public String[] listAuctions(boolean active) throws RemoteException {
+		return this.AM.list(active);
 	}
 
 }
