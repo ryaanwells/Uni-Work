@@ -21,6 +21,14 @@ public class Signal {
 		this.sampleLength = sampleLength;
 	}
 	
+	public double getAverage(boolean normalized){
+		double count = 0.0;
+		for (int i=0; i < this.signal.length; i++){
+			count += normalized ? this.normalizedSignal[i] : this.signal[i];
+		}
+		return count / this.signal.length;
+	}
+	
 	public int sampleCount(){
 		return this.signal.length;
 	}
