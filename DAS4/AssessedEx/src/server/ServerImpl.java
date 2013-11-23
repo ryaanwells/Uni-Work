@@ -24,8 +24,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 	}
 	
 	@Override
-	public int createAuction(String name, int minValue, ClientInterface c, int clientID) throws RemoteException {
-		AuctionItem a = this.AM.add(name, minValue, c, clientID);
+	public int createAuction(String name, int minValue, ClientInterface c, int clientID, long timeout) throws RemoteException {
+		AuctionItem a = this.AM.add(name, minValue, c, clientID, timeout);
 		System.out.println("Auction created: " + name + ", " + minValue);
 		return a.getUUID();
 	}

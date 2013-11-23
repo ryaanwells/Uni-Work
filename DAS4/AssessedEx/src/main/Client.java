@@ -67,8 +67,11 @@ public class Client {
 				String name = in.nextLine();
 				System.out.print("Give your item a price: ");
 				int price = Integer.parseInt(in.nextLine().trim());
+				System.out.print("How many minutes from now should it end?: ");
+				long timeout = Long.parseLong(in.nextLine().trim());
+				timeout = 60000 * timeout; //minutes to milliseconds conversion
 				try {
-					SI.createAuction(name, price, CI, ID);
+					SI.createAuction(name, price, CI, ID, timeout);
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}

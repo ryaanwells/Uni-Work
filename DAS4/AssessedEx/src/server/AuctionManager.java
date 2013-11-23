@@ -15,10 +15,11 @@ public class AuctionManager {
 		auctions = new HashMap<Integer, AuctionItem>();
 	}
 	
-	public synchronized AuctionItem add(String name, int minimumPrice, ClientInterface c, int clientID){
+	public synchronized AuctionItem add(String name, int minimumPrice, ClientInterface c, int clientID, long timeout){
 		AuctionItem a = null;
 		try {
-			a = new AuctionItem(nextUUID, name, minimumPrice, c, clientID);
+			a = new AuctionItem(nextUUID, name, minimumPrice, c, clientID, timeout);
+			a.start();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;

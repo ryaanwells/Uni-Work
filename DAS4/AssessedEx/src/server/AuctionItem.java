@@ -10,8 +10,15 @@ import core.MessageType;
 
 @SuppressWarnings("serial")
 public class AuctionItem extends UnicastRemoteObject{
+	
 	private int uuid;
 	private String name;
+	
+	private AuctionThread AT = null;
+	private boolean isActive;
+	private long timeout;
+	private boolean bidding;
+	
 	private int currentMaxBid;
 	private int minimumPrice;
 
@@ -22,7 +29,7 @@ public class AuctionItem extends UnicastRemoteObject{
 	private HashMap<ClientInterface, Integer> bidders;
 	private ArrayList<String> history;
 
-	public AuctionItem(int uuid, String name, int minimumPrice, ClientInterface c, int ID) throws RemoteException {
+	public AuctionItem(int uuid, String name, int minimumPrice, ClientInterface c, int ID, long timeout) throws RemoteException {
 		super();
 		this.uuid = uuid;
 		this.name = name;
@@ -35,10 +42,21 @@ public class AuctionItem extends UnicastRemoteObject{
 		
 		this.history.add("Client " + this.ownerID + " starts auction for "+
 				this.name + " with reserve of " + this.minimumPrice);
+		
+		this.isActive = true;
+		this.timeout = timeout;
+		this.bidding = false;
 	}
 
 	public String getName() {
 		return this.name;
+	}
+	
+	public void start(){
+		if (isActive && this.AT == null){
+			this.AT = new AuctionThread();
+			new Thread(this.AT).start();
+		}
 	}
 
 	public int getUUID() {
@@ -49,8 +67,9 @@ public class AuctionItem extends UnicastRemoteObject{
 		return this.currentMaxBid;
 	}
 
-	public boolean attemptBid(int bid, ClientInterface ci, int clientID) {
-		if (bid > currentMaxBid && !ci.equals(owner)) {
+	public synchronized boolean attemptBid(int bid, ClientInterface ci, int clientID) {
+		if (isActive && bid > currentMaxBid && !ci.equals(owner)) {
+			this.bidding = true;
 			boolean leaderChanged = false;
 			ClientInterface oldLeader = null;
 			bidders.put(ci, bid);
@@ -106,6 +125,8 @@ public class AuctionItem extends UnicastRemoteObject{
 					RE.printStackTrace();
 				}
 			}
+			this.bidding = false;
+			notifyAll();
 			return leaderChanged;
 		}
 		return false;
@@ -119,9 +140,71 @@ public class AuctionItem extends UnicastRemoteObject{
 		String[] array = new String[this.history.size()];
 		return this.history.toArray(array);
 	}
+	
+	private synchronized void close(){
+		System.out.println("CLOSING");
+		this.isActive = false;
+		for (ClientInterface CI: this.bidders.keySet()){
+			try {
+				if (CI.equals(this.maxBidder)){
+					if (this.reserveMet()){
+						CI.update(MessageType.AUCTION_WIN, "You Won! Item " + this.name + 
+								" for " + this.currentMaxBid);
+					}
+					else {
+						CI.update(MessageType.NOT_SOLD, "Reserve was not met on " + this.name +
+								" when auction ended at " + this.currentMaxBid);
+					}
+				}
+				else if (CI.equals(this.owner)){
+					if (this.reserveMet()){
+						CI.update(MessageType.SOLD, "Your item " + this.name + 
+								" has been sold for " + this.currentMaxBid);
+					}
+					else {
+						CI.update(MessageType.NOT_SOLD, "Reserve was not met on " + this.name +
+								" when auction ended at " + this.currentMaxBid + 
+								". Reserve was " + this.minimumPrice);
+					}
+				}
+				else {
+					if (this.reserveMet()){
+						CI.update(MessageType.AUCTION_END, "Auction ended for " + this.name +
+								" at " + this.currentMaxBid + ". Item was sold");
+					}
+					else {
+						CI.update(MessageType.AUCTION_END, "Auction ended for " + this.name +
+								" at " + this.currentMaxBid + ". Item was not sold");
+					}
+				}
+			} catch (java.rmi.RemoteException RE){
+				RE.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	public String toString() {
 		return this.name;
+	}
+	
+	private class AuctionThread implements Runnable{
+		
+		@Override
+		public void run() {
+			try {
+				System.out.println(timeout);
+				Thread.sleep(timeout);
+				if (bidding){
+					try{
+						wait();
+					}
+					catch (InterruptedException IE){}
+				}
+				close();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
