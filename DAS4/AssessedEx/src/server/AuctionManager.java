@@ -15,10 +15,10 @@ public class AuctionManager {
 		auctions = new HashMap<Integer, AuctionItem>();
 	}
 	
-	public synchronized AuctionItem add(String name, int minimumPrice, ClientInterface c){
+	public synchronized AuctionItem add(String name, int minimumPrice, ClientInterface c, int clientID){
 		AuctionItem a = null;
 		try {
-			a = new AuctionItem(nextUUID, name, minimumPrice, c);
+			a = new AuctionItem(nextUUID, name, minimumPrice, c, clientID);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
@@ -28,12 +28,12 @@ public class AuctionManager {
 		return a;
 	}
 	
-	public synchronized boolean bidOn(int UUID, int bid, ClientInterface c){
+	public synchronized boolean bidOn(int UUID, int bid, ClientInterface c, int clientID){
 		AuctionItem a = auctions.get(UUID);
 		if (a == null){
 			return false;
 		}
-		return a.attemptBid(bid, c);
+		return a.attemptBid(bid, c, clientID);
 	}
 	
 	public synchronized String[] list(boolean active){
@@ -46,6 +46,12 @@ public class AuctionManager {
 		String[] ai = new String[sa.size()];
 		ai = sa.toArray(ai);
 		return ai;
+	}
+	
+	public synchronized String[] getHistory(int UUID){
+		AuctionItem a = auctions.get(UUID);
+		if (a == null) { return new String[0]; }
+		return a.getHistory();
 	}
 	
 }

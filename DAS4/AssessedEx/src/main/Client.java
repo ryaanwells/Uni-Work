@@ -68,7 +68,7 @@ public class Client {
 				System.out.print("Give your item a price: ");
 				int price = Integer.parseInt(in.nextLine().trim());
 				try {
-					SI.createAuction(name, price, CI);
+					SI.createAuction(name, price, CI, ID);
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -93,7 +93,7 @@ public class Client {
 				int bid = Integer.parseInt(in.nextLine().trim());
 				boolean success = false;
 				try {
-					success = SI.bidOnItem(UUID, bid, CI);
+					success = SI.bidOnItem(UUID, bid, CI, ID);
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -102,6 +102,21 @@ public class Client {
 				}
 				else {
 					System.out.println("Unsuccesful in bidding on " + UUID);
+				}
+			}
+			else if (command.equals("h")){
+				System.out.print("Ender ID of item: ");
+				int UUID = Integer.parseInt(in.nextLine().trim());
+				String[] history = null;
+				try {
+					history = SI.getHistory(UUID);
+				} catch (RemoteException e){
+					e.printStackTrace();
+				}
+				if (history != null){
+					for (String s: history){
+						System.out.println(s);
+					}
 				}
 			}
 			System.out.print(" _\n|" + ID + "| > ");
