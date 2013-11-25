@@ -2,6 +2,7 @@ package client;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 import core.MessageType;
 
@@ -9,39 +10,41 @@ import core.MessageType;
 public class ClientImpl extends UnicastRemoteObject implements ClientInterface {
 
 	private int id;
+	private ArrayList<String> messages;
+	private ArrayList<String> alerts;
 	
 	public ClientImpl(int id) throws RemoteException{
 		super();
 		this.id = id;
+		this.messages = new ArrayList<String>(20);
+		this.alerts = new ArrayList<String>(20);
 	}
 	
 	@Override
 	public void update(MessageType mt, String message) throws RemoteException {
 		switch (mt){
 		case BID:
-			System.out.println("Bid Notification");
+			this.messages.add(message);
 			break;
 		case MAX_BIDDER:
-			System.out.println("Maximum Bidder");
+			this.alerts.add(message);
 			break;
 		case OUTBID:
-			System.out.println("Outbid Notification");
+			this.alerts.add(message);
 			break;
 		case AUCTION_END:
-			System.out.println("Auction End");
+			this.messages.add(message);
 			break;
 		case AUCTION_LOSE:
-			System.out.println("Auction Lose");
+			this.messages.add(message);
 			break;
 		case AUCTION_WIN:
-			System.out.println("Auction Win");
+			this.alerts.add(message);
 			break;
 		case SOLD:
-			System.out.println("Sold");
+			this.alerts.add(message);
 		case NOT_SOLD:
-			System.out.println("Not sold");
-		default:
-			break;
+			this.alerts.add(message);
 		}
 	}
 	

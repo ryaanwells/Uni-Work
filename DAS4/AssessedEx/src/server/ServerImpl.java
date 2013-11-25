@@ -13,7 +13,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 	
 	public ServerImpl() throws RemoteException {
 		super();
-		this.AM = new AuctionManager();
+		this.AM = new AuctionManager(1000);
 		this.nextID = -1;
 	}
 
@@ -25,7 +25,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 	
 	@Override
 	public int createAuction(String name, int minValue, ClientInterface c, int clientID, long timeout) throws RemoteException {
-		AuctionItem a = this.AM.add(name, minValue, c, clientID, timeout);
+		Auction a = this.AM.add(name, minValue, c, clientID, timeout);
 		System.out.println("Auction created: " + name + ", " + minValue);
 		return a.getUUID();
 	}

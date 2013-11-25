@@ -1,0 +1,140 @@
+package client;
+
+import java.rmi.RemoteException;
+import java.util.Scanner;
+
+import server.ServerInterface;
+
+public class UserInterface {
+
+	private Scanner in;
+	private int ID;
+	private ClientInterface CI;
+	private ServerInterface SI;
+	
+	public UserInterface(Scanner in, int ID, ClientInterface CI, ServerInterface SI){
+		this.in = in;
+		this.CI = CI;
+		this.SI = SI;
+	}
+	
+	public void start(){
+		this.help();
+		String command;
+		while(true){
+			System.out.print("bidding> ");
+			command = in.nextLine();
+			if (command.equals("h")){
+				this.help();
+				continue;
+			}
+			else if (command.equals("q")){
+				break;
+			}
+			else if (command.equals("n")){
+				this.newItem();
+			}
+			else if (command.equals("l")){
+				this.list();
+			}
+			else if (command.equals("b")){
+				this.bid();
+			}
+			else if (command.equals("i")){
+				this.history();
+			}
+			else {
+				this.unknownCommand();
+			}
+		}
+	}
+		
+	private void newItem(){
+		System.out.print("\tName your item: ");
+		String name = in.nextLine();
+		
+		System.out.print("\tGive your item a price: ");
+		int price = Integer.parseInt(in.nextLine().trim());
+		
+		System.out.print("\tHow many minutes from now should it end?: ");
+		long timeout = Long.parseLong(in.nextLine().trim());
+		timeout = 60000 * timeout; //minutes to milliseconds conversion
+		
+		try {
+			SI.createAuction(name, price, this.CI, this.ID, timeout);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void list(){
+		String[] auctions = null;
+		try {
+			auctions = SI.listAuctions(true);
+		} catch (RemoteException e){
+			e.printStackTrace();
+			return;
+		}
+		
+		for (String A : auctions){
+			System.out.println(A);
+		}
+	}
+	
+	private void bid(){
+		System.out.print("\tEnter ID of item: ");
+		int UUID = Integer.parseInt(in.nextLine().trim());
+		
+		System.out.print("\tEnter bid: ");
+		int bid = Integer.parseInt(in.nextLine().trim());
+		
+		boolean success = false;
+		
+		try {
+			success = SI.bidOnItem(UUID, bid, CI, ID);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		if (success){
+			System.out.println("\tSucceeded in bidding on " + UUID);
+		}
+		else {
+			System.out.println("\tUnsuccesful in bidding on " + UUID);
+		}
+	}
+	
+	private void history(){
+		System.out.print("\tEnder ID of item: ");
+		int UUID = Integer.parseInt(in.nextLine().trim());
+		
+		String[] history = null;
+		
+		try {
+			history = SI.getHistory(UUID);
+		} catch (RemoteException e){
+			e.printStackTrace();
+		}
+		
+		if (history != null){
+			for (String s: history){
+				System.out.println(s);
+			}
+		}
+	}
+	
+	private void help(){
+		String help = "\th\t-\tDisplays this help message.\n"
+				+"\tn\t-\tCreates a new auction.\n"
+				+ "\tl\t-\tLists all auctions that are open.\n"
+				+ "\tb\t-\tBid on an auction.\n"
+				+ "\ti\t-\tInformation on an items bidding history\n"
+				+ "\tq\t-\tExit the application.";
+		System.out.println(help);
+	}
+	
+	private void unknownCommand(){
+		String unknownCommand = "\tUnrecognised command. Type 'h' for help.";
+		System.out.println(unknownCommand);
+	}
+}

@@ -9,15 +9,12 @@ import client.ClientInterface;
 import core.MessageType;
 
 @SuppressWarnings("serial")
-public class AuctionItem extends UnicastRemoteObject{
+public class Auction extends UnicastRemoteObject{
 	
 	private int uuid;
 	private String name;
 	
-	private AuctionThread AT = null;
-	private boolean isActive;
-	private long timeout;
-	private boolean bidding;
+	private boolean isActive;	
 	
 	private int currentMaxBid;
 	private int minimumPrice;
@@ -29,7 +26,7 @@ public class AuctionItem extends UnicastRemoteObject{
 	private HashMap<ClientInterface, Integer> bidders;
 	private ArrayList<String> history;
 
-	public AuctionItem(int uuid, String name, int minimumPrice, ClientInterface c, int ID, long timeout) throws RemoteException {
+	public Auction(int uuid, String name, int minimumPrice, ClientInterface c, int ID) throws RemoteException {
 		super();
 		this.uuid = uuid;
 		this.name = name;
@@ -44,20 +41,12 @@ public class AuctionItem extends UnicastRemoteObject{
 				this.name + " with reserve of " + this.minimumPrice);
 		
 		this.isActive = true;
-		this.timeout = timeout;
-		this.bidding = false;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 	
-	public void start(){
-		if (isActive && this.AT == null){
-			this.AT = new AuctionThread();
-			new Thread(this.AT).start();
-		}
-	}
 
 	public int getUUID() {
 		return this.uuid;
@@ -69,7 +58,6 @@ public class AuctionItem extends UnicastRemoteObject{
 
 	public synchronized boolean attemptBid(int bid, ClientInterface ci, int clientID) {
 		if (isActive && bid > currentMaxBid && !ci.equals(owner)) {
-			this.bidding = true;
 			boolean leaderChanged = false;
 			ClientInterface oldLeader = null;
 			bidders.put(ci, bid);
@@ -125,7 +113,6 @@ public class AuctionItem extends UnicastRemoteObject{
 					RE.printStackTrace();
 				}
 			}
-			this.bidding = false;
 			notifyAll();
 			return leaderChanged;
 		}
@@ -141,7 +128,7 @@ public class AuctionItem extends UnicastRemoteObject{
 		return this.history.toArray(array);
 	}
 	
-	private synchronized void close(){
+	public synchronized void close(){
 		System.out.println("CLOSING");
 		this.isActive = false;
 
@@ -191,25 +178,5 @@ public class AuctionItem extends UnicastRemoteObject{
 	@Override
 	public String toString() {
 		return this.name;
-	}
-	
-	private class AuctionThread implements Runnable{
-		
-		@Override
-		public void run() {
-			try {
-				System.out.println(timeout);
-				Thread.sleep(timeout);
-				if (bidding){
-					try{
-						wait();
-					}
-					catch (InterruptedException IE){}
-				}
-				close();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

@@ -8,18 +8,22 @@ import client.ClientInterface;
 
 public class AuctionManager {
 
-	private HashMap<Integer, AuctionItem> auctions;
+	private HashMap<Integer, Auction> auctions;
 	private int nextUUID = 0;
+	private long archiveTime;
 	
-	public AuctionManager(){
-		auctions = new HashMap<Integer, AuctionItem>();
+	
+	public AuctionManager(long archiveTime){
+		this.auctions = new HashMap<Integer, Auction>();
+		this.archiveTime = archiveTime;
 	}
 	
-	public synchronized AuctionItem add(String name, int minimumPrice, ClientInterface c, int clientID, long timeout){
-		AuctionItem a = null;
+	public synchronized Auction add(String name, int minimumPrice, ClientInterface c, int clientID, long timeout){
+		Auction a = null;
 		try {
-			a = new AuctionItem(nextUUID, name, minimumPrice, c, clientID, timeout);
-			a.start();
+			a = new Auction(nextUUID, name, minimumPrice, c, clientID);
+			AuctionEndingThread AET = new AuctionEndingThread(a.getUUID(), timeout);
+			new Thread(AET).start();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
@@ -30,7 +34,7 @@ public class AuctionManager {
 	}
 	
 	public synchronized boolean bidOn(int UUID, int bid, ClientInterface c, int clientID){
-		AuctionItem a = auctions.get(UUID);
+		Auction a = auctions.get(UUID);
 		if (a == null){
 			return false;
 		}
@@ -39,7 +43,7 @@ public class AuctionManager {
 	
 	public synchronized String[] list(boolean active){
 		ArrayList<String> sa = new ArrayList<String>(auctions.size());
-		for (AuctionItem a : auctions.values()){
+		for (Auction a : auctions.values()){
 			sa.add(a.getUUID() + " " + a.getName() + " " 
 					+ a.getCurrentMaxBid() + " " + a.reserveMet());
 		}
@@ -50,9 +54,58 @@ public class AuctionManager {
 	}
 	
 	public synchronized String[] getHistory(int UUID){
-		AuctionItem a = auctions.get(UUID);
+		Auction a = auctions.get(UUID);
 		if (a == null) { return new String[0]; }
 		return a.getHistory();
+	}
+	
+	private synchronized void archive(int UUID){
+		this.auctions.remove(UUID);
+	}
+	
+	private class AuctionEndingThread implements Runnable{
+
+		private long timeout;
+		private int auction;
+		
+		public AuctionEndingThread(int auction, long timeout){
+			this.auction = auction;
+			this.timeout = timeout;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(timeout);
+				System.out.println("CLOSING AUCTION");
+				auctions.get(auction).close();
+				AuctionArchiveThread AAT = new AuctionArchiveThread(auction);
+				new Thread(AAT).start();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private class AuctionArchiveThread implements Runnable{
+		
+		private int auction;
+		
+		public AuctionArchiveThread(int auction){
+			this.auction = auction;
+		}
+		
+		@Override
+		public void run(){
+			try {
+				Thread.sleep(archiveTime);
+				System.out.println("ARCHIVING AUCTION");
+				archive(auction);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 }
