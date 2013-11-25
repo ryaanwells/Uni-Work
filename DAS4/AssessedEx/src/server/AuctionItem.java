@@ -144,6 +144,22 @@ public class AuctionItem extends UnicastRemoteObject{
 	private synchronized void close(){
 		System.out.println("CLOSING");
 		this.isActive = false;
+
+		try {
+			if (this.reserveMet()) {
+				this.owner.update(MessageType.SOLD, "Your item " + this.name
+						+ " has been sold for " + this.currentMaxBid);
+			} else {
+				this.owner.update(MessageType.NOT_SOLD,
+						"Reserve was not met on " + this.name
+								+ " when auction ended at "
+								+ this.currentMaxBid + ". Reserve was "
+								+ this.minimumPrice);
+			}
+		} catch (java.rmi.RemoteException RE) {
+			RE.printStackTrace();
+		}
+
 		for (ClientInterface CI: this.bidders.keySet()){
 			try {
 				if (CI.equals(this.maxBidder)){
@@ -154,17 +170,6 @@ public class AuctionItem extends UnicastRemoteObject{
 					else {
 						CI.update(MessageType.NOT_SOLD, "Reserve was not met on " + this.name +
 								" when auction ended at " + this.currentMaxBid);
-					}
-				}
-				else if (CI.equals(this.owner)){
-					if (this.reserveMet()){
-						CI.update(MessageType.SOLD, "Your item " + this.name + 
-								" has been sold for " + this.currentMaxBid);
-					}
-					else {
-						CI.update(MessageType.NOT_SOLD, "Reserve was not met on " + this.name +
-								" when auction ended at " + this.currentMaxBid + 
-								". Reserve was " + this.minimumPrice);
 					}
 				}
 				else {

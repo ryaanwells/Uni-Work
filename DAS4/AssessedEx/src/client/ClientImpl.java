@@ -36,6 +36,10 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInterface {
 		case AUCTION_WIN:
 			System.out.println("Auction Win");
 			break;
+		case SOLD:
+			System.out.println("Sold");
+		case NOT_SOLD:
+			System.out.println("Not sold");
 		default:
 			break;
 		}
