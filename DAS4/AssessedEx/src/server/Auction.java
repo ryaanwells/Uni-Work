@@ -57,7 +57,7 @@ public class Auction extends UnicastRemoteObject{
 	}
 
 	public synchronized boolean attemptBid(int bid, ClientInterface ci, int clientID) {
-		if (isActive && bid > currentMaxBid && !ci.equals(owner)) {
+		if (isActive && bid > currentMaxBid && (owner != null && !ci.equals(owner))) {
 			boolean leaderChanged = false;
 			ClientInterface oldLeader = null;
 			bidders.put(ci, bid);
@@ -104,12 +104,14 @@ public class Auction extends UnicastRemoteObject{
 					RE.printStackTrace();
 				}
 				try {
-					this.owner.update(MessageType.BID, "Item: " + this.name + " (" 
-							+ this.uuid + "). Max bid is: "
-							+ this.currentMaxBid);
+					if (owner != null){
+						this.owner.update(MessageType.BID, "Item: " + this.name + " (" 
+								+ this.uuid + "). Max bid is: "
+								+ this.currentMaxBid);
+					}
 				} catch (java.rmi.RemoteException RE){
 					System.err.println("AUCTION " + this.uuid
-							+ ": Remote Error for Client: " + this.owner + "\n" + RE);
+							+ ": Remote Error for Client: " + this.ownerID + "\n" + RE);
 					RE.printStackTrace();
 				}
 			}
@@ -129,19 +131,20 @@ public class Auction extends UnicastRemoteObject{
 	}
 	
 	public synchronized void close(){
-		System.out.println("CLOSING");
 		this.isActive = false;
 
 		try {
-			if (this.reserveMet()) {
-				this.owner.update(MessageType.SOLD, "Your item " + this.name
-						+ " has been sold for " + this.currentMaxBid);
-			} else {
-				this.owner.update(MessageType.NOT_SOLD,
-						"Reserve was not met on " + this.name
+			if (this.owner != null){
+				if (this.reserveMet()) {
+					this.owner.update(MessageType.SOLD, "Your item " + this.name
+							+ " has been sold for " + this.currentMaxBid);
+				} else {
+					this.owner.update(MessageType.NOT_SOLD,
+							"Reserve was not met on " + this.name
 								+ " when auction ended at "
 								+ this.currentMaxBid + ". Reserve was "
 								+ this.minimumPrice);
+				}
 			}
 		} catch (java.rmi.RemoteException RE) {
 			RE.printStackTrace();

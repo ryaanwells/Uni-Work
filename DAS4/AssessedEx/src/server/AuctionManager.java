@@ -77,7 +77,6 @@ public class AuctionManager {
 		public void run() {
 			try {
 				Thread.sleep(timeout);
-				System.out.println("CLOSING AUCTION");
 				auctions.get(auction).close();
 				AuctionArchiveThread AAT = new AuctionArchiveThread(auction);
 				new Thread(AAT).start();
@@ -99,7 +98,6 @@ public class AuctionManager {
 		public void run(){
 			try {
 				Thread.sleep(archiveTime);
-				System.out.println("ARCHIVING AUCTION");
 				archive(auction);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
