@@ -109,8 +109,8 @@ public class Auction extends UnicastRemoteObject {
 					}
 				} catch (java.rmi.RemoteException RE) {
 					System.err.println("AUCTION " + this.uuid
-							+ ": Remote Error for Client: " + ci + "\n" + RE);
-					RE.printStackTrace();
+							+ ": Remote Error for Client: " + ci + "\n" + RE 
+							+ "\nCould not reach client.");
 				}
 				try {
 					if (owner != null) {
@@ -121,8 +121,8 @@ public class Auction extends UnicastRemoteObject {
 				} catch (java.rmi.RemoteException RE) {
 					System.err.println("AUCTION " + this.uuid
 							+ ": Remote Error for Client: " + this.ownerID
-							+ "\n" + RE);
-					RE.printStackTrace();
+							+ "\n" + RE + "\nCould not reach client.");
+					
 				}
 			}
 			notifyAll();

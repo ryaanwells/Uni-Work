@@ -55,7 +55,7 @@ public class Client {
 		try {
 			ID = SI.getNextID();
 		} catch (RemoteException RE){
-			System.out.println(RE);
+			RE.printStackTrace();
 			System.exit(0);
 		}
 		
