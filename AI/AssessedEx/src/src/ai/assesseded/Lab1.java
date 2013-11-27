@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import ai.io.ProcessFile;
 import ai.signals.*;
 
-public class Main {
+public class Lab1 {
 	
 	public static void main(String args[]){
 		String filename = System.getProperty("user.dir") + "/laboratory.dat";
@@ -65,6 +65,9 @@ public class Main {
 		} catch(IOException e){
 			System.err.println("Could not create buffered writer for energyData.txt");
 		}
+		System.out.println(energy.getAverage(false));
+		System.out.println(magnitude.getAverage(false));
+		System.out.println(zeroCrossing.getAverage(false));
 		System.out.println("Done.");
 	}
 	
