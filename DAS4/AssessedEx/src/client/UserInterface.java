@@ -9,11 +9,13 @@ public class UserInterface {
 
 	private Scanner in;
 	private int ID;
+	private ClientImpl C;
 	private ClientInterface CI;
 	private ServerInterface SI;
 	
-	public UserInterface(Scanner in, int ID, ClientInterface CI, ServerInterface SI){
+	public UserInterface(Scanner in, int ID, ClientImpl C, ClientInterface CI, ServerInterface SI){
 		this.in = in;
+		this.C = C;
 		this.CI = CI;
 		this.SI = SI;
 	}
@@ -43,6 +45,9 @@ public class UserInterface {
 			}
 			else if (command.equals("i")){
 				this.history();
+			}
+			else if (command.equals("m")){
+				this.messages();
 			}
 			else {
 				this.unknownCommand();
@@ -133,6 +138,15 @@ public class UserInterface {
 			for (String s: history){
 				System.out.println(s);
 			}
+		}
+	}
+	
+	private void messages(){
+		System.out.println("\tGetting messages...");
+		String[] messages = C.getMessages();
+		if (messages.length == 0){ System.out.println("\tNo new messages"); return;}
+		for (String s: messages){
+			System.out.println("\t" + s);
 		}
 	}
 	

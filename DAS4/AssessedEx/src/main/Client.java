@@ -61,12 +61,14 @@ public class Client {
 		
 		System.out.println("Done.");
 		
+		ClientImpl C = null;
 		ClientInterface CI = null;
 		
 		System.out.print("Creating user... ");
 		
 		try {
-			CI = new ClientImpl(ID);
+			C = new ClientImpl(ID); 
+			CI = C;
 		} catch (RemoteException RE){
 			RE.printStackTrace();
 			System.exit(0);
@@ -75,7 +77,7 @@ public class Client {
 		System.out.println("Done.");
 		
 		Scanner in = new Scanner(System.in);
-		UserInterface UI = new UserInterface(in, ID, CI, SI);
+		UserInterface UI = new UserInterface(in, ID, C, CI, SI);
 		UI.start();
 
 		in.close();

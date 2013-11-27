@@ -1,4 +1,0 @@
-Item A:1:1
-My Old Socks:10:5
-The Answer To Life:42:42
-It's a magic number:3:3

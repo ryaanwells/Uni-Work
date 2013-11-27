@@ -11,41 +11,23 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInterface {
 
 	private int id;
 	private ArrayList<String> messages;
-	private ArrayList<String> alerts;
 	
 	public ClientImpl(int id) throws RemoteException{
 		super();
 		this.id = id;
 		this.messages = new ArrayList<String>(20);
-		this.alerts = new ArrayList<String>(20);
 	}
 	
 	@Override
-	public void update(MessageType mt, String message) throws RemoteException {
-		switch (mt){
-		case BID:
-			this.messages.add(message);
-			break;
-		case MAX_BIDDER:
-			this.alerts.add(message);
-			break;
-		case OUTBID:
-			this.alerts.add(message);
-			break;
-		case AUCTION_END:
-			this.messages.add(message);
-			break;
-		case AUCTION_LOSE:
-			this.messages.add(message);
-			break;
-		case AUCTION_WIN:
-			this.alerts.add(message);
-			break;
-		case SOLD:
-			this.alerts.add(message);
-		case NOT_SOLD:
-			this.alerts.add(message);
-		}
+	public synchronized void update(MessageType mt, String message) throws RemoteException {
+		this.messages.add(message);
+	}
+	
+	public synchronized String[] getMessages(){
+		String[] out = new String[this.messages.size()];
+		out = this.messages.toArray(out);
+		this.messages.clear();
+		return out;
 	}
 	
 	@Override
