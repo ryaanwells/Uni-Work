@@ -41,14 +41,22 @@ public class AuctionManager {
 		return a.attemptBid(bid, c, clientID);
 	}
 	
-	public synchronized String[] list(boolean active){
-		ArrayList<String> sa = new ArrayList<String>(auctions.size());
+	public synchronized String[][] list(boolean active){
+		ArrayList<String[]> sa = new ArrayList<String[]>(auctions.size());
+		String[] data;
 		for (Auction a : auctions.values()){
-			sa.add(a.getUUID() + " " + a.getName() + " " 
-					+ a.getCurrentMaxBid() + " " + a.reserveMet());
+			if (a.isActive() == active){
+				data = new String[4];
+				data[0] = String.valueOf(a.getUUID());
+				data[1] = a.getName();
+				data[2] = String.valueOf(a.getCurrentMaxBid());
+				data[3] = String.valueOf(a.reserveMet());
+				
+				sa.add(data);
+			}
 		}
 		sa.trimToSize();
-		String[] ai = new String[sa.size()];
+		String[][] ai = new String[sa.size()][4];
 		ai = sa.toArray(ai);
 		return ai;
 	}

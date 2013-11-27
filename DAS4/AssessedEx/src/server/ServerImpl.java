@@ -73,7 +73,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 	}
 
 	@Override
-	public String[] listAuctions(boolean active) throws RemoteException {
+	public String[][] listAuctions(boolean active) throws RemoteException {
 		return this.AM.list(active);
 	}
 	

@@ -19,10 +19,11 @@ public class UserInterface {
 	}
 	
 	public void start(){
+		this.initial();
 		this.help();
 		String command;
 		while(true){
-			System.out.print("bidding> ");
+			System.out.print("bidRMI> ");
 			command = in.nextLine();
 			if (command.equals("h")){
 				this.help();
@@ -68,16 +69,28 @@ public class UserInterface {
 	}
 	
 	private void list(){
-		String[] auctions = null;
+		String[][] auctions = null;
+		boolean active = true;
+		
+		System.out.println("Do you wish to see open [Y] or closed auctions [n]? :");
+		String command = in.nextLine().trim();
+		
+		if (command.equals("n") || command.equals("N")){
+			active = false;
+		}
+		
 		try {
-			auctions = SI.listAuctions(true);
+			auctions = SI.listAuctions(active);
 		} catch (RemoteException e){
 			e.printStackTrace();
 			return;
 		}
 		
-		for (String A : auctions){
-			System.out.println(A);
+		System.out.println("\t| Item ID |   Item Name  | Current Bid | Reserve Met |");
+		System.out.println("\t|----------------------------------------------------|");
+		for (String[] A : auctions){
+			System.out.println("\t\t" + A[0] + "\t" + A[1] + "\t" + A[2] + "\t" + A[3]);
+			System.out.println("\t|----------------------------------------------------|");
 		}
 	}
 	
@@ -123,6 +136,25 @@ public class UserInterface {
 		}
 	}
 	
+	private void initial(){
+		System.out.println();
+		System.out.println("\t|-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-|\n" +
+						   "\t|                                                 |\n" +
+				           "\t|                   Welcome to                    |\n" +
+						   "\t|                                                 |\n" +
+						   "\t|       #               # #####  #     #  #####   |\n" +
+						   "\t|      #     #         #  #    # # # # #   ##     |\n" +
+						   "\t|     #     ##        #   #    # #  #  #    #     |\n" +
+						   "\t|    #####       #####    #####  #     #    #     |\n" +
+						   "\t|   #    #  #   #   #     #  #   #     #    #     |\n" +
+						   "\t|  #    #   #  #   #      #   #  #     #    ##    |\n" +
+						   "\t|  #####   ##  ####       #    # #     #  #####   |\n" +
+						   "\t|                                                 |\n" +
+						   "\t|-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-+=+-|\n"
+				);
+		System.out.println();
+	}
+	
 	private void help(){
 		String help = "\th\t-\tDisplays this help message.\n"
 				+"\tn\t-\tCreates a new auction.\n"
@@ -134,7 +166,8 @@ public class UserInterface {
 	}
 	
 	private void unknownCommand(){
-		String unknownCommand = "\tUnrecognised command. Type 'h' for help.";
+		String unknownCommand = "\tUnrecognised command. The available commands are: ";
 		System.out.println(unknownCommand);
+		this.help();
 	}
 }

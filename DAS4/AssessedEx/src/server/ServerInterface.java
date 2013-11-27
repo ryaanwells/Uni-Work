@@ -13,7 +13,7 @@ public interface ServerInterface extends java.rmi.Remote{
 	public boolean bidOnItem(int itemID, int maxBid, ClientInterface c, int clientID)
 		throws java.rmi.RemoteException;
 	
-	public String[] listAuctions(boolean active)
+	public String[][] listAuctions(boolean active)
 		throws java.rmi.RemoteException;
 	
 	public String[] getHistory(int itemID)
