@@ -13,20 +13,30 @@ public class Server {
 
 	public static void main(String args[]) {
 		System.out.println("Starting Server.");
+		int port = 1099;
+		
+		if (args.length>0){
+			try {
+				port = Integer.parseInt(args[0]);
+			} catch (NumberFormatException MIE){
+				System.out.println("Port was not an integer, using " + port);
+			}
+		}
 		try {
 			System.out.print("Getting Registry... ");
-			Registry registry = LocateRegistry.getRegistry(1099);
+			Registry registry = LocateRegistry.getRegistry(port);
 			registry.list();
 			System.out.println("Done.");
 		} catch (RemoteException e) {
 			try {
 				System.out.println("Failed - no registry started.");
 				System.out.print("Starting registry... ");
-				LocateRegistry.createRegistry(1099);
+				LocateRegistry.createRegistry(port);
 				System.out.println("Done.");
 			} catch (RemoteException e1) {
 				System.out.println("Failed. Could not start registry.");
 				e1.printStackTrace();
+				System.exit(0);
 			}
 		}
 
@@ -56,7 +66,7 @@ public class Server {
 			System.out.println("Creating Server Instance.");
 			SI = new ServerImpl(decision.equals("y") || decision.equals("Y"),
 					delay * 60000);
-			Naming.rebind("rmi://localhost:1099/bidding/", SI);
+			Naming.rebind("rmi://localhost:" + port + "/bidding/", SI);
 			System.out.println("Running!");
 		} catch (RemoteException e) {
 			e.printStackTrace();

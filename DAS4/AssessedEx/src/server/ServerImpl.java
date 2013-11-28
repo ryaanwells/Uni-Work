@@ -56,7 +56,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInterface{
 	}
 
 	@Override
-	public int getNextID(){
+	public synchronized int getNextID(){
 		nextID++;
 		return nextID;
 	}

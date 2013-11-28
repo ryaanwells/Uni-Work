@@ -52,11 +52,11 @@ public class Auction extends UnicastRemoteObject {
 		return this.uuid;
 	}
 
-	public int getCurrentMaxBid() {
+	public synchronized int getCurrentMaxBid() {
 		return this.currentMaxBid;
 	}
 	
-	public boolean isActive(){
+	public synchronized boolean isActive(){
 		return this.isActive;
 	}
 
@@ -66,26 +66,50 @@ public class Auction extends UnicastRemoteObject {
 				&& (this.owner == null || (this.owner != null && !this.owner.equals(ci)))) {
 			boolean leaderChanged = false;
 			ClientInterface oldLeader = null;
-			this.bidders.put(ci, bid);
 			if (this.maxBidder != null && this.maxBidder.equals(ci)) {
 				leaderChanged = false;
-				history.add("Increased max bid of leader " + clientID + " to £"
-						+ bid);
+				if (bid > this.currentMaxBid){
+					this.bidders.put(ci, bid);
+					if (!this.reserveMet()){
+						if (bid >= this.minimumPrice){
+							this.currentMaxBid = this.minimumPrice;
+						}
+						else {
+							this.currentMaxBid = bid;
+						}
+					}
+					history.add("Increased max bid of leader " + clientID + " to £"
+							+ bid);
+					return true;
+				}
+				else {
+					return false;
+				}
 			} else if (maxBidder == null || bid > bidders.get(maxBidder)) {
+				this.bidders.put(ci, bid);
 				leaderChanged = true;
 				oldLeader = this.maxBidder;
+				if (!this.reserveMet()){
+					if (bid >= this.minimumPrice){
+						this.currentMaxBid = this.minimumPrice;
+					}
+					else {
+						this.currentMaxBid = bid;
+					}
+				}
+				else {
+					this.currentMaxBid = bidders.get(oldLeader) + 1;
+				}
 				this.maxBidder = ci;
 				this.maxBidderID = clientID;
 				this.currentMaxBid = bid;
 				history.add("Bid: " + maxBidderID + " bids £"
 						+ this.currentMaxBid);
 			} else if (bidders.get(maxBidder) > bid) {
+				this.bidders.put(ci, bid);
 				this.currentMaxBid = bid + 1;
 				history.add("Bid: " + clientID + " bids £" + bid);
 				history.add("Bid: " + maxBidderID + "bids £"
-						+ this.currentMaxBid);
-			} else {
-				history.add("Bid: " + clientID + " matches leading bid of £"
 						+ this.currentMaxBid);
 			}
 
@@ -112,20 +136,21 @@ public class Auction extends UnicastRemoteObject {
 							+ ": Remote Error for Client: " + ci + "\n" + RE 
 							+ "\nCould not reach client.");
 				}
-				try {
-					if (owner != null) {
-						this.owner.update(MessageType.BID, "Item: \"" + this.name
-								+ "\" (" + this.uuid + "). Max bid is: £"
-								+ this.currentMaxBid);
-					}
-				} catch (java.rmi.RemoteException RE) {
-					System.err.println("AUCTION " + this.uuid
-							+ ": Remote Error for Client: " + this.ownerID
-							+ "\n" + RE + "\nCould not reach client.");
-					
-				}
 			}
-			notifyAll();
+			
+			try {
+				if (owner != null) {
+					this.owner.update(MessageType.BID, "Item: \"" + this.name
+							+ "\" (" + this.uuid + "). Max bid is: £"
+							+ this.currentMaxBid);
+				}
+			} catch (java.rmi.RemoteException RE) {
+				System.err.println("AUCTION " + this.uuid
+						+ ": Remote Error for Client: " + this.ownerID
+						+ "\n" + RE + "\nCould not reach client.");
+				
+			}
+			
 			return leaderChanged;
 		}
 		this.history.add("Attempted bid by " + clientID
@@ -133,11 +158,11 @@ public class Auction extends UnicastRemoteObject {
 		return false;
 	}
 
-	public boolean reserveMet() {
+	public synchronized boolean reserveMet() {
 		return minimumPrice <= currentMaxBid;
 	}
 
-	public String[] getHistory() {
+	public synchronized String[] getHistory() {
 		String[] array = new String[this.history.size()];
 		return this.history.toArray(array);
 	}
@@ -150,7 +175,7 @@ public class Auction extends UnicastRemoteObject {
 				if (this.reserveMet()) {
 					this.owner.update(MessageType.SOLD, "Your item \""
 							+ this.name + "\" has been sold for £"
-							+ this.currentMaxBid);
+							+ this.currentMaxBid + " to " + this.maxBidderID);
 				} else {
 					this.owner.update(MessageType.NOT_SOLD,
 							"Reserve was not met on \"" + this.name
@@ -179,7 +204,7 @@ public class Auction extends UnicastRemoteObject {
 					if (this.reserveMet()) {
 						CI.update(MessageType.AUCTION_END, "Auction ended for \""
 								+ this.name + "\" at £" + this.currentMaxBid
-								+ ". Item was sold");
+								+ ". Item was sold to " + this.maxBidderID);
 					} else {
 						CI.update(MessageType.AUCTION_END, "Auction ended for \""
 								+ this.name + "\" at £" + this.currentMaxBid

@@ -33,7 +33,7 @@ public class AuctionManager {
 		return a;
 	}
 	
-	public synchronized boolean bidOn(int UUID, int bid, ClientInterface c, int clientID){
+	public boolean bidOn(int UUID, int bid, ClientInterface c, int clientID){
 		Auction a = auctions.get(UUID);
 		if (a == null){
 			return false;
@@ -61,7 +61,7 @@ public class AuctionManager {
 		return ai;
 	}
 	
-	public synchronized String[] getHistory(int UUID){
+	public String[] getHistory(int UUID){
 		Auction a = auctions.get(UUID);
 		if (a == null) { return new String[0]; }
 		return a.getHistory();
@@ -88,9 +88,7 @@ public class AuctionManager {
 				auctions.get(auction).close();
 				AuctionArchiveThread AAT = new AuctionArchiveThread(auction);
 				new Thread(AAT).start();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			} catch (InterruptedException e) {}
 		}
 	}
 	
@@ -107,9 +105,7 @@ public class AuctionManager {
 			try {
 				Thread.sleep(archiveTime);
 				archive(auction);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			} catch (InterruptedException e) {}
 			
 		}
 	}

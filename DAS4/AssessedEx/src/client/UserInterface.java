@@ -62,8 +62,20 @@ public class UserInterface {
 		System.out.print("\tGive your item a price: ");
 		int price = Integer.parseInt(in.nextLine().trim());
 		
-		System.out.print("\tHow many minutes from now should it end?: ");
+		while (price < 0){
+			System.out.print("\tThe price cannot be negative!: ");
+			price = Integer.parseInt(in.nextLine().trim());
+		}
+		
+		System.out.print("\tHow many minutes from now should it end?: ");		
 		long timeout = Long.parseLong(in.nextLine().trim());
+		
+		while (timeout < 0){
+			System.out.println("\tYou cannot finish an auction before it begins!");
+			System.out.print("\tEnter a value in minutes greater than 0:");
+			timeout = Long.parseLong(in.nextLine().trim());
+		}
+		
 		timeout = 60000 * timeout; //minutes to milliseconds conversion
 		
 		try {
@@ -77,7 +89,7 @@ public class UserInterface {
 		String[][] auctions = null;
 		boolean active = true;
 		
-		System.out.println("Do you wish to see open [Y] or closed auctions [n]? :");
+		System.out.print("Do you wish to see open [Y] or closed auctions [n]? :");
 		String command = in.nextLine().trim();
 		
 		if (command.equals("n") || command.equals("N")){
@@ -175,6 +187,7 @@ public class UserInterface {
 				+ "\tl\t-\tLists all auctions that are open.\n"
 				+ "\tb\t-\tBid on an auction.\n"
 				+ "\ti\t-\tInformation on an items bidding history\n"
+				+ "\tm\t-\tView unread messages\n"
 				+ "\tq\t-\tExit the application.";
 		System.out.println(help);
 	}
