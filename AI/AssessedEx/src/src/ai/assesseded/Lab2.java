@@ -1,89 +1,61 @@
 package src.ai.assesseded;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Scanner;
 
-import ai.signals.Signal;
-import ai.signals.SignalEnergy;
-import ai.signals.SignalMagnitude;
-import ai.signals.SignalProcess;
-import ai.signals.SignalZeroCrossingRate;
+import ai.core.Classify;
+import ai.io.ProcessSamples;
+
 
 public class Lab2 {
 
 	public static void main(String[] args) {
-		SignalProcess SE = new SignalEnergy();
-		SignalProcess SM = new SignalMagnitude();
-		SignalProcess SZ = new SignalZeroCrossingRate();
+		ProcessSamples PS = new ProcessSamples("silenceValues.txt", "speechValues.txt");
+		PS.process(0.001, 30, 300);
+				
+		double[][] silences = PS.getSilences();
+		double[][] speeches = PS.getSpeeches();
 		
-		double scaleFactor = 0.001;
-		int sampleLength = 300;
-		int windowSize = 30;
-
-		Path path;
-		Scanner scanner;
+		double[][] testSilence;
+		double[][] testSpeech;
+		double[][] groundSilence;
+		double[][] groundSpeech;
 		
-		double[] data;
-		Signal signal;
-		Signal energySignal;
-		Signal magnitudeSignal;
-		Signal zeroCrossingSignal;
-		
-		Path writePath = Paths.get("speechValues.txt");
-		BufferedWriter out = null;;
-		
-		try {
-			Files.deleteIfExists(writePath);
-			writePath = Files.createFile(writePath);
-		} catch (IOException IOE){
-			System.err.println("Could not instantiate file.");
-			System.exit(0);
-		}
-		
-		try {
-			out = Files.newBufferedWriter(writePath, Charset.defaultCharset());
-		} catch (IOException IOE){
-			System.err.println("Could not create writer for file.");
-			System.exit(0);
-		}
-		
-		for (int i = 1; i < 51; i++){
-			path = Paths.get("audio/speech_" + (i > 9 ? i : "0" + i) + ".dat");
-			try {
-				scanner = new Scanner(path);
-			} catch (IOException e) {
-				System.out.println("Could not find audio sample for audio/silence_" + (i > 9 ? i : "0" + i) + ".dat"); 
-				continue;
+		double correct = 0;
+		double incorrect = 0;
+		Classify C;
+		for (int initial = 0; initial < 50; initial+=5){
+			testSilence = new double[5][3];
+			testSpeech = new double[5][3];
+			groundSilence = new double[45][3];
+			groundSpeech = new double[45][3];
+			for (int k = 0; k < 50; k++){
+				if (k >= initial && k < initial+5){
+					testSilence[k % 5] = silences[k];
+					testSpeech[k % 5] = speeches[k];
+				}
+				else {
+					groundSilence[k <= initial? k : k - 5] = silences[k];
+					groundSpeech[k <= initial? k : k - 5] = speeches[k];
+				}
 			}
-			int count = 0;
-			data = new double[2400];
-			while (scanner.hasNext()){
-				data[count] = scanner.nextInt() * scaleFactor;
-				count++;
-			}
-			signal = new Signal(data, sampleLength);
-			energySignal = SE.process(signal, windowSize);
-			magnitudeSignal = SM.process(signal, windowSize);
-			zeroCrossingSignal = SZ.process(signal, windowSize);
 			
-			System.out.format("%.2f %.2f %.2f \n", Math.log(energySignal.getAverage(false)),
-					Math.log(magnitudeSignal.getAverage(false)),
-					zeroCrossingSignal.getAverage(false));
+			C = new Classify(groundSilence, groundSpeech);
 			
-			try {
-				out.write(String.format("%.2f %.2f %.2f \n", Math.log(energySignal.getAverage(false)),
-						Math.log(magnitudeSignal.getAverage(false)),
-						zeroCrossingSignal.getAverage(false)));
-			} catch (IOException e) {
-				e.printStackTrace();
+			for (int i = 0; i < testSilence.length; i++){
+				if (C.isSpeech(testSilence[i][0], testSilence[i][1], testSilence[i][2])){
+					incorrect++;
+				}
+				else {
+					correct++;
+				}
+				
+				if (C.isSpeech(testSpeech[i][0], testSpeech[i][1], testSpeech[i][2])){
+					correct++;
+				}
+				else {
+					incorrect++;
+				}
 			}
 		}
-		
+		System.out.println(correct + " " + incorrect + " " + correct / (correct + incorrect));
 	}
-
 }
