@@ -22,7 +22,7 @@ public class Lab2 {
 		double correct = 0;
 		double incorrect = 0;
 		Classify C;
-		for (int initial = 0; initial < 50; initial+=5){
+		for (int initial = 0; initial <= 45; initial+=5){
 			testSilence = new double[5][3];
 			testSpeech = new double[5][3];
 			groundSilence = new double[45][3];

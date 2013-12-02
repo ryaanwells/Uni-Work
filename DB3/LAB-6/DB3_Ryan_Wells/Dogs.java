@@ -5,7 +5,10 @@ import java.util.*;
 import java.sql.*;
 
 /*
- * Completed 1-5 and 10
+ * Ryan William Wells
+ * 1002253w
+ * Time spent 5 hours
+ * 
  */
 
 public class Dogs extends JFrame {
