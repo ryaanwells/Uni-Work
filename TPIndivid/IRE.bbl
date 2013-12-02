@@ -1,7 +1,13 @@
 \begin{thebibliography}{1}
 
+\bibitem{Schwartz}
+B.~L. Schwartz.
+\newblock Possible winners in partially completed tournaments.
+\newblock {\em SIAM Rev.}, 8:302--308, 1996.
+
 \bibitem{Wayne}
 Kevin~D. Wayne.
 \newblock A new property and a faster algorithm for baseball elimination.
+\newblock {\em SIAM J. Discrete Math}, 14(2):223--229, 2001.
 
 \end{thebibliography}

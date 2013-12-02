@@ -63,7 +63,7 @@ void re_status(RegExp *re, char *buf, int size) {
 /*
  * re_destroy - return any Heap storage associated with the engine
  */
-void re_destroy(RegExp *re) {
+void re_JSdestroy(RegExp *re) {
 	if (re->status == COMPILED)
 		regfree(&(re->preg));
 	free(re);
@@ -73,7 +73,7 @@ void re_destroy(RegExp *re) {
  * re_match - check whether the supplied buffer matches the pattern
  *            return 1 if successful, 0 otherwise
  */
-int re_match(RegExp *re, char *buf) {
+int reJS_match(RegExp *re, char *buf) {
 	size_t nmatch = NPATTERNS;
 	regmatch_t pmatch[NPATTERNS];
 

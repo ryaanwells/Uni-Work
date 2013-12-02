@@ -15,6 +15,7 @@ public class ConcurrentNode {
 	public String getFileName(){
 		return fileName;
 	}
+
 	
 	public boolean isEnd(){
 		return end;

@@ -1,48 +1,45 @@
 This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
 The top-level auxiliary file: IRE.aux
 The style file: plain.bst
-Database file #1: bib.bib
-Warning--empty journal in Wayne
-Warning--empty year in Wayne
-You've used 1 entry,
+Database file #1: bibs.bib
+You've used 2 entries,
             2118 wiz_defined-function locations,
-            501 strings with 4068 characters,
-and the built_in function-call counts, 221 in all, are:
-= -- 17
-> -- 7
+            513 strings with 4205 characters,
+and the built_in function-call counts, 591 in all, are:
+= -- 58
+> -- 14
 < -- 0
-+ -- 4
-- -- 2
-* -- 13
-:= -- 45
-add.period$ -- 2
-call.type$ -- 1
-change.case$ -- 4
++ -- 7
+- -- 4
+* -- 41
+:= -- 105
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 8
 chr.to.int$ -- 0
-cite$ -- 3
-duplicate$ -- 10
-empty$ -- 18
-format.name$ -- 2
-if$ -- 39
+cite$ -- 2
+duplicate$ -- 22
+empty$ -- 54
+format.name$ -- 4
+if$ -- 122
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 7
-num.names$ -- 2
-pop$ -- 8
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 4
 preamble$ -- 1
-purify$ -- 3
+purify$ -- 6
 quote$ -- 0
-skip$ -- 6
+skip$ -- 14
 stack$ -- 0
-substring$ -- 6
-swap$ -- 0
+substring$ -- 53
+swap$ -- 2
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
-warning$ -- 2
-while$ -- 2
-width$ -- 2
-write$ -- 9
-(There were 2 warnings)
+type$ -- 8
+warning$ -- 0
+while$ -- 6
+width$ -- 3
+write$ -- 24

@@ -28,13 +28,13 @@ void re_status(RegExp *re, char *buf, int size);
 /*
  * re_destroy - return any Heap storage associated with the engine
  */
-void re_destroy(RegExp *re);
+void re_JSdestroy(RegExp *re);
 
 /*
  * re_match - check whether the supplied buffer matches the pattern
  *            return 1 if successful, 0 otherwise
  */
-int re_match(RegExp *re, char *buf);
+int reJS_match(RegExp *re, char *buf);
 
 /*
  * re_regmatch - return information about matched sub-expressions

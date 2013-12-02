@@ -1,4 +1,6 @@
-
+#include <stdlib.h>
+#include <pthread.h>
+#include <stdio.h>
 #include "tstreeset.h"
 #include "treeset.h"
 /*
@@ -32,8 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-#include <pthread.h>
+
 
 #define LOCK(ts)&((ts)->lock)
 
@@ -48,7 +49,6 @@ TSTreeSet *tstreeset_create(int (*cmpFunction)(void *, void *)) {
     TreeSet *ts = ts_create(cmpFunction);
     if(ts == NULL){
       free(tsts);
-      tsts == NULL;
     }else{
       pthread_mutexattr_t ma;
       pthread_mutexattr_init(&ma);
@@ -87,8 +87,10 @@ int tstreeset_add(TSTreeSet *tsts, void *element){
 
 Iterator *tsts_it_create(TSTreeSet *tsts){
   Iterator *it;
+  TreeSet *ts = tsts->ts;
   pthread_mutex_lock(LOCK(tsts));
-  it = ts_it_create(tsts->ts);
+  it = (ts_it_create(ts));
   pthread_mutex_unlock(LOCK(tsts));
+  if (it == NULL)  fprintf(stderr, "failed to create iterator");
   return it;
 }

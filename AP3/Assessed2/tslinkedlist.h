@@ -1,13 +1,13 @@
 #ifndef _TSLINKEDLIST_H_
 #define _TSLINKEDLIST_H_
-
+#include <pthread.h>
+#include "linkedlist.h"
 /*
  *interface definition for generic threadsafe
  *linked list implementation
  */
 
-#include <pthread.h>
-#include "linkedlist.h"
+
 
 typedef struct tslinkedlist TSLinkedList; /*opaque type definition */
 

@@ -1,4 +1,5 @@
-
+#include <stdlib.h>
+#include <pthread.h>
 #include "tslinkedlist.h"
 #include "linkedlist.h"
 /*
@@ -31,8 +32,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#include <stdlib.h>
-#include <pthread.h>
+
  
 #define LOCK(ll)&((ll)->lock)
 

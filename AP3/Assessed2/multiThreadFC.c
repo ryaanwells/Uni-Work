@@ -1,11 +1,11 @@
 #define _BSD_SOURCE 1	/* enables macros to test type of directory entry */
-
 #include <sys/types.h>
 #include <dirent.h>
 #include <regex.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "tslinkedlist.h"
 #include "tstreeset.h"
 #include "re.h"
@@ -80,7 +80,7 @@ static int processDirectory(char *dirname, TSLinkedList *tsll, int verbose) {
    char *sp;
    int len, status = 1;
    char d[4096];
-
+   fprintf(stderr, "processing directory `%s'", dirname);
    /*
     * eliminate trailing slash, if there
     */
@@ -106,7 +106,7 @@ static int processDirectory(char *dirname, TSLinkedList *tsll, int verbose) {
       goto cleanup;
    }
    tslinkedlist_lock(tsll);
-   if (!tsll_add(tsll, sp)) {
+   if (!tslinkedlist_put(tsll, sp)) {
      tslinkedlist_unlock(tsll);
       fprintf(stderr, "Error adding `%s' to linked list\n", sp);
       free(sp);
@@ -149,78 +149,84 @@ static int scmp(void *a, void *b) {
  * for entries that match, the fully qualified pathname is inserted into
  * the treeset
  */
-void *applyRe(void *args) {
+static void *applyRe(void *args) {
   ARVars *arvars = args;
   RegExp *reg = arvars->reg;
   TSLinkedList *tsll = arvars->tsll;
   TSTreeSet *tsts = arvars->tsts;
-   DIR *dd;
-   struct dirent *dent;
-   int status = 1;
-   char *dir;
-   while(1){
-     tslinkedlist_lock(tsll);
-     tslinkedlist_take(tsll,*(&dir));
-     if(*dir== '\0'){
-       tslinkedlist_put(tsll,*(&dir));
-       tslinkedlist_unlock(tsll);
-       break;
-     }
-     tslinkedlist_unlock(tsll);
-     /*
-      * open the directory
-      */
-     if ((dd = opendir(dir)) == NULL) {
-       fprintf(stderr, "Error opening directory `%s'\n", dir);
-       break;
-     }
-     /*
-      * for each entry in the directory
-      */
-     while (status && (dent = readdir(dd)) != NULL) {
-       if (strcmp(".", dent->d_name) == 0 || strcmp("..", dent->d_name) == 0)
-         continue;
-       if (!(dent->d_type & DT_DIR)) {
-         char b[4096], *sp;
-	 /*
-	  * see if filename matches regular expression
-	  */
-	 if (! re_match(reg, dent->d_name))
-	   continue;
-         sprintf(b, "%s/%s", dir, dent->d_name);
-	 /*
-	  * duplicate fully qualified pathname for insertion into treeset
-	  */
-	 if ((sp = strdup(b)) != NULL) {
-	   tstreeset_lock(tsts);
-	   if (!tsts_add(tsts, sp)) {
-	     tstreeset_unlock(tsts);
-	     fprintf(stderr, "Error adding `%s' to tree set\n", sp);
-	     free(sp);
-	     status = 0;
-	     break;
-	   }
-	   tstreeset_unlock(tsts);
-	 } else {
-	   fprintf(stderr, "Error adding `%s' to tree set\n", b);
-	   status = 0;
-	   break;
-	 }
-       }
-     }
-     (void) closedir(dd);
-     free(dir);
-   }
+  DIR *dd;
+  struct dirent *dent;
+  int status = 1;
+  char *dir;
+  while(status){
+    tslinkedlist_lock(tsll);
+    tslinkedlist_take(tsll,(void *)(&dir));
+    if(*dir== '\0'){
+      tslinkedlist_put(tsll,*(&dir));
+      tslinkedlist_unlock(tsll);
+      status = 0;
+      break;
+    }
+    tslinkedlist_unlock(tsll);
+    /*
+     * open the directory
+     */
+    if ((dd = opendir(dir)) == NULL) {
+      fprintf(stderr, "Error opening directory `%s'\n", dir);
+      status = 0;
+      break;
+    }
+    /*
+     * for each entry in the directory
+     */
+    while (status && (dent = readdir(dd)) != NULL) {
+      if (strcmp(".", dent->d_name) == 0 || strcmp("..", dent->d_name) == 0)
+	continue;
+      if (!(dent->d_type & DT_DIR)) {
+	char b[4096], *sp;
+	/*
+	 * see if filename matches regular expression
+	 */
+	if (! reJS_match(reg, dent->d_name))
+	  continue;
+	sprintf(b, "%s/%s", dir, dent->d_name);
+	/*
+	 * duplicate fully qualified pathname for insertion into treeset
+	 */
+	if ((sp = strdup(b)) != NULL) {
+	  tstreeset_lock(tsts);
+	  if (!tstreeset_add(tsts, sp)) {
+	    tstreeset_unlock(tsts);
+	    fprintf(stderr, "Error adding `%s' to tree set\n", sp);
+	    free(sp);
+	    status = 0;
+	    break;
+	  }
+	  tstreeset_unlock(tsts);
+	} else {
+	  fprintf(stderr, "Error adding `%s' to tree set\n", b);
+	  status = 0;
+	  break;
+	}
+      }
+    }
+    (void) closedir(dd);
+    free(dir);
+  }
+  return NULL;
 }
 
 int main(int argc, char *argv[]) {
-   TSLinkedList *tsll = NULL;
+  TSLinkedList *tsll = NULL;
    TSTreeSet *tsts = NULL;
-   char *sp;
    char pattern[4096];
    RegExp *reg;
    Iterator *it;
-
+   ARVars *arv;
+   pthread_t harvesters[2];
+   int i;
+   char *eof = "";
+   int joined = -1;
    if (argc < 2) {
       fprintf(stderr, "Usage: ./fileCrawler pattern [dir] ...\n");
       return -1;
@@ -238,7 +244,7 @@ int main(int argc, char *argv[]) {
       re_status(reg, eb, sizeof eb);
       fprintf(stderr, "Compile error - pattern: `%s', error message: `%s'\n",
               pattern, eb);
-      re_destroy(reg);
+      re_JSdestroy(reg);
       return -1;
    }
    /*
@@ -253,20 +259,19 @@ int main(int argc, char *argv[]) {
       goto done;
    }
 
-   ARVars *arv = malloc(sizeof(ARVars));
+   arv = malloc(sizeof(ARVars));
    if (arv == NULL){
-     //DEAL WITH THIS MALLOC FAIL
+     goto done;
    }
    arv->reg=reg;
    arv->tsll=tsll;
    arv->tsts=tsts;
    
-   pthread_t harvesters[2];
-   int i;
-   for(i=0;i<2;i++){
+   for(i=0;i<0;i++){
      pthread_create(&harvesters[i],NULL,applyRe,arv);
    }
    
+   joined = 0;
    /*
     * populate linked list
     */
@@ -279,20 +284,24 @@ int main(int argc, char *argv[]) {
             goto done;
       }
    }
-   char *eof = "";
+   
    tslinkedlist_lock(tsll);
    tslinkedlist_put(tsll,*(&eof));
    tslinkedlist_unlock(tsll);
    
+
    for(i=0;i<2;i++){
      pthread_join(harvesters[i],NULL);
+     joined++;
    }
-
    /*
     * create iterator to traverse files matching pattern in sorted order
     */
-   if ((it = ts_it_create(tsts)) == NULL) {
+   tstreeset_lock(tsts);
+   it = tsts_it_create(tsts);
+   if (it == NULL) {
       fprintf(stderr, "Unable to create iterator over tree set\n");
+      tstreeset_unlock(tsts);
       goto done;
    }
    while (it_hasNext(it)) {
@@ -301,14 +310,21 @@ int main(int argc, char *argv[]) {
       printf("%s\n", s);
    }
    it_destroy(it);
+   tstreeset_unlock(tsts);
 /*
  * cleanup after ourselves so there are no memory leaks
  */
 done:
+   if(joined !=i){
+     for(;joined<i;joined++){
+       pthread_cancel(harvesters[joined]);
+       pthread_join(harvesters[joined],NULL);
+     }
+   }
    if (tsll != NULL)
       tsll_destroy(tsll, free);
    if (tsts != NULL)
       tstreeset_destroy(tsts, free);
-   re_destroy(reg);
+   re_JSdestroy(reg);
    return 0;
 }

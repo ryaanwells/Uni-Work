@@ -1,7 +1,8 @@
 #ifndef _TSTREESET_H_
 #define _TSTREESET_H_
-
+#include <pthread.h>
 #include "iterator.h"
+#include "treeset.h"
 
 /*
  *interface definition for generic threadsafe
