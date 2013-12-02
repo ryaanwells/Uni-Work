@@ -1,0 +1,11 @@
+#ifndef _MULTITHREADFC_H_
+#define _MULTITHREADFC_H_
+
+#include <pthread.h>
+#include "tslinkedlist.h"
+#include "tstreeset.h"
+#include "re.h"
+
+typedef struct arvars ARVars;
+
+static void cvtPattern(char pattern[], const char *bashpat);

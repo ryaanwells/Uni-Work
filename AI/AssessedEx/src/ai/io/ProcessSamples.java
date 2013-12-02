@@ -36,10 +36,19 @@ public class ProcessSamples {
 		speeches = new double[50][3];
 	}
 	
+	
+	/*
+	 * This function reads the speech and silence samples in, computes the 
+	 * energy, magnitude and zero crossing rate for each sample and stores them
+	 * in the appropriate array for later use.
+	 * 
+	 */
 	public void process(double scaleFactor, int windowSize, int sampleLength){
 		
 		BufferedWriter outSpeech = null;
 		BufferedWriter outSilence = null;
+		
+		// Delete the output files if they exist.x
 		
 		try {
 			Files.deleteIfExists(pathSilence);
@@ -56,6 +65,8 @@ public class ProcessSamples {
 			System.err.println("Could not instantiate file.");
 			System.exit(0);
 		}
+		
+		// Create writers to write the data out to the two files.
 		
 		try {
 			outSilence = Files.newBufferedWriter(pathSilence, Charset.defaultCharset());
@@ -81,6 +92,8 @@ public class ProcessSamples {
 		Signal magnitudeSignal;
 		Signal zeroCrossingSignal;
 		
+		
+		// For each of the 50 samples of speech and audio.
 		for (int i = 1; i < 51; i++){
 			path = Paths.get("audio/speech_" + (i > 9 ? i : "0" + i) + ".dat");
 			try {
@@ -89,22 +102,26 @@ public class ProcessSamples {
 				System.out.println("Could not find audio sample for audio/speech_" + (i > 9 ? i : "0" + i) + ".dat"); 
 				continue;
 			}
+			// There are 2400 points per sample.
 			int count = 0;
 			data = new double[2400];
 			while (scanner.hasNext()){
 				data[count] = scanner.nextInt() * scaleFactor;
 				count++;
 			}
+			
+			// Create the signal from this data and create the three computed signals from it.
 			signal = new Signal(data, sampleLength);
 			energySignal = SE.process(signal, windowSize);
 			magnitudeSignal = SM.process(signal, windowSize);
 			zeroCrossingSignal = SZ.process(signal, windowSize);
 			
-			speeches[i-1][0] =Math.log(energySignal.getAverage(false));
+			// Log this entry.
+				
+			speeches[i-1][0] = Math.log(energySignal.getAverage(false));
 			speeches[i-1][1] = Math.log(magnitudeSignal.getAverage(false));
 			speeches[i-1][2] = zeroCrossingSignal.getAverage(false);
 			
-			//System.out.println(speeches[i-1][0] + " " + speeches[i-1][1] + " " + speeches[i-1][2]);
 			
 			try {
 				outSpeech.write(speeches[i-1][0] + " " + speeches[i-1][1] + " " + speeches[i-1][2] + "\n");
@@ -112,6 +129,8 @@ public class ProcessSamples {
 				e.printStackTrace();
 			}
 			
+			
+			// Repeat for silence
 			path = Paths.get("audio/silence_" + (i > 9 ? i : "0" + i) + ".dat");
 			try {
 				scanner = new Scanner(path);
