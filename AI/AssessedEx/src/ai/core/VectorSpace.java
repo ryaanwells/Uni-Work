@@ -32,7 +32,11 @@ public class VectorSpace {
 					continue;
 
 				// if the vector we're comparing is closer to centroidA then
-				// classify it as in class TRUE, otherwise class FALSE
+				// classify it as in class TRUE, otherwise class FALSE.
+				// Also note where our ground truth speech vector is for later
+				// class determination.
+				// Increment the average vector for that classification when adding
+				// this vector to a class.
 				if (s.similarity(centroidA) > s.similarity(centroidB)) {
 					if (s.equals(speech)){ speechIsClassA = true; }
 					s.classifyAs(true);
@@ -50,6 +54,8 @@ public class VectorSpace {
 				}
 			}
 
+			// Create SampleVectors from these averages so we can compute
+			// the similarity for evaluating new centroids.
 			SampleVector averageA = new SampleVector(classA[0]
 					/ (double) countA, classA[1] / (double) countA, classA[2]
 					/ (double) countA, true);
@@ -57,7 +63,7 @@ public class VectorSpace {
 					/ (double) countB, classB[1] / (double) countB, classB[2]
 					/ (double) countB, false);
 
-			// recompute centroids based upon current distribution
+			// Recompute centroids based upon current distribution
 
 			for (SampleVector s : SV) {
 				if (averageA.similarity(s) > averageB.similarity(s)) {
@@ -72,6 +78,8 @@ public class VectorSpace {
 			}
 		}
 
+		// Determine how many have been correctly classified with respect to 
+		// where the ground truth speech vector has landed.
 		double correct = 0;
 		for (SampleVector s : SV) {
 			if (s.isSpeech() && (speechIsClassA == s.classifiedAsSpeech())){
