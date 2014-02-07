@@ -72,6 +72,11 @@ public class Network extends DirectedGraph {
 	 * @return true, if the assignment is a valid flow
 	 */
 	public boolean isFlow() {
+		LinkedList<Vertex> sourceLL = this.getAdjList(source);
+		
+		for (Vertex v : sourceLL){
+			
+		}
 		// complete this method as part of Task 1
 		return true;
 	}
