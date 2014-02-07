@@ -84,6 +84,7 @@ public class FordFulk {
 	 * Print the results of the execution of the Ford-Fulkerson algorithm.
 	 */
 	public void printResults() {
+		System.out.println(net.getValue());
 		if (net.isFlow()) {
 			System.out.println("The assignment is a valid flow");
 			System.out.println("A maximum flow has value: "+net.getValue());
