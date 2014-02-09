@@ -95,7 +95,7 @@ public class Network extends DirectedGraph {
 			}
 		}
 		
-		for (int i = 1; i < this.numVertices; i++) {
+		for (int i = 1; i < this.numVertices -1; i++) {
 			if (outgoing[i] != incoming[i]) {
 				return false;
 			}
