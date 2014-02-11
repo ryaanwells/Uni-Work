@@ -11,6 +11,14 @@ public class FordFulk {
 	/** The name of the file that encodes the given network. */
 	private String filename;
 
+	private int numStudents;
+	private int numProjects;
+	private int numSupervisors;
+	
+	private LinkedList<Student> students;
+	private LinkedList<Project> projects;
+	private LinkedList<Lecturer> lecturers;
+	
 	/** The network on which the Ford-Fulkerson algorithm is to be run. */
 	private Network net;
 
@@ -22,6 +30,9 @@ public class FordFulk {
 	 */
 	public FordFulk(String s) {
 		filename = s; // store name of input file
+		students = new LinkedList<Student>();
+		projects = new LinkedList<Project>();
+		lecturers = new LinkedList<Lecturer>();
 	}
 
 	/**
@@ -35,15 +46,38 @@ public class FordFulk {
 			try {
 				fr = new FileReader(filename);
 				Scanner in = new Scanner(fr);
-
+				String line;
+				
 				// get number of vertices
-				String line = in.nextLine();
-				int numVertices = Integer.parseInt(line);
-
+				numStudents = Integer.parseInt(in.nextLine());
+				numProjects = Integer.parseInt(in.nextLine());
+				numSupervisors = Integer.parseInt(in.nextLine());
+				
 				// create new network with desired number of vertices
-				net = new Network(numVertices);
-
-				// now add the edges
+				net = new Network(numStudents + numProjects + numSupervisors + 2);
+				
+				int id = 1;
+				// Add Student Edges
+				for (int counter = 1; counter <= numStudents; counter++, id++){
+					line = in.nextLine();
+					String[] tokens = line.split(" ");
+					Student s = new Student(id, counter, tokens[1] == "Y" ? true : false, tokens);
+					students.add(s);
+				}
+				for (int counter = 1; counter <= numProjects; counter++, id++){
+					line = in.nextLine();
+					String[] tokens = line.split(" ");
+					int lecturer = Integer.parseInt(tokens[2]);
+					int capacity = Integer.parseInt(tokens[3]);
+					Project p = new Project(id, counter, tokens[1] == "Y" ? true : false, lecturer, capacity);
+					projects.add(p);
+				}
+				for (int counter = 1; counter < numSupervisors; counter++, id++){
+					line = in.nextLine();
+					String[] tokens = line.split(" ");
+					Lecturer l = new Lecturer(id ,counter, Integer.parseInt(tokens[1]));
+					lecturers.add(l);
+				}
 				while (in.hasNextLine()) {
 					line = in.nextLine();
 					String[] tokens = line.split("[( )]+");
