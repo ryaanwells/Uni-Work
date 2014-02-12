@@ -22,6 +22,8 @@ public class FordFulk {
 	/** The network on which the Ford-Fulkerson algorithm is to be run. */
 	private Network net;
 
+	private boolean hasMinMatching = false;
+	
 	/**
 	 * Instantiates a new FordFulk object.
 	 * 
@@ -56,34 +58,40 @@ public class FordFulk {
 				// create new network with desired number of vertices
 				net = new Network(numStudents + numProjects + numLecturers + 2);
 				
-				int id = 1;
+				int guid = 1;
+				int id;
 				// Make Student Objects from File
-				for (int counter = 1; counter <= numStudents; counter++, id++){
+				for (int counter = 1; counter <= numStudents; counter++, guid++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
-					Student s = new Student(id, counter, tokens[1].equals("Y") ? true : false, tokens);
+					id = Integer.parseInt(tokens[0]);
+					Student s = new Student(guid, id, tokens[1].equals("Y") ? true : false, tokens);
 					students[counter - 1] = s;
 					
 				}
 				// Make Project Objects from File
-				for (int counter = 1; counter <= numProjects; counter++, id++){
+				for (int counter = 1; counter <= numProjects; counter++, guid++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
+					id = Integer.parseInt(tokens[0]);
 					int lecturer = Integer.parseInt(tokens[2]);
 					int capacity = Integer.parseInt(tokens[3]);
-					Project p = new Project(id, counter, tokens[1].equals("Y") ? true : false, lecturer, capacity);
+					Project p = new Project(guid, id, tokens[1].equals("Y") ? true : false, lecturer, capacity);
 					projects[counter - 1] = p;
 				}
 				// Make Lecturer Objects from File
-				for (int counter = 1; counter <= numLecturers; counter++, id++){
+				for (int counter = 1; counter <= numLecturers; counter++, guid++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
-					Lecturer l = new Lecturer(id ,counter, Integer.parseInt(tokens[1]));
+					id = Integer.parseInt(tokens[0]);
+					Lecturer l = new Lecturer(guid, id, Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
 					lecturers[counter - 1] = l;
 				}
-				
+				in.close();
 				for (Lecturer l : lecturers){
-					net.addEdge(l, net.getSink(), l.capacity());
+					// Each edge from a Lecturer node to the Sink starts off with capacity
+					// equal to the minimum bound of that lecturer.
+					net.addEdge(l, net.getSink(), l.min());
 				}
 				for (Project p : projects){
 					net.addEdge(p, lecturers[p.lecturer() - 1], p.capacity());
@@ -108,6 +116,84 @@ public class FordFulk {
 		}
 	}
 
+	public void computeMatching(){
+		// Reset from any previous invocations of this.
+		hasMinMatching = false;
+		net.reset();
+		for (Student s: students){
+			s.unassign();
+		}
+		// Run the Ford Fulkerson with the minimum capacities of each
+		// lecturer. If the maximum flow here is equal to the sum of all
+		// lecturers minimum bounds then we know that the minimum bound
+		// can be obtained. This is checked by determining that every
+		// edge incoming to the source is saturated, due to our initial
+		// network creation.
+		fordFulkerson();
+		for (Lecturer l : lecturers){
+			Edge e = net.getAdjMatrixEntry(l, net.getSink());
+			if (e.getFlow() != e.getCap())
+				return;
+		}
+		// If this minimum allocation is achievable then we definitely
+		// have a matching.
+		hasMinMatching = true;
+		// If Student s has a project allocated from the minimum allocation
+		// then we do not want to lose this (Ford-Fulkerson will undo matches
+		// to create a larger flow) as this could incur a lecturer not meeting
+		// their minimum bound.
+		for (Student s : students){
+			// By removing all current allocations (and reducing the relevant 
+			// capacities on edges that show that allocation) we effectively
+			// "reset" the graph to zero but with the restrictions of the allocations
+			// currently made.
+			// So temporarily...
+			Project p = s.getProject();
+			if (p != null){
+				// remove this allocation if it exists.
+				Edge sourceStudent = net.getAdjMatrixEntry(net.getSource(), s);
+				Edge studentProject = net.getAdjMatrixEntry(s, p);
+				Edge projectLecturer = net.getAdjMatrixEntry(p, lecturers[p.lecturer() - 1]);
+				sourceStudent.setCap(0);
+				studentProject.setCap(0);
+				projectLecturer.setCap(projectLecturer.getCap() - 1);
+				projectLecturer.setFlow(projectLecturer.getFlow() - 1);
+			}
+		}
+		// Reset the lecturer-sink edges to zero flow and set capacity to
+		// the potential allocation increase from their minimum allocation
+		// up to their maximum allocation.
+		for (Lecturer l : lecturers){
+			Edge lecturerSink = net.getAdjMatrixEntry(l, net.getSink());
+			lecturerSink.setFlow(0);
+			lecturerSink.setCap(l.capacity() - l.min());
+		}
+		// Rerun the Ford Fulkerson to find a maximum allocation on this reduced 
+		// network. No Student that was previously matched will be matched in
+		// this iteration, and neither will they be unmatched.
+		fordFulkerson();
+		// Redo all allocations we undid before.
+		for (Student s : students){
+			Edge sourceStudent = net.getAdjMatrixEntry(net.getSource(), s);
+			if (sourceStudent.getCap() == 0){
+				Project p = s.getProject();
+				Lecturer l = lecturers[p.lecturer() - 1];
+				
+				Edge studentProject = net.getAdjMatrixEntry(s, p);
+				Edge projectLecturer = net.getAdjMatrixEntry(p, l);
+				Edge lecturerSink = net.getAdjMatrixEntry(l, net.getSink());
+				
+				sourceStudent.setCap(1);
+				studentProject.setCap(1);
+				projectLecturer.setCap(projectLecturer.getCap() + 1);
+				projectLecturer.setFlow(projectLecturer.getFlow() + 1);
+				lecturerSink.setCap(lecturerSink.getCap() + 1);
+				lecturerSink.setFlow(lecturerSink.getFlow() + 1);
+			}
+		}
+		// We now have an allocation that fulfils the requirements of the lecturers.
+	}
+	
 	/**
 	 * Executes Ford-Fulkerson algorithm on the constructed network net.
 	 */
@@ -161,7 +247,7 @@ public class FordFulk {
 	 * Print the results of the execution of the Ford-Fulkerson algorithm.
 	 */
 	public void printResults() {
-		if (net.isFlow()) {
+		if (hasMinMatching) {
 			for (Student s : students){
 				System.out.print("Student " + s.id() + " is ");
 				if (s.getProject() != null){
@@ -180,12 +266,12 @@ public class FordFulk {
 			System.out.println();
 			for (Lecturer l : lecturers){
 				int flow = net.getAdjMatrixEntry(l, net.getSink()).getFlow();
-				System.out.println("Lecturer " + l.id() + " with capacity " +
-						l.capacity() + " is assigned " + flow +	" student" + 
-						(flow != 1 ? "s" : ""));
+				System.out.println("Lecturer " + l.id() + " with lower quota " +
+						l.min() + " and upper quota " + l.capacity() + " is assigned " + 
+						flow + " student" + (flow != 1 ? "s" : ""));
 			}
 			System.out.println(net.getValue());
 		} else
-			System.out.println("The assignment is not a valid flow");
+			System.out.println("No assignment exists that meets all the lecturer lower quotas");
 	}
 }
