@@ -13,11 +13,11 @@ public class FordFulk {
 
 	private int numStudents;
 	private int numProjects;
-	private int numSupervisors;
+	private int numLecturers;
 	
-	private LinkedList<Student> students;
-	private LinkedList<Project> projects;
-	private LinkedList<Lecturer> lecturers;
+	private Student[] students;
+	private Project[] projects;
+	private Lecturer[] lecturers;
 	
 	/** The network on which the Ford-Fulkerson algorithm is to be run. */
 	private Network net;
@@ -30,9 +30,6 @@ public class FordFulk {
 	 */
 	public FordFulk(String s) {
 		filename = s; // store name of input file
-		students = new LinkedList<Student>();
-		projects = new LinkedList<Project>();
-		lecturers = new LinkedList<Lecturer>();
 	}
 
 	/**
@@ -51,53 +48,55 @@ public class FordFulk {
 				// get number of vertices
 				numStudents = Integer.parseInt(in.nextLine());
 				numProjects = Integer.parseInt(in.nextLine());
-				numSupervisors = Integer.parseInt(in.nextLine());
+				numLecturers = Integer.parseInt(in.nextLine());
 				
+				students = new Student[numStudents];
+				projects = new Project[numProjects];
+				lecturers = new Lecturer[numLecturers];
 				// create new network with desired number of vertices
-				net = new Network(numStudents + numProjects + numSupervisors + 2);
+				net = new Network(numStudents + numProjects + numLecturers + 2);
 				
 				int id = 1;
-				// Add Student Edges
+				// Make Student Objects from File
 				for (int counter = 1; counter <= numStudents; counter++, id++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
-					Student s = new Student(id, counter, tokens[1] == "Y" ? true : false, tokens);
-					students.add(s);
+					Student s = new Student(id, counter, tokens[1].equals("Y") ? true : false, tokens);
+					students[counter - 1] = s;
+					
 				}
+				// Make Project Objects from File
 				for (int counter = 1; counter <= numProjects; counter++, id++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
 					int lecturer = Integer.parseInt(tokens[2]);
 					int capacity = Integer.parseInt(tokens[3]);
-					Project p = new Project(id, counter, tokens[1] == "Y" ? true : false, lecturer, capacity);
-					projects.add(p);
+					Project p = new Project(id, counter, tokens[1].equals("Y") ? true : false, lecturer, capacity);
+					projects[counter - 1] = p;
 				}
-				for (int counter = 1; counter < numSupervisors; counter++, id++){
+				// Make Lecturer Objects from File
+				for (int counter = 1; counter <= numLecturers; counter++, id++){
 					line = in.nextLine();
 					String[] tokens = line.split(" ");
 					Lecturer l = new Lecturer(id ,counter, Integer.parseInt(tokens[1]));
-					lecturers.add(l);
+					lecturers[counter - 1] = l;
 				}
-				while (in.hasNextLine()) {
-					line = in.nextLine();
-					String[] tokens = line.split("[( )]+");
-					// this line corresponds to add vertices adjacent to vertex
-					// u
-					int u = Integer.parseInt(tokens[0]);
-					// get corresponding Vertex object
-					Vertex uu = net.getVertexByIndex(u);
-					int i = 1;
-					while (i < tokens.length) {
-						// get label of vertex v adjacent to u
-						int v = Integer.parseInt(tokens[i++]);
-						// get corresponding Vertex object
-						Vertex vv = net.getVertexByIndex(v);
-						// get capacity c of (uu,vv)
-						int c = Integer.parseInt(tokens[i++]);
-						// add edge (uu,vv) with capacity c to network
-						net.addEdge(uu, vv, c);
+				
+				for (Lecturer l : lecturers){
+					net.addEdge(l, net.getSink(), l.capacity());
+				}
+				for (Project p : projects){
+					net.addEdge(p, lecturers[p.lecturer() - 1], p.capacity());
+				}
+				for (Student s : students){
+					net.addEdge(net.getSource(), s, 1);
+					for (int project : s.choices()){
+						if ((s.isSE() && projects[project - 1].se()) ||	!s.isSE()){
+							net.addEdge(s, projects[project - 1], 1);
+						}
 					}
 				}
+				
 			} finally {
 				if (fr != null)
 					fr.close();
@@ -133,10 +132,25 @@ public class FordFulk {
 					if (netEdge != null
 							&& (netEdge.getCap() - netEdge.getFlow()) >= increase) {
 						netEdge.setFlow(netEdge.getFlow() + increase);
+						// If starting vertex is a Student and this is a forwards edge, 
+						// then the corresponding end vertex is a Project, so this is an 
+						// assignment this of a Project to a Student, so assign this
+						// Project to the Student. 
+						if (start.getLabel() > 0 && start.getLabel() <= numStudents){
+							Project p = projects[end.getLabel() - numStudents - 1];
+							students[start.getLabel() -1].assignProject(p);
+						}
 					}
 					else { // Backwards edge
 						netEdge = net.getAdjMatrixEntry(end, start);
 						netEdge.setFlow(netEdge.getFlow() - increase);
+						// If end vertex is a Student and this is a backwards edge, then
+						// the corresponding starting vertex is a Project, so this is an
+						// unassignment of this Project to this Student, so unassign this
+						// Project from the Student.
+						if (end.getLabel() > 0 && end.getLabel() <= numStudents){
+							students[end.getLabel() - 1].unassign();
+						}
 					}
 				}
 			}
@@ -155,6 +169,33 @@ public class FordFulk {
 			System.out.println("A maximum flow has value: " + net.getValue());
 			System.out.println("The flows along the edges are as follows:");
 			net.printFlow();
+			for (Student s : students){
+				System.out.print("Student " + s.id() + (s.isSE() ? " (SE)" : ""));
+				System.out.print(" [");
+				for (Vertex c : net.getAdjList(s)){
+					System.out.print(c.getLabel() - numStudents + ", ");
+				}
+				System.out.print("]");
+				if (s.getProject() != null){
+					System.out.println(" is assigned to project " + s.getProject().id());
+				}
+				else {
+					System.out.println(" is not assigned");
+				}
+			}
+			System.out.println();
+			for (Project p : projects){
+				System.out.println("Project " + p.id() + (p.se() ? " (SE)" : "") +
+						" with capacity " + p.capacity() +
+						" is asssigned " + net.getAdjMatrixEntry(p, lecturers[p.lecturer() - 1]).getFlow());
+			}
+			System.out.println();
+			for (Lecturer l : lecturers){
+				int flow = net.getAdjMatrixEntry(l, net.getSink()).getFlow();
+				System.out.println("Lecturer " + l.id() + " with capacity " +
+						l.capacity() + " is assigned " + flow +	" student" + 
+						(flow > 1 ? "s" : ""));
+			}
 		} else
 			System.out.println("The assignment is not a valid flow");
 	}

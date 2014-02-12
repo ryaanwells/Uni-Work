@@ -5,6 +5,7 @@ public class Student extends Vertex {
 	private int id;
 	private boolean isSE;
 	private int[] projectChoices;
+	private Project project;
 
 	public Student(int guid, int id, boolean isSE, String[] choices) {
 		super(guid);
@@ -28,4 +29,16 @@ public class Student extends Vertex {
 		return this.projectChoices;
 	}
 
+	public void assignProject(Project p){
+		this.project = p; 
+	}
+	
+	public void unassign(){
+		this.project = null;
+	}
+	
+	public Project getProject(){
+		return this.project;
+	}
+	
 }
