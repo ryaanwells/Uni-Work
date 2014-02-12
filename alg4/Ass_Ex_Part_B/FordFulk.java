@@ -116,18 +116,15 @@ public class FordFulk {
 			ResidualGraph rg = new ResidualGraph(net);
 			LinkedList<Edge> path = rg.findAugmentingPath();
 			if (path.size() > 0) {
-				System.out.println("Path Length: " + path.size());
 				int increase = path.peek().getCap();
 				for (Edge e : path) {
 					if (e.getCap() < increase)
 						increase = e.getCap();
 				}
-				System.out.println(increase);
 				for (Edge e : path) {
 					Vertex start = e.getSourceVertex();
 					Vertex end = e.getTargetVertex();
 					Edge netEdge = net.getAdjMatrixEntry(start, end);
-					System.out.println(start.getLabel() + " " + end.getLabel());
 					// Forwards Edge
 					if (netEdge != null
 							&& (netEdge.getCap() - netEdge.getFlow()) >= increase) {
@@ -165,36 +162,27 @@ public class FordFulk {
 	 */
 	public void printResults() {
 		if (net.isFlow()) {
-			System.out.println("The assignment is a valid flow");
-			System.out.println("A maximum flow has value: " + net.getValue());
-			System.out.println("The flows along the edges are as follows:");
-			net.printFlow();
 			for (Student s : students){
-				System.out.print("Student " + s.id() + (s.isSE() ? " (SE)" : ""));
-				System.out.print(" [");
-				for (Vertex c : net.getAdjList(s)){
-					System.out.print(c.getLabel() - numStudents + ", ");
-				}
-				System.out.print("]");
+				System.out.print("Student " + s.id() + " is ");
 				if (s.getProject() != null){
-					System.out.println(" is assigned to project " + s.getProject().id());
+					System.out.println("assigned to project " + s.getProject().id());
 				}
 				else {
-					System.out.println(" is not assigned");
+					System.out.println("is not assigned");
 				}
 			}
 			System.out.println();
 			for (Project p : projects){
-				System.out.println("Project " + p.id() + (p.se() ? " (SE)" : "") +
-						" with capacity " + p.capacity() +
-						" is asssigned " + net.getAdjMatrixEntry(p, lecturers[p.lecturer() - 1]).getFlow());
+				int flow = net.getAdjMatrixEntry(p, lecturers[p.lecturer() - 1]).getFlow();
+				System.out.println("Project " + p.id() + " with capacity " + p.capacity() +
+						" is asssigned " + flow + (flow != 1 ? " students" : " student"));
 			}
 			System.out.println();
 			for (Lecturer l : lecturers){
 				int flow = net.getAdjMatrixEntry(l, net.getSink()).getFlow();
 				System.out.println("Lecturer " + l.id() + " with capacity " +
 						l.capacity() + " is assigned " + flow +	" student" + 
-						(flow > 1 ? "s" : ""));
+						(flow != 1 ? "s" : ""));
 			}
 		} else
 			System.out.println("The assignment is not a valid flow");
