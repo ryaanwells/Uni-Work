@@ -69,6 +69,20 @@ public class CTO{
 	}
     }
 
+    public double getWeightOfBigrams(int[] text){
+	double weight = 0;
+	for (int start = 0; start < text.length - 1; start++){
+	    for (int i = 0; i < bigrams.length - 1; i++){
+		if (text[start    ] == bigrams[i][0] &&
+		    text[start + 1] == bigrams[i][1]){
+		    weight += bigramWeight[i];
+		    break;
+		}
+	    }
+	}
+	return weight;
+    }
+
     public boolean bruteForce(){
 	for (int i = 0; i < Math.pow(2,16); i++){
 	    int decrypt = Coder.decrypt(i, firstBlockCipher);
@@ -100,45 +114,8 @@ public class CTO{
 
     public static void main(String[] args){
 	CTO cto = new CTO("test.txt", "1_ciphertext.txt");
-	System.out.println(bigrams.length == bigramWeight.length);
-	LinkedList<int[]> chars = new LinkedList<int[]>();
-	LinkedList<Double> weights = new LinkedList<Double>();
-	try {
-	    BufferedReader fr = new BufferedReader(new FileReader("test.txt"));
-	    String s;
-	    while ((s= fr.readLine()) != null){
-		String[] arr = s.split("-");
-		char[] charr = arr[0].toCharArray();
-		int[] ints = new int[2];
-		ints[0] = (int)Character.toLowerCase(charr[0]);
-		ints[1] = (int)Character.toLowerCase(charr[1]);
-		chars.add(ints);
-		weights.add(Double.parseDouble(arr[1]));
-		System.out.println((int)Character.toLowerCase(charr[0]) + ":" + (int)charr[1] + ":" + arr[1]);
-	    }
-	} 
-	catch (Exception e){
-	    e.printStackTrace();
-	}
-
-	System.out.println("{ ");
-	for (int[] ints: chars){
-	    System.out.println("{" + ints[0] + ", " + ints[1] + "},");
-	}
-	System.out.println("}");
-	
-	System.out.print("{");
-	for (double d: weights){
-	    System.out.print(d + ", ");
-	}
-	System.out.println("}");
-
-	// String s = "E ";
-	// char[] ca = s.toCharArray();
-	// System.out.println((int)Character.toLowerCase(ca[0]));
-	// System.out.println((int)Character.toLowerCase(ca[1]));
-	// cto.initialize();
-	// String message = cto.getMessage();
-	// System.out.println(message);
+	int[] a = {101, 32, 109};
+	double weight = cto.getWeightOfBigrams(a);
+	System.out.println(weight);
     }
 }
