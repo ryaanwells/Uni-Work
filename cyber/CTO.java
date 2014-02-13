@@ -3,7 +3,7 @@ import FormatIO.FileOut;
 import FormatIO.EofX;
 import java.util.LinkedList;
 
-public class KPT{
+public class CTO{
 
     private FileIn plaintext;
     private FileIn ciphertext;
@@ -12,7 +12,7 @@ public class KPT{
     private Integer[] cipherBlocks;
     private int key;
 
-    public KPT(String plaintextFilename, String ciphertextFilename){
+    public CTO(String plaintextFilename, String ciphertextFilename){
 	this.plaintext = new FileIn(plaintextFilename);
 	this.ciphertext = new FileIn(ciphertextFilename);
     }
@@ -68,9 +68,9 @@ public class KPT{
     }
 
     public static void main(String[] args){
-	KPT kpt = new KPT("1_plaintext.txt", "1_ciphertext.txt");
-	kpt.initialize();
-	String message = kpt.getMessage();
+	CTO cto = new CTO("1_plaintext.txt", "1_ciphertext.txt");
+	cto.initialize();
+	String message = cto.getMessage();
 	System.out.println(message);
     }
 }
