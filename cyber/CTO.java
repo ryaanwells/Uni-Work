@@ -4,15 +4,15 @@ import FormatIO.EofX;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.charset.Charset;
 
 public class CTO{
 
     private FileIn plaintext;
     private FileIn ciphertext;
-    private int firstBlockPlain;
-    private int firstBlockCipher;
     private Integer[] cipherBlocks;
     private int key;
+    private Charset charset;
 
     private static int[][] bigrams = { 
 	{101, 32}, {32, 109}, {104, 32}, {32, 116}, {97, 116},
@@ -43,18 +43,11 @@ public class CTO{
 	0.55, 0.38, 0.88, 0.55, 0.37};
 
 
-    public CTO(String plaintextFilename, String ciphertextFilename){
-	this.plaintext = new FileIn(plaintextFilename);
+    public CTO(String ciphertextFilename){
 	this.ciphertext = new FileIn(ciphertextFilename);
     }
 
     public void initialize(){
-	try {
-	    String hexPlain = plaintext.readWord();
-	    firstBlockPlain = Hex16.convert(hexPlain);
-	}
-	catch (EofX x){}
-	
 	LinkedList<Integer> allCipherBlocks = new LinkedList<Integer>();
 	try {
 	    for (;;){
@@ -65,14 +58,26 @@ public class CTO{
 	catch (EofX x){
 	    cipherBlocks = new Integer[allCipherBlocks.size()];
 	    cipherBlocks = allCipherBlocks.toArray(cipherBlocks);
-	    firstBlockCipher = cipherBlocks[0];
 	}
+	charset = Charset.forName("US-ASCII");
+    }
+
+    public boolean validCharacters(int a, int b){
+	// return charset.newEncoder().canEncode((char)a) &&
+	//     charset.newEncoder().canEncode((char)b);
+	return (Character.isLetter(a) || a == '.' || a == ',' || a == ':' || a == ' ' || a == '\'') &&
+	    (Character.isLetter(b) || b == '.' || b == ',' || b == ':' || b == ' ' || b == '\'');
     }
 
     public double getWeightOfBigrams(int[] text){
 	double weight = 0;
 	for (int start = 0; start < text.length - 1; start++){
 	    for (int i = 0; i < bigrams.length - 1; i++){
+		int a = text[start];
+		int b = text[start +1 ];
+		if (!validCharacters(a, b)){
+		    return 0;
+		}
 		if (text[start    ] == bigrams[i][0] &&
 		    text[start + 1] == bigrams[i][1]){
 		    weight += bigramWeight[i];
@@ -84,11 +89,43 @@ public class CTO{
     }
 
     public boolean bruteForce(){
-	for (int i = 0; i < Math.pow(2,16); i++){
-	    int decrypt = Coder.decrypt(i, firstBlockCipher);
-	    if (decrypt == firstBlockPlain){
-		// System.out.println("KEY: " + i);
-		key = i;
+	double bestKeyWeight = -1;
+	int bestKey = -1;
+	int keysWithSameWeight = 0;
+	for (int numBlocks = 3; numBlocks < cipherBlocks.length; numBlocks++){
+	    keysWithSameWeight = 0;
+	    bestKey = -1;
+	    bestKeyWeight = -1;
+	    for (int i = 0; i < Math.pow(2,16); i++){
+		int[] subCipher = new int [numBlocks * 2];
+		for (int j = 0, k = 0; j < numBlocks; j++, k++){
+		    int decrypt = Coder.decrypt(i, cipherBlocks[j]);
+		    int c0 = decrypt / 256;
+		    int c1 = decrypt % 256;
+		    subCipher[k] = (int) Character.toLowerCase(c0);
+		    subCipher[++k] = (int) Character.toLowerCase(c1);
+		}
+		double weight = getWeightOfBigrams(subCipher);
+		if (weight == 0)
+		    continue;
+		// We have an equal weight to our current best, note this;
+		if (weight == bestKeyWeight){
+		    keysWithSameWeight++;
+		}
+		else if (weight > bestKeyWeight){
+		    keysWithSameWeight = 0;
+		    bestKey = i;
+		    bestKeyWeight = weight;
+		}
+	    }
+	    System.out.println("\nIteration: " + numBlocks);
+	    System.out.println("Same weighted Keys: " + keysWithSameWeight);
+	    System.out.println("Top Weight: " + bestKeyWeight);
+	    // If we have found a key that is unambiguously the best then stop searching.
+	    if (bestKey >= 0 && keysWithSameWeight == 0){
+		key = bestKey;
+		System.out.println("KEY: " + key);
+		System.out.println("Number of Blocks: " + numBlocks);
 		return true;
 	    }
 	}
@@ -113,9 +150,11 @@ public class CTO{
     }
 
     public static void main(String[] args){
-	CTO cto = new CTO("test.txt", "1_ciphertext.txt");
-	int[] a = {101, 32, 109};
-	double weight = cto.getWeightOfBigrams(a);
-	System.out.println(weight);
+	// System.out.println(32 == ' ');
+	CTO cto = new CTO("2_ciphertext.txt");
+	// System.out.println(cto.validCharacters(32, 32));
+	cto.initialize();
+	String message = cto.getMessage();
+	System.out.println(message);
     }
 }
