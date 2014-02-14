@@ -68,7 +68,7 @@ public class KPT{
     }
 
     public static void main(String[] args){
-	KPT kpt = new KPT("1_plaintext.txt", "1_ciphertext.txt");
+	KPT kpt = new KPT(args[0], args[1]);
 	kpt.initialize();
 	String message = kpt.getMessage();
 	System.out.println(message);
