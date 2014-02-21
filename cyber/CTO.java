@@ -1,5 +1,4 @@
 import FormatIO.FileIn;
-import FormatIO.FileOut;
 import FormatIO.EofX;
 import java.util.LinkedList;
 import java.io.BufferedReader;
