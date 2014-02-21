@@ -39,7 +39,9 @@ public class CTO{
 	{39, 103}, {39, 104}, {39, 105}, {39, 106}, {39, 107},
 	{39, 108}, {39, 111}, {39, 112}, {39, 113}, {39, 114},
 	{39, 117}, {39, 118}, {39, 119}, {39, 120}, {39, 121},
-	{39, 122}
+	{39, 122},
+	// Disallowed double vowels
+	{117, 117}
 
     };
 
@@ -59,6 +61,7 @@ public class CTO{
 	-100, -100, -100, -100, -100, -100, -100, -100, -100, -100,
 	-100,
 	
+	-100
     };
 
 
@@ -81,6 +84,7 @@ public class CTO{
     }
 
     public boolean validCharacters(int a, int b){
+	
 	return ( (a >= 'a' && a <= 'z') || a == '.' || a == ',' || a == ':' || a == ' ' || a == '\'') &&
 	    ( (b >= 'a' && b <= 'z') || b == '.' || b == ',' || b == ':' || b == ' ' || b == '\'');
     }
@@ -88,14 +92,14 @@ public class CTO{
     public double getWeightOfBigrams(int[] text){
 	double weight = 0;
 	for (int start = 0; start < text.length - 1; start++){
-	    int a = text[start];
-	    int b = text[start + 1];
-	    if (!validCharacters(a, b)){
+	    int c0 = text[start];
+	    int c1 = text[start + 1];
+	    if (!validCharacters(c0, c1)){
 		return 0;
 	    }
-	    for (int i = 0; i < bigrams.length - 1; i++){
-		if (text[start    ] == bigrams[i][0] &&
-		    text[start + 1] == bigrams[i][1]){
+	    for (int i = 0; i < bigrams.length; i++){
+		if (c0 == bigrams[i][0] &&
+		    c1 == bigrams[i][1]){
 		    weight += bigramWeight[i];
 		    break;
 		}
@@ -182,32 +186,7 @@ public class CTO{
     }
 
     public static void main(String[] args){
-	System.out.println("{" + (int) '\'' + ", " + (int) 'a' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'b' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'c' + "}");
-
-	System.out.println("{" + (int) '\'' + ", " + (int) 'e' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'f' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'g' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'h' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'i' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'j' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'k' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'l' + "}");
-
-
-	System.out.println("{" + (int) '\'' + ", " + (int) 'o' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'p' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'q' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'r' + "}");
-
-
-	System.out.println("{" + (int) '\'' + ", " + (int) 'u' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'v' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'w' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'x' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'y' + "}");
-	System.out.println("{" + (int) '\'' + ", " + (int) 'z' + "}");
+	System.out.println("{" + (int) 'u' + ", " + (int) 'u' + "}");
 
 
 	CTO cto = new CTO(args[0]);

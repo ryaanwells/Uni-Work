@@ -1,5 +1,7 @@
 package networkFlow;
 
+import java.util.LinkedList;
+
 public class Lecturer extends Vertex {
 
 	private int id;
