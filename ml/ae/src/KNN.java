@@ -204,6 +204,13 @@ public class KNN {
 	}
 
 	public void setVotesForGap() {
+		PrintWriter out;
+		try {
+			out = new PrintWriter("gaps_1002253w.csv", "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
 		Random r = new Random();
 		int counters = 0;
 		int total = 0;
@@ -252,7 +259,9 @@ public class KNN {
 					System.out.println("MP " + gap.getName() + " voted " + proposedVote + " on vote " + i);
 				}
 			}
+			out.println(gap.toString());
 		}
+		out.close();
 		System.out.println("Number of counter votes: " + counters);
 		System.out.println("Total votes: " + total);
 	}
