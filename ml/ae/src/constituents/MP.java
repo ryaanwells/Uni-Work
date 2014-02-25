@@ -7,13 +7,15 @@ public class MP implements Comparable<MP>{
 	private int[] votes;
 	private double similarity;
 	
-	private Party guessedClass;
-	
 	public MP (String name, String party, int[] votes){
 		this.name = name;
 		this.party = Party.getParty(party);
 		this.votes = votes;
 		this.similarity = 0;
+	}
+	
+	public void voidSimilarity(){
+		similarity = -1;
 	}
 	
 	public void setSimilarity(MP other){
@@ -42,24 +44,44 @@ public class MP implements Comparable<MP>{
 		return party;
 	}
 	
+	public void setParty(Party p){
+		this.party = p;
+	}
+	
 	public double getSimilarity(){
 		return similarity;
 	}
 	
-	public void guessParty(Party party){
-		this.guessedClass = party;
-	}
-	
-	public Party getGuess(){
-		return this.guessedClass;
-	}
-	
-	public boolean guessedCorrect(){
-		return this.guessedClass == this.party;
+	public int[] getVotes(){
+		return votes;
 	}
 	
 	public int compareTo(MP other){
-		return this.similarity > other.similarity ? -1 : 1;
+		if (this.similarity == other.similarity) return 0;
+		return this.similarity >= other.similarity ? -1 : 1;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if (o instanceof MP){
+			MP mp = (MP) o;
+			return (this.party == mp.party && 
+					this.name == mp.name);
+		}
+		return false;
 	}
 
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.name);
+		sb.append(",");
+		sb.append(this.party.getName());
+		for (int vote: votes){
+			sb.append(",");
+			sb.append(vote);
+		}
+		return sb.toString();
+	}
+	
 }
