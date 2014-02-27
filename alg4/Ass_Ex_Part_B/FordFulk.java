@@ -184,7 +184,6 @@ public class FordFulk {
 						l.capacity() + " is assigned " + flow +	" student" + 
 						(flow != 1 ? "s" : ""));
 			}
-			System.out.println(net.getValue());
 		} else
 			System.out.println("The assignment is not a valid flow");
 	}
