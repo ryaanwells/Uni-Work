@@ -15,6 +15,8 @@ public class KNN {
 	private MP[] testSet;
 	private MP[] gapSet;
 	private int K = 2;
+	private int crossValidationSize = 7; // alternatively could be 61
+	
 	private HashMap<String, VoteTotal> votesCast;
 
 	public KNN(String filename, String unknownData, String gapData) {
@@ -150,7 +152,7 @@ public class KNN {
 
 		// Find most common Party.
 		for (int m = 0; m < counts.length; m++) {
-			// Break here simply on first-assigned wins.
+			// Break ties here simply on first-assigned wins.
 			if (counts[m] > highest) {
 				chosen = parties[m];
 				highest = counts[m];
@@ -163,26 +165,28 @@ public class KNN {
 		int bestK = 0;
 		double bestPercent = 0;
 
+		// Do k nearest neighbour for k in [2, 11]
 		for (int i = 2; i < 11; i++) {
 			int classifiedCorrectly = 0;
-			for (int j = 0; j < MPS.length; j += 7) {
+			for (int j = 0; j < MPS.length; j += crossValidationSize) {
 				// Initialize test sets
-				MP[] testing = new MP[7];
-				MP[] order = new MP[MPS.length - 7];
-				// Split the MPS array into two arrays,
-				// One for training, and other for testing.
+				MP[] testing = new MP[crossValidationSize];
+				MP[] order = new MP[MPS.length - crossValidationSize];
+				
+				// Split the MPS array into two arrays for cross validation
 				for (int k = 0; k < MPS.length; k++) {
-					if (j <= k && k < j + 7) {
+					if (j <= k && k < j + crossValidationSize) {
 						testing[k - j] = MPS[k];
 					} else {
 						if (k < j) {
 							order[k] = MPS[k];
 						} else {
-							order[k - 7] = MPS[k];
+							order[k - crossValidationSize] = MPS[k];
 						}
 					}
 				}
-
+				
+				
 				for (MP test : testing) {
 					Party proposed = nearestNeighbour(test, i, order);
 					if (proposed == test.getParty()) {
@@ -259,11 +263,21 @@ public class KNN {
 					System.out.println("MP " + gap.getName() + " voted " + proposedVote + " on vote " + i);
 				}
 			}
+			// Write this MP to the output file.
 			out.println(gap.toString());
 		}
 		out.close();
 		System.out.println("Number of counter votes: " + counters);
 		System.out.println("Total votes: " + total);
+		
+		int classificationMatch = 0;
+		for (MP check: gapSet){
+			Party guessedParty = this.nearestNeighbour(check, 2, MPS);
+			if (guessedParty == check.getParty()){
+				classificationMatch++;
+			}
+		}
+		System.out.println("Believable predictions: " + classificationMatch + " from " + gapSet.length + " MPS.");
 	}
 
 	public void classifyUnknown() {
@@ -285,8 +299,8 @@ public class KNN {
 
 	public static void main(String[] args) {
 		KNN knn = new KNN(args[0], args[1], args[2]);
-		// knn.findBestK();
+		 knn.findBestK();
 		// knn.classifyUnknown();
-		knn.setVotesForGap();
+//		knn.setVotesForGap();
 	}
 }
