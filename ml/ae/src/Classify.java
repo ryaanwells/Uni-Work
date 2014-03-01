@@ -6,10 +6,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 import constituents.*;
 
-public class KNN {
+public class Classify {
 
 	private MP[] MPS;
 	private MP[] testSet;
@@ -19,7 +20,12 @@ public class KNN {
 	
 	private HashMap<String, VoteTotal> votesCast;
 
-	public KNN(String filename, String unknownData, String gapData) {
+	private boolean verbose;
+	
+	public Classify(String filename, String unknownData, String gapData, boolean verbose) {
+		
+		this.verbose = verbose;
+		
 		FileReader frTraining = null;
 		FileReader frTest = null;
 		FileReader frGap = null;
@@ -53,7 +59,7 @@ public class KNN {
 			int[] votes = new int[1288];
 
 			VoteTotal partyVoted = votesCast.get(party);
-
+			partyVoted.incMPS();
 			for (int i = 2; i < tokens.length; i++) {
 				votes[i - 2] = Integer.parseInt(tokens[i]);
 				partyVoted.addVote(i - 2, votes[i - 2]);
@@ -105,10 +111,6 @@ public class KNN {
 
 		gapSet = new MP[gap.size()];
 		gapSet = gap.toArray(gapSet);
-		
-		System.out.println(MPS.length);
-		System.out.println(testSet.length);
-		System.out.println(gapSet.length);
 	}
 
 	public Party nearestNeighbour(MP test, int k, MP[] testSet) {
@@ -162,6 +164,8 @@ public class KNN {
 	}
 
 	public void findBestK() {
+		System.out.println("Determining best K for k-nearest neighbour.");
+		System.out.println("===========================================");
 		int bestK = 0;
 		double bestPercent = 0;
 
@@ -199,15 +203,17 @@ public class KNN {
 				bestPercent = percentCorrect;
 				bestK = i;
 			}
-			System.out.println("This K: " + i + " Percent: " + percentCorrect);
-			System.out.println("Errors: "
+			System.out.println("This K: " + i + " - Classified: " + percentCorrect * 100 + "% correctly.");
+			System.out.println("\tErrors: "
 					+ (MPS.length - (MPS.length * percentCorrect)));
 		}
-		System.out.println("Best K: " + bestK + " Percent: " + bestPercent);
+		System.out.println("\nBest K: " + bestK + ". Classified " + bestPercent + "% correctly.\n\n");
 		K = bestK;
 	}
 
 	public void setVotesForGap() {
+		System.out.println("Filling in vote gaps for MPs");
+		System.out.println("===========================================");
 		PrintWriter out;
 		try {
 			out = new PrintWriter("gaps_1002253w.csv", "UTF-8");
@@ -232,17 +238,29 @@ public class KNN {
 					// Start off with voter goes with majority. Randomly split on 
 					// equal ayes and noes.
 					int proposedVote;
-					// Combine this with a random probability of individuality based on
-					// how spread the votes were. This is a number in (0, 1].
+					
+					// I use a metric of confidence in this majority vote as a way
+					// to determine if this MP will vote with the party or not.
+					// For example: 30% of the current MPs party votes aye
+					//              10% of the current MPs party votes no
+					//              60% of the current MPs party abstain from voting.
+					// The majority vote is aye (since the vote we have to guess is
+					// always an aye or no, never not voted) but 70% of the party
+					// didn't follow this vote so the confidence that an aye vote is 
+					// the vote that best represents the party isn't high.
 					double confidence;
 					
 					if (ayes == noes){
+						// We have a tie. Split randomly and set the confidence based
+						// on ayes or noes. Doesn't matter which vote we choose to
+						// determine confidence as both ayes and noes will give the
+						// same value.
 						proposedVote = r.nextBoolean() ? 1 : -1;
-						confidence = 0.5;
+						confidence = ((double) ayes) / ((double) cast);
 					}
 					else {
 						proposedVote = ayes > noes ? 1 : -1;
-						confidence = proposedVote > 0 ? 
+						confidence = ayes > noes ? 
 							((double) ayes)	/ ((double) cast) : 
 							((double) noes)	/ ((double) cast);
 					}
@@ -260,15 +278,17 @@ public class KNN {
 					
 					// Finally set this as the users vote.
 					votes[i] = proposedVote;
-					System.out.println("MP " + gap.getName() + " voted " + proposedVote + " on vote " + i);
+					if (verbose){
+						System.out.println("MP " + gap.getName() + " voted " + proposedVote + " on vote " + i);
+					}
 				}
 			}
 			// Write this MP to the output file.
 			out.println(gap.toString());
 		}
-		out.close();
-		System.out.println("Number of counter votes: " + counters);
-		System.out.println("Total votes: " + total);
+		out.close(); 
+		System.out.println("Number of votes against party confidence: " + counters);
+		System.out.println("Total numver of votes guessed: " + total);
 		
 		int classificationMatch = 0;
 		for (MP check: gapSet){
@@ -277,10 +297,12 @@ public class KNN {
 				classificationMatch++;
 			}
 		}
-		System.out.println("Believable predictions: " + classificationMatch + " from " + gapSet.length + " MPS.");
+		System.out.println("Believable predictions: " + classificationMatch + " from " + gapSet.length + " MPS.\n\n");
 	}
 
 	public void classifyUnknown() {
+		System.out.println("Creating classification of unknown MPs");
+		System.out.println("===========================================");
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter("predictions_1002253w.csv", "UTF-8");
@@ -288,19 +310,48 @@ public class KNN {
 			e.printStackTrace();
 			return;
 		}
-		for (MP unknown : testSet) {
+		for (int i = 0; i < testSet.length; i++) {
+			MP unknown = testSet[i];
 			Party proposed = nearestNeighbour(unknown, K, MPS);
 			unknown.setParty(proposed);
-			System.out.println(unknown.getParty().getName());
+			if (verbose){
+				System.out.println("MP " + i + " was put in Party " + unknown.getParty().getName());
+			}
 			out.println(unknown.toString());
 		}
+		out.close();
+		System.out.println("Finished classification of unknown MPs\n\n");
+	}
+	
+	public void generateAggregations(){
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter("aggregations_1002253w.csv", "UTF-8");
+		} catch (Exception e){
+			e.printStackTrace();
+			return;
+		}
+		Party[] keys = Party.values();
+		for (int i = 0; i < keys.length; i++){
+			double[] aggregate = votesCast.get(keys[i].getName()).aggregateNormalized();
+			out.println(keys[i].getName() + "," + aggregate[0] + "," + 
+					aggregate[1] + "," + aggregate[2]);
+		}
+		
 		out.close();
 	}
 
 	public static void main(String[] args) {
-		KNN knn = new KNN(args[0], args[1], args[2]);
-		 knn.findBestK();
-		// knn.classifyUnknown();
-//		knn.setVotesForGap();
+		Classify classify;
+		if (args[0].equals("-v")){
+			classify = new Classify(args[1], args[2], args[3], true);
+		}
+		else {
+			classify = new Classify(args[0], args[1], args[2], false);
+		}
+//		classify.findBestK();
+//		classify.classifyUnknown();
+//		classify.setVotesForGap();
+		classify.generateAggregations();
 	}
 }
