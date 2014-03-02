@@ -207,7 +207,7 @@ public class Classify {
 			System.out.println("\tErrors: "
 					+ (MPS.length - (MPS.length * percentCorrect)));
 		}
-		System.out.println("\nBest K: " + bestK + ". Classified " + bestPercent + "% correctly.\n\n");
+		System.out.println("\nBest K: " + bestK + ". Classified " + bestPercent * 100 + "% correctly.\n\n");
 		K = bestK;
 	}
 
@@ -340,18 +340,69 @@ public class Classify {
 		
 		out.close();
 	}
+	
+	public void generateSimilarityOfClass(){
+		HashMap<Party, ArrayList<MP>> split = new HashMap<Party, ArrayList<MP>>();
+		for (Party p: Party.values()){
+			split.put(p, new ArrayList<MP>());
+		}
+		for (MP mp: MPS){
+			ArrayList<MP> thisPartyMPS = split.get(mp.getParty());
+			thisPartyMPS.add(mp);
+		}
+		
+		for (Party p: split.keySet()){
+			double closestDistance = -1.0;
+			double furthestDistance = 1.0;
+			double average = 0;
+			int comparisons = 0;
+			for (MP mpA: split.get(p)){
+				for (MP mpB: split.get(p)){
+					if (mpA.equals(mpB)){
+						continue;
+					}
+					comparisons++;
+					mpA.setSimilarity(mpB);
+					double similarity = mpA.getSimilarity();
+					average += similarity;
+					if (similarity < furthestDistance){
+						furthestDistance = similarity;
+					}
+					else if (similarity > closestDistance){
+						closestDistance = similarity;
+					}
+				}
+			}
+			average = average / comparisons;
+			System.out.println(p.getName());
+			System.out.println("\t- Max Distance: " + furthestDistance);
+			System.out.println("\t- Min Distance: " + closestDistance);
+			System.out.println("\t- Average: " + average);
+			System.out.println("\t- MPs:" + split.get(p).size());
+		}
+	}
 
 	public static void main(String[] args) {
-		Classify classify;
-		if (args[0].equals("-v")){
-			classify = new Classify(args[1], args[2], args[3], true);
+		if (args.length < 3){
+			System.out.println("Usage: java -cp . src/Classify [-v] [-s] <trainingData.csv> <unknownData.csv> <gapData.csv>");
 		}
-		else {
-			classify = new Classify(args[0], args[1], args[2], false);
+		Classify classify;
+		boolean verbose = false;
+		boolean similarity = false;
+		if (args[0].equals("-v") || args[1].equals("-v")){
+			verbose = true;
+		}
+		if (args[0].equals("-s") || (verbose && args[1].equals("-s"))){
+			similarity = true;
+		}
+		classify = new Classify(args[args.length-3], args[args.length-2], args[args.length-1], verbose);
+		if (similarity){
+			classify.generateSimilarityOfClass();
 		}
 //		classify.findBestK();
 //		classify.classifyUnknown();
 //		classify.setVotesForGap();
-		classify.generateAggregations();
+//		classify.generateAggregations();
+		
 	}
 }
