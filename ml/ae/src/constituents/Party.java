@@ -8,9 +8,7 @@ public enum Party {
 	CON ("Con"), 
 	LAB ("Lab"), 
 	IND ("Ind"), 
-	UUP ("UUP"), 
-	LDEM ("LDem"), 
-	UKIP ("UKIP"), 
+	LDEM ("LDem"),  
 	PC ("PC");
 	
 	private String name;

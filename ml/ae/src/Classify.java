@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 import constituents.*;
 
@@ -15,7 +14,7 @@ public class Classify {
 	private MP[] MPS;
 	private MP[] testSet;
 	private MP[] gapSet;
-	private int K = 2;
+	private int K;
 	private int crossValidationSize = 7; // alternatively could be 61
 	
 	private HashMap<String, VoteTotal> votesCast;
@@ -138,7 +137,7 @@ public class Classify {
 		Arrays.sort(testSet);
 
 		Party[] parties = Party.values();
-		int[] counts = new int[11]; // 11 Parties.
+		int[] counts = new int[parties.length];
 
 		// Count Parties of the K closest MPs.
 		for (int i = 0; i < k; i++) {
@@ -320,13 +319,13 @@ public class Classify {
 			out.println(unknown.toString());
 		}
 		out.close();
-		System.out.println("Finished classification of unknown MPs\n\n");
+		System.out.println("Finished classification of " + testSet.length+ " unknown MPs\n\n");
 	}
 	
-	public void generateAggregations(){
+	public void generateApathy(){
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter("aggregations_1002253w.csv", "UTF-8");
+			out = new PrintWriter("apathy_1002253w.csv", "UTF-8");
 		} catch (Exception e){
 			e.printStackTrace();
 			return;
@@ -334,8 +333,8 @@ public class Classify {
 		Party[] keys = Party.values();
 		for (int i = 0; i < keys.length; i++){
 			double[] aggregate = votesCast.get(keys[i].getName()).aggregateNormalized();
-			out.println(keys[i].getName() + "," + aggregate[0] + "," + 
-					aggregate[1] + "," + aggregate[2]);
+			double percent = aggregate[1] / (aggregate[0] + aggregate[1] + aggregate[2]) * 100;
+			out.printf(keys[i].getName() + " (%2$.2f),%1$.2f\n", percent, aggregate[1]);
 		}
 		
 		out.close();
@@ -373,7 +372,14 @@ public class Classify {
 					}
 				}
 			}
-			average = average / comparisons;
+			if (comparisons == 0){
+				average = 0;
+				furthestDistance = 0;
+				closestDistance = 0;
+			}
+			else {
+				average = average / comparisons;
+			}
 			System.out.println(p.getName());
 			System.out.println("\t- Max Distance: " + furthestDistance);
 			System.out.println("\t- Min Distance: " + closestDistance);
@@ -399,10 +405,10 @@ public class Classify {
 		if (similarity){
 			classify.generateSimilarityOfClass();
 		}
-//		classify.findBestK();
-//		classify.classifyUnknown();
-//		classify.setVotesForGap();
-//		classify.generateAggregations();
+		classify.findBestK();
+		classify.classifyUnknown();
+		classify.setVotesForGap();
+		classify.generateApathy();
 		
 	}
 }
